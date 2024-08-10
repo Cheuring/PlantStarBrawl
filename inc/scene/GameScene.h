@@ -2,9 +2,13 @@
 #define _GAME_SCENE_H_
 
 #include <iostream>
-#include "Scene.h"
 
-class GameScene : public Scene{
+#include "Scene.h"
+#include "SceneManager.h"
+
+extern SceneManager scene_manager;
+
+class GameScene : public Scene {
 public:
     GameScene() = default;
     ~GameScene() = default;
@@ -16,13 +20,15 @@ public:
         std::cout << "GameScene on_exit" << std::endl;
     }
     void on_input(const ExMessage& msg) override {
-        std::cout << "GameScene on_input" << std::endl;
+        if(msg.message == WM_KEYDOWN){
+            scene_manager.switch_to(SceneManager::SceneType::Menu);
+        }
     }
     void on_update() override {
         std::cout << "GameScene on_update" << std::endl;
     }
     void on_draw() override {
-        std::cout << "GameScene on_draw" << std::endl;
+        outtextxy(10, 10, _T("GameScene on_draw"));
     }
 
 private:

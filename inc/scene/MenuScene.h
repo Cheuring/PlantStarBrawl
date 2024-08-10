@@ -2,10 +2,13 @@
 #define _MEMU_SCENE_H_
 
 #include <iostream>
-#include "Scene.h"
 
-class MenuScene : public Scene
-{
+#include "Scene.h"
+#include "SceneManager.h"
+
+extern SceneManager scene_manager;
+
+class MenuScene : public Scene {
 public:
     MenuScene() = default;
     ~MenuScene() = default;
@@ -19,7 +22,11 @@ public:
     void on_draw() override {
         outtextxy(10, 10, _T("Main Menu painting content"));
     }
-    void on_input(const ExMessage& msg) override {};
+    void on_input(const ExMessage& msg) override {
+        if(msg.message == WM_KEYDOWN){
+            scene_manager.switch_to(SceneManager::SceneType::Game);
+        }
+    };
     void on_exit() override {
         std::cout << "exit Main Menu" << std::endl;
     }
