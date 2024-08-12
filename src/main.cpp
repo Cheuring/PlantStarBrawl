@@ -1,10 +1,13 @@
 #include <graphics.h>
 
-#include "Scene.h"
-#include "MenuScene.h"
+#include "Atlas.h"
 #include "GameScene.h"
+#include "MediaSource.h"
+#include "MenuScene.h"
+#include "Scene.h"
 #include "SelectorScene.h"
 #include "SceneManager.h"
+#include "util.h"
 
 Scene* menu_scene = nullptr;
 Scene* game_scene = nullptr;
@@ -14,7 +17,8 @@ SceneManager scene_manager;
 
 int main(){
     ExMessage msg;
-    const int FPS = 60;
+
+    load_game_resources();
 
     initgraph(1280, 720, EW_SHOWCONSOLE);
 
@@ -33,7 +37,11 @@ int main(){
             scene_manager.on_input(msg);
         }
 
-        scene_manager.on_update();
+        static DWORD last_tick_time = GetTickCount();
+        DWORD current_tick_time = GetTickCount();
+        DWORD delta = current_tick_time - last_tick_time;
+        scene_manager.on_update(delta);
+        last_tick_time = current_tick_time;
 
         cleardevice();
         scene_manager.on_draw();

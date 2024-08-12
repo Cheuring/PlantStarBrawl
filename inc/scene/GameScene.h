@@ -24,7 +24,7 @@ public:
             scene_manager.switch_to(SceneManager::SceneType::Menu);
         }
     }
-    void on_update() override {
+    void on_update(int delta) override {
         std::cout << "GameScene on_update" << std::endl;
     }
     void on_draw() override {

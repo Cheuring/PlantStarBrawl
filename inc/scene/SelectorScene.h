@@ -16,7 +16,7 @@ public:
     void on_enter() override {
         std::cout << "into Selector Scene" << std::endl;
     }
-    void on_update() override {
+    void on_update(int delta) override {
         std::cout << "Selector Scene running" << std::endl;
     }
     void on_draw() override {

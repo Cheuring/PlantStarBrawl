@@ -37,23 +37,10 @@ public:
         return &img_list[index];
     }
 
-    IMAGE& operator[](int index) {
-        if(index < 0 || index >= img_list.size()){
-            throw std::out_of_range("index out of range");
-        }
-        return img_list[index];
+    void add_image(IMAGE& img) {
+        img_list.emplace_back(std::move(img));
     }
 
-    const IMAGE& operator[](int index) const {
-        if(index < 0 || index >= img_list.size()){
-            throw std::out_of_range("index out of range");
-        }
-        return img_list[index];
-    }
-
-    void add_image(const IMAGE& img) {
-        img_list.push_back(img);
-    }
 private:
     std::vector<IMAGE> img_list;
 };
