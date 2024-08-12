@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "Scene.h"
 #include "SceneManager.h"
+#include "Timer.h"
 
 extern Atlas atlas_peashooter_run_right;
 extern SceneManager scene_manager;
@@ -21,8 +22,14 @@ public:
         anim_peashooter_run_right.set_atlas(&atlas_peashooter_run_right);
         anim_peashooter_run_right.set_interval(75);
         anim_peashooter_run_right.set_loop(true);
+
+        timer.set_wait_time(1000);
+        timer.set_callback([&](){
+            std::cout << "timer callback" << std::endl;
+        });
     }
     void on_update(int delta) override {
+        timer.on_update(delta);
         camera.on_update(delta);
         anim_peashooter_run_right.on_update(delta);
     }
@@ -32,7 +39,7 @@ public:
     }
     void on_input(const ExMessage& msg) override {
         if(msg.message == WM_KEYDOWN){
-            scene_manager.switch_to(SceneManager::SceneType::Game);
+            camera.shake(10, 350);
         }
     };
     void on_exit() override {
@@ -40,6 +47,7 @@ public:
     }
 
 private:
+    Timer timer;
     Camera camera;
     Animation anim_peashooter_run_right;
 };
