@@ -27,7 +27,7 @@ public:
     void on_update(int delta) override {
         std::cout << "GameScene on_update" << std::endl;
     }
-    void on_draw() override {
+    void on_draw(const Camera& camera) override {
         outtextxy(10, 10, _T("GameScene on_draw"));
     }
 

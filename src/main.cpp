@@ -1,6 +1,7 @@
 #include <graphics.h>
 
 #include "Atlas.h"
+#include "Camera.h"
 #include "GameScene.h"
 #include "MediaSource.h"
 #include "MenuScene.h"
@@ -13,6 +14,7 @@ Scene* menu_scene = nullptr;
 Scene* game_scene = nullptr;
 Scene* selector_scene = nullptr;
 
+Camera main_camera;
 SceneManager scene_manager;
 
 int main(){
@@ -44,7 +46,7 @@ int main(){
         last_tick_time = current_tick_time;
 
         cleardevice();
-        scene_manager.on_draw();
+        scene_manager.on_draw(main_camera);
         FlushBatchDraw();
 
         DWORD frame_end_time = GetTickCount();

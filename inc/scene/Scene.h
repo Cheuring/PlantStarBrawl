@@ -3,6 +3,8 @@
 
 #include <graphics.h>
 
+#include "Camera.h"
+
 class Scene
 {
 public:
@@ -11,7 +13,7 @@ public:
 
     virtual void on_enter() {};
     virtual void on_update(int delta) {};
-    virtual void on_draw() {};
+    virtual void on_draw(const Camera& camera) {};
     virtual void on_input(const ExMessage& msg) {};
     virtual void on_exit() {};
 

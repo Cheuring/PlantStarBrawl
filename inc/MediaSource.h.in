@@ -159,19 +159,19 @@ void load_game_resources(){
     loadimage(&img_avatat_peashooter, _T(MEDIA_PATH_PREFIX "avatat_peashooter.png"));
     loadimage(&img_avatat_sunflower, _T(MEDIA_PATH_PREFIX "avatat_sunflower.png"));
 
-    mciSendString(_T("open media/bgm_game.mp3 alias bgm_game"), NULL, 0, NULL);
-    mciSendString(_T("open media/bgm_menu.mp3 alias bgm_menu"), NULL, 0, NULL);
-    mciSendString(_T("open media/pea_break_1.mp3 alias pea_break_1"), NULL, 0, NULL);
-    mciSendString(_T("open media/pea_break_2.mp3 alias pea_break_2"), NULL, 0, NULL);
-    mciSendString(_T("open media/pea_break_3.mp3 alias pea_break_3"), NULL, 0, NULL);
-    mciSendString(_T("open media/pea_shoot_1.mp3 alias pea_shoot_1"), NULL, 0, NULL);
-    mciSendString(_T("open media/pea_shoot_2.mp3 alias pea_shoot_2"), NULL, 0, NULL);
-    mciSendString(_T("open media/pea_shoot_ex.mp3 alias pea_shoot_ex"), NULL, 0, NULL);
-    mciSendString(_T("open media/sun_explode.mp3 alias sun_explode"), NULL, 0, NULL);
-    mciSendString(_T("open media/sun_explode_ex.mp3 alias sun_explode_ex"), NULL, 0, NULL);
-    mciSendString(_T("open media/sun_text.mp3 alias sun_text"), NULL, 0, NULL);
-    mciSendString(_T("open media/ui_confirm.wav alias ui_confirm"), NULL, 0, NULL);
-    mciSendString(_T("open media/ui_switch.wav alias ui_switch"), NULL, 0, NULL);
-    mciSendString(_T("open media/ui_win.wav alias ui_win"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "bgm_game.mp3 alias bgm_game"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "bgm_menu.mp3 alias bgm_menu"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "pea_break_1.mp3 alias pea_break_1"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "pea_break_2.mp3 alias pea_break_2"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "pea_break_3.mp3 alias pea_break_3"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "pea_shoot_1.mp3 alias pea_shoot_1"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "pea_shoot_2.mp3 alias pea_shoot_2"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "pea_shoot_ex.mp3 alias pea_shoot_ex"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "sun_explode.mp3 alias sun_explode"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "sun_explode_ex.mp3 alias sun_explode_ex"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "sun_text.mp3 alias sun_text"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "ui_confirm.wav alias ui_confirm"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "ui_switch.wav alias ui_switch"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "ui_win.wav alias ui_win"), NULL, 0, NULL);
 }
 #endif // _MEDIA_H_
