@@ -5,6 +5,7 @@
 #include <graphics.h>
 
 #include "Atlas.h"
+#include "Camera.h"
 #include "util.h"
 
 class Animation
@@ -70,11 +71,11 @@ public:
         }
     }
 
-    void on_draw(int x, int y) const {
+    void on_draw(const Camera& camera, int x, int y) const {
         if(atlas == nullptr){
             return;
         }
-        put_image_alpha(x, y, atlas->get_image(frame_index));
+        put_image_alpha(camera, x, y, atlas->get_image(frame_index));
     }
 
     void set_on_finish(std::function<void()> on_finish){

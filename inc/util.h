@@ -3,6 +3,8 @@
 
 #include <graphics.h>
 
+#include "Camera.h"
+
 const int FPS = 60;
 
 inline void flip_image(IMAGE* src, IMAGE* dest){
@@ -28,6 +30,19 @@ inline void put_image_alpha(int dst_x, int dst_y, IMAGE* img){
     int h = img->getheight();
     AlphaBlend(GetImageHDC(GetWorkingImage()), dst_x, dst_y, w, h,
         GetImageHDC(img), 0, 0, w, h, { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA});
+}
+inline void put_image_alpha(int dst_x, int dst_y, int width, int height, IMAGE* img, int src_x, int src_y){
+    int w = width > 0 ? width : img->getwidth();
+    int h = height > 0 ? height : img->getheight();
+    AlphaBlend(GetImageHDC(GetWorkingImage()), dst_x, dst_y, w, h,
+        GetImageHDC(img), src_x, src_y, w, h, { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA});
+}
+inline void put_image_alpha(const Camera& camera, int dst_x, int dst_y, IMAGE* img){
+    int w = img->getwidth();
+    int h = img->getheight();
+    const Vector2& camera_pos = camera.get_position();
+    AlphaBlend(GetImageHDC(GetWorkingImage()), (int)(dst_x - camera_pos.x), (int)(dst_y - camera_pos.y),
+    w, h, GetImageHDC(img), 0, 0, w, h, { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA});
 }
 
 

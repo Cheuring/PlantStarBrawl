@@ -88,7 +88,7 @@ void flip_atlas(Atlas& src, Atlas& dest){
 }
 
 void load_game_resources(){
-    AddFontResourceEx(_T(MEDIA_PATH_PREFIX "IPix.ttf"), FR_PRIVATE, NULL);
+    AddFontResourceEx(_T(MEDIA_PATH_PREFIX "zpix.ttf"), FR_PRIVATE, NULL);
 
     loadimage(&img_menu_background, _T(MEDIA_PATH_PREFIX "menu_background.png"));
 

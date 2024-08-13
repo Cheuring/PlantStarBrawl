@@ -84,9 +84,49 @@ public:
     }
 
     void on_update(int delta) override {
+        animation_peashooter.on_update(delta);
+        animation_sunflower.on_update(delta);
+
+        selector_background_scroll_offset_x += 5;
+        if(selector_background_scroll_offset_x >= img_peashooter_selector_background_left.getwidth()){
+            selector_background_scroll_offset_x = 0;
+        }
     }
+
     void on_draw(const Camera& camera) override {
+        IMAGE* img_p1_selector_background = nullptr;
+        IMAGE* img_p2_selector_background = nullptr;
+
+        switch (player_2P) {
+            case PlayerType::Peashooter:
+                img_p1_selector_background = &img_peashooter_selector_background_right;
+                break;
+
+            default:
+            case PlayerType::Sunflower:
+                img_p1_selector_background = &img_sunflower_selector_background_right;
+                break;
+        }
+
+        switch (player_1P) {
+            case PlayerType::Peashooter:
+                img_p2_selector_background = &img_peashooter_selector_background_left;
+                break;
+
+            default:
+            case PlayerType::Sunflower:
+                img_p2_selector_background = &img_sunflower_selector_background_left;
+                break;
+        }
+
         putimage(0, 0, &img_selector_background);
+
+        put_image_alpha(selector_background_scroll_offset_x - img_p1_selector_background->getwidth(), 0, img_p1_selector_background);
+        put_image_alpha(selector_background_scroll_offset_x, 0,
+            img_p1_selector_background->getwidth() - selector_background_scroll_offset_x, 0, img_p1_selector_background, 0, 0);
+        put_image_alpha(getwidth() - img_p2_selector_background->getwidth(), 0, img_p2_selector_background->getwidth() -
+            selector_background_scroll_offset_x, 0, img_p2_selector_background, selector_background_scroll_offset_x, 0);
+        put_image_alpha(getwidth() - selector_background_scroll_offset_x, 0, img_p2_selector_background);
 
         put_image_alpha(pos_img_VS.x, pos_img_VS.y, &img_VS);
 
@@ -95,36 +135,152 @@ public:
         put_image_alpha(pos_img_1P_gravestone.x, pos_img_1P_gravestone.y, &img_gravestone_left);
         put_image_alpha(pos_img_2P_gravestone.x, pos_img_2P_gravestone.y, &img_gravestone_right);
 
+        switch (player_1P) {
+            case PlayerType::Peashooter:
+                animation_peashooter.on_draw(camera, pos_animation_1P.x, pos_animation_1P.y);
+                pos_img_1P_name.x = pos_img_1P_gravestone.x + (img_gravestone_left.getwidth() - textwidth(str_peashooter_name)) / 2;
+                outtextxy_shaded(pos_img_1P_name.x, pos_img_1P_name.y, str_peashooter_name);
+                break;
+            case PlayerType::Sunflower:
+                animation_sunflower.on_draw(camera, pos_animation_1P.x, pos_animation_1P.y);
+                pos_img_1P_name.x = pos_img_1P_gravestone.x + (img_gravestone_left.getwidth() - textwidth(str_sunflower_name)) / 2;
+                outtextxy_shaded(pos_img_1P_name.x, pos_img_1P_name.y, str_sunflower_name);
+                break;
+        }
+
+        switch (player_2P) {
+            case PlayerType::Peashooter:
+                animation_peashooter.on_draw(camera, pos_animation_2P.x, pos_animation_2P.y);
+                pos_img_2P_name.x = pos_img_2P_gravestone.x + (img_gravestone_right.getwidth() - textwidth(str_peashooter_name)) / 2;
+                outtextxy_shaded(pos_img_2P_name.x, pos_img_2P_name.y, str_peashooter_name);
+                break;
+            case PlayerType::Sunflower:
+                animation_sunflower.on_draw(camera, pos_animation_2P.x, pos_animation_2P.y);
+                pos_img_2P_name.x = pos_img_2P_gravestone.x + (img_gravestone_right.getwidth() - textwidth(str_sunflower_name)) / 2;
+                outtextxy_shaded(pos_img_2P_name.x, pos_img_2P_name.y, str_sunflower_name);
+                break;
+        }
+
+        put_image_alpha(pos_1P_selector_btn_left.x, pos_1P_selector_btn_left.y,
+            is_btn_1P_left_down ? &img_1P_selector_btn_down_left : &img_1P_selector_btn_idle_left);
+        put_image_alpha(pos_1P_selector_btn_right.x, pos_1P_selector_btn_right.y,
+            is_btn_1P_right_down ? &img_1P_selector_btn_down_right : &img_1P_selector_btn_idle_right);
+        put_image_alpha(pos_2P_selector_btn_left.x, pos_2P_selector_btn_left.y,
+            is_btn_2P_left_down ? &img_2P_selector_btn_down_left : &img_2P_selector_btn_idle_left);
+        put_image_alpha(pos_2P_selector_btn_right.x, pos_2P_selector_btn_right.y,
+            is_btn_2P_right_down ? &img_2P_selector_btn_down_right : &img_2P_selector_btn_idle_right);
+
         put_image_alpha(pos_img_1P_desc.x, pos_img_1P_desc.y, &img_1P_desc);
         put_image_alpha(pos_img_2P_desc.x, pos_img_2P_desc.y, &img_2P_desc);
 
         put_image_alpha(pos_img_tip.x, pos_img_tip.y, &img_selector_tip);
     }
+
     void on_input(const ExMessage& msg) override {
+        switch (msg.message) {
+            case WM_KEYDOWN:
+                switch (msg.vkcode){
+                    case 'A':
+                    case 'a':
+                        is_btn_1P_left_down = true;
+                        break;
+                    case 'D':
+                    case 'd':
+                        is_btn_1P_right_down = true;
+                        break;
+                    case VK_LEFT:
+                        is_btn_2P_left_down = true;
+                        break;
+                    case VK_RIGHT:
+                        is_btn_2P_right_down = true;
+                        break;
+                }
+                break;
+            case WM_KEYUP:
+                switch (msg.vkcode){
+                    case 'A':
+                    case 'a':
+                        is_btn_1P_left_down = false;
+                        player_1P = (PlayerType)(((int)PlayerType::Invalid + (int)player_1P - 1) % (int)PlayerType::Invalid);
+                        mciSendString(_T("play ui_switch from 0"), nullptr, 0, nullptr);
+                        break;
+                    case 'D':
+                    case 'd':
+                        is_btn_1P_right_down = false;
+                        player_1P = (PlayerType)(((int)player_1P + 1) % (int)PlayerType::Invalid);
+                        mciSendString(_T("play ui_switch from 0"), nullptr, 0, nullptr);
+                        break;
+                    case VK_LEFT:
+                        is_btn_2P_left_down = false;
+                        player_2P = (PlayerType)(((int)PlayerType::Invalid + (int)player_2P - 1) % (int)PlayerType::Invalid);
+                        mciSendString(_T("play ui_switch from 0"), nullptr, 0, nullptr);
+                        break;
+                    case VK_RIGHT:
+                        is_btn_2P_right_down = false;
+                        player_2P = (PlayerType)(((int)player_2P + 1) % (int)PlayerType::Invalid);
+                        mciSendString(_T("play ui_switch from 0"), nullptr, 0, nullptr);
+                        break;
+                    case VK_RETURN:
+                        scene_manager.switch_to(SceneManager::SceneType::Game);
+                        mciSendString(_T("play ui_confirm from 0"), nullptr, 0, nullptr);
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
     };
+
     void on_exit() override {
     }
 
 private:
-    POINT pos_img_VS = { 0, 0 };                //  VS è‰ºæœ¯å­—å›¾ç‰‡ä½ç½®
-    POINT pos_img_tip = { 0, 0 };               //  æç¤ºä¿¡æ¯æ–‡æœ¬å›¾ç‰‡ä½ç½®
-    POINT pos_img_1P = { 0, 0 };                //  1P æ–‡æœ¬å›¾ç‰‡ä½ç½®
-    POINT pos_img_2P = { 0, 0 };                //  2P æ–‡æœ¬å›¾ç‰‡ä½ç½®
-    POINT pos_img_1P_desc = { 0, 0 };           //  1P æè¿°ä½ç½®
-    POINT pos_img_2P_desc = { 0, 0 };           //  2P æè¿°ä½ç½®
-    POINT pos_img_1P_name = { 0, 0 };           //  1P åå­—ä½ç½®
-    POINT pos_img_2P_name = { 0, 0 };           //  2P åå­—ä½ç½®
-    POINT pos_animation_1P = { 0, 0 };          //  1P åŠ¨ç”»ä½ç½®
-    POINT pos_animation_2P = { 0, 0 };          //  2P åŠ¨ç”»ä½ç½®
-    POINT pos_img_1P_gravestone = { 0, 0 };     //  1P å¢“ç¢‘ä½ç½®
-    POINT pos_img_2P_gravestone = { 0, 0 };     //  2P å¢“ç¢‘ä½ç½®
-    POINT pos_1P_selector_btn_left = { 0, 0 };  //  1P å‘å·¦åˆ‡æ¢æŒ‰é’®ä½ç½®
-    POINT pos_1P_selector_btn_right = { 0, 0 }; //  1P å‘å³åˆ‡æ¢æŒ‰é’®ä½ç½®
-    POINT pos_2P_selector_btn_left = { 0, 0 };  //  2P å‘å·¦åˆ‡æ¢æŒ‰é’®ä½ç½®
-    POINT pos_2P_selector_btn_right = { 0, 0 }; //  2P å‘å³åˆ‡æ¢æŒ‰é’®ä½ç½®
+    enum class PlayerType {
+        Peashooter,
+        Sunflower,
+        Invalid
+    };
+
+    POINT pos_img_VS = { 0, 0 };                //  VS ÒÕÊõ×ÖÍ¼Æ¬Î»ÖÃ
+    POINT pos_img_tip = { 0, 0 };               //  ÌáÊ¾ĞÅÏ¢ÎÄ±¾Í¼Æ¬Î»ÖÃ
+    POINT pos_img_1P = { 0, 0 };                //  1P ÎÄ±¾Í¼Æ¬Î»ÖÃ
+    POINT pos_img_2P = { 0, 0 };                //  2P ÎÄ±¾Í¼Æ¬Î»ÖÃ
+    POINT pos_img_1P_desc = { 0, 0 };           //  1P ÃèÊöÎ»ÖÃ
+    POINT pos_img_2P_desc = { 0, 0 };           //  2P ÃèÊöÎ»ÖÃ
+    POINT pos_img_1P_name = { 0, 0 };           //  1P Ãû×ÖÎ»ÖÃ
+    POINT pos_img_2P_name = { 0, 0 };           //  2P Ãû×ÖÎ»ÖÃ
+    POINT pos_animation_1P = { 0, 0 };          //  1P ¶¯»­Î»ÖÃ
+    POINT pos_animation_2P = { 0, 0 };          //  2P ¶¯»­Î»ÖÃ
+    POINT pos_img_1P_gravestone = { 0, 0 };     //  1P Ä¹±®Î»ÖÃ
+    POINT pos_img_2P_gravestone = { 0, 0 };     //  2P Ä¹±®Î»ÖÃ
+    POINT pos_1P_selector_btn_left = { 0, 0 };  //  1P Ïò×óÇĞ»»°´Å¥Î»ÖÃ
+    POINT pos_1P_selector_btn_right = { 0, 0 }; //  1P ÏòÓÒÇĞ»»°´Å¥Î»ÖÃ
+    POINT pos_2P_selector_btn_left = { 0, 0 };  //  2P Ïò×óÇĞ»»°´Å¥Î»ÖÃ
+    POINT pos_2P_selector_btn_right = { 0, 0 }; //  2P ÏòÓÒÇĞ»»°´Å¥Î»ÖÃ
 
     Animation animation_peashooter;
     Animation animation_sunflower;
+
+    PlayerType player_1P = PlayerType::Peashooter;
+    PlayerType player_2P = PlayerType::Sunflower;
+
+    LPCTSTR str_peashooter_name = _T("Íñ¶ºÉäÊÖ");
+    LPCTSTR str_sunflower_name = _T("ÁúÈÕ¿û");
+
+    int selector_background_scroll_offset_x = 0;
+
+    bool is_btn_1P_left_down = false;
+    bool is_btn_1P_right_down = false;
+    bool is_btn_2P_left_down = false;
+    bool is_btn_2P_right_down = false;
+
+private:
+    void outtextxy_shaded(int x, int y, LPCTSTR str){
+        settextcolor(RGB(45, 45, 45));
+        outtextxy(x + 3, y + 3, str);
+        settextcolor(RGB(255, 255, 255));
+        outtextxy(x, y, str);
+    }
 
 };
 

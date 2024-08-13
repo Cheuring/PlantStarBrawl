@@ -24,6 +24,9 @@ int main(){
 
     initgraph(1280, 720, EW_SHOWCONSOLE);
 
+    settextstyle(28, 0, _T("zpix"));
+    setbkmode(TRANSPARENT);
+
     BeginBatchDraw();
 
     menu_scene = new MenuScene();
