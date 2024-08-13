@@ -1,7 +1,7 @@
 #ifndef _MEMU_SCENE_H_
 #define _MEMU_SCENE_H_
 
-
+#include "MediaSource.h"
 #include "Scene.h"
 #include "SceneManager.h"
 
@@ -16,18 +16,25 @@ public:
     void on_enter() override {
         mciSendString(_T("play bgm_menu repeat from 0"), NULL, 0, NULL);
     }
+
     void on_update(int delta) override {
 
     }
+
     void on_draw(const Camera& camera) override {
         putimage(0, 0, &img_menu_background);
     }
+
     void on_input(const ExMessage& msg) override {
         if(msg.message == WM_KEYUP){
             mciSendString(_T("play ui_confirm from 0"), NULL, 0, NULL);
             scene_manager.switch_to(SceneManager::SceneType::Selector);
         }
     };
+
+    void on_exit() override {
+        // mciSendString(_T("stop bgm_menu"), NULL, 0, NULL);
+    }
 
 private:
 };

@@ -7,6 +7,7 @@
 #include "MediaSource.h"
 #include "MenuScene.h"
 #include "Platform.h"
+#include "Player.h"
 #include "Scene.h"
 #include "SelectorScene.h"
 #include "SceneManager.h"
@@ -22,6 +23,9 @@ Camera main_camera;
 SceneManager scene_manager;
 
 std::vector<Platform> platform_list;
+
+Player* player_1 = nullptr;
+Player* player_2 = nullptr;
 
 int main(){
     ExMessage msg;
