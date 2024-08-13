@@ -1,14 +1,18 @@
 #include <graphics.h>
+#include <vector>
 
 #include "Atlas.h"
 #include "Camera.h"
 #include "GameScene.h"
 #include "MediaSource.h"
 #include "MenuScene.h"
+#include "Platform.h"
 #include "Scene.h"
 #include "SelectorScene.h"
 #include "SceneManager.h"
 #include "util.h"
+
+bool is_debug = false;
 
 Scene* menu_scene = nullptr;
 Scene* game_scene = nullptr;
@@ -16,6 +20,8 @@ Scene* selector_scene = nullptr;
 
 Camera main_camera;
 SceneManager scene_manager;
+
+std::vector<Platform> platform_list;
 
 int main(){
     ExMessage msg;

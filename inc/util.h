@@ -45,5 +45,9 @@ inline void put_image_alpha(const Camera& camera, int dst_x, int dst_y, IMAGE* i
     w, h, GetImageHDC(img), 0, 0, w, h, { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA});
 }
 
+inline void line(const Camera& camera, int x1, int y1, int x2, int y2){
+    const Vector2& camera_pos = camera.get_position();
+    ::line((int)(x1 - camera_pos.x), (int)(y1 - camera_pos.y), (int)(x2 - camera_pos.x), (int)(y2 - camera_pos.y));
+}
 
 #endif // _UTIL_H_
