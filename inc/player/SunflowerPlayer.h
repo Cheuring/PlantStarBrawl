@@ -24,6 +24,8 @@ public:
         animation_idle_right.set_interval(75);
         animation_run_left.set_interval(75);
         animation_run_right.set_interval(75);
+
+        size.x = 96, size.y = 96;
     }
 
     void on_update(int delta) override {

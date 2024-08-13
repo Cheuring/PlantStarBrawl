@@ -37,10 +37,12 @@ extern IMAGE img_sunflower_selector_background_left;
 extern IMAGE img_sunflower_selector_background_right;
 
 extern Atlas atlas_peashooter_idle_right;
+extern Atlas atlas_peashooter_idle_left;
 extern Atlas atlas_sunflower_idle_right;
+extern Atlas atlas_sunflower_idle_left;
 
-extern IMAGE img_avatat_peashooter;
-extern IMAGE img_avatat_sunflower;
+// extern IMAGE img_avatat_peashooter;
+// extern IMAGE img_avatat_sunflower;
 
 
 class SelectorScene : public Scene {
@@ -52,8 +54,14 @@ public:
         animation_peashooter.set_atlas(&atlas_peashooter_idle_right);
         animation_peashooter.set_interval(100);
 
+        animation_peashooter_left.set_atlas(&atlas_peashooter_idle_left);
+        animation_peashooter_left.set_interval(100);
+
         animation_sunflower.set_atlas(&atlas_sunflower_idle_right);
         animation_sunflower.set_interval(100);
+
+        animation_sunflower_left.set_atlas(&atlas_sunflower_idle_left);
+        animation_sunflower_left.set_interval(100);
 
         static const int OFFSET_X = 50;
 
@@ -91,7 +99,9 @@ public:
 
     void on_update(int delta) override {
         animation_peashooter.on_update(delta);
+        animation_peashooter_left.on_update(delta);
         animation_sunflower.on_update(delta);
+        animation_sunflower_left.on_update(delta);
 
         selector_background_scroll_offset_x += 5;
         if(selector_background_scroll_offset_x >= img_peashooter_selector_background_left.getwidth()){
@@ -156,12 +166,12 @@ public:
 
         switch (player_2P) {
             case PlayerType::Peashooter:
-                animation_peashooter.on_draw(camera, pos_animation_2P.x, pos_animation_2P.y);
+                animation_peashooter_left.on_draw(camera, pos_animation_2P.x, pos_animation_2P.y);
                 pos_img_2P_name.x = pos_img_2P_gravestone.x + (img_gravestone_right.getwidth() - textwidth(str_peashooter_name)) / 2;
                 outtextxy_shaded(pos_img_2P_name.x, pos_img_2P_name.y, str_peashooter_name);
                 break;
             case PlayerType::Sunflower:
-                animation_sunflower.on_draw(camera, pos_animation_2P.x, pos_animation_2P.y);
+                animation_sunflower_left.on_draw(camera, pos_animation_2P.x, pos_animation_2P.y);
                 pos_img_2P_name.x = pos_img_2P_gravestone.x + (img_gravestone_right.getwidth() - textwidth(str_sunflower_name)) / 2;
                 outtextxy_shaded(pos_img_2P_name.x, pos_img_2P_name.y, str_sunflower_name);
                 break;
@@ -284,7 +294,9 @@ private:
     POINT pos_2P_selector_btn_right = { 0, 0 }; //  2P 角色切换按钮位置
 
     Animation animation_peashooter;
+    Animation animation_peashooter_left;
     Animation animation_sunflower;
+    Animation animation_sunflower_left;
 
     PlayerType player_1P = PlayerType::Peashooter;
     PlayerType player_2P = PlayerType::Sunflower;
