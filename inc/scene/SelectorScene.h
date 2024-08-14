@@ -13,6 +13,8 @@
 extern Player* player_1;
 extern Player* player_2;
 extern SceneManager scene_manager;
+extern IMAGE* img_player_1_avatar;
+extern IMAGE* img_player_2_avatar;
 
 extern IMAGE img_VS;
 extern IMAGE img_1P;
@@ -41,8 +43,8 @@ extern Atlas atlas_peashooter_idle_left;
 extern Atlas atlas_sunflower_idle_right;
 extern Atlas atlas_sunflower_idle_left;
 
-// extern IMAGE img_avatat_peashooter;
-// extern IMAGE img_avatat_sunflower;
+extern IMAGE img_avatat_peashooter;
+extern IMAGE img_avatat_sunflower;
 
 
 class SelectorScene : public Scene {
@@ -251,9 +253,11 @@ public:
         switch (player_1P) {
             case PlayerType::Peashooter:
                 player_1 = new PeashooterPlayer();
+                img_player_1_avatar = &img_avatat_peashooter;
                 break;
             case PlayerType::Sunflower:
                 player_1 = new SunflowerPlayer();
+                img_player_1_avatar = &img_avatat_sunflower;
                 break;
         }
         player_1->set_id(PlayerId::P1);
@@ -261,9 +265,11 @@ public:
         switch (player_2P) {
             case PlayerType::Peashooter:
                 player_2 = new PeashooterPlayer();
+                img_player_2_avatar = &img_avatat_peashooter;
                 break;
             case PlayerType::Sunflower:
                 player_2 = new SunflowerPlayer();
+                img_player_2_avatar = &img_avatat_sunflower;
                 break;
         }
         player_2->set_id(PlayerId::P2);

@@ -29,6 +29,9 @@ std::vector<Platform> platform_list;
 Player* player_1 = nullptr;
 Player* player_2 = nullptr;
 
+IMAGE* img_player_1_avatar = nullptr;
+IMAGE* img_player_2_avatar = nullptr;
+
 int main(){
     ExMessage msg;
 
