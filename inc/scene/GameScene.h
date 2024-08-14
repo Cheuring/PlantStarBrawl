@@ -6,7 +6,6 @@
 #include "Camera.h"
 #include "Platform.h"
 #include "Player.h"
-#include "MediaSource.h"
 #include "Scene.h"
 #include "SceneManager.h"
 #include "StatusBar.h"

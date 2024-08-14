@@ -4,7 +4,6 @@
 #include "Animation.h"
 #include "Bullet.h"
 #include "Camera.h"
-#include "MediaSource.h"
 #include "Vector2.h"
 
 extern Atlas atlas_sun_ex;

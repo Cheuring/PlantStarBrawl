@@ -2,7 +2,6 @@
 #define _SUNFLOWER_PLAYER_H_
 
 #include "Atlas.h"
-#include "MediaSource.h"
 #include "Player.h"
 #include "SunBullet.h"
 #include "SunBulletEx.h"

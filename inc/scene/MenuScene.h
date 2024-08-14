@@ -1,7 +1,6 @@
 #ifndef _MEMU_SCENE_H_
 #define _MEMU_SCENE_H_
 
-#include "MediaSource.h"
 #include "Scene.h"
 #include "SceneManager.h"
 
