@@ -17,6 +17,7 @@ extern IMAGE img_platform_large;
 extern IMAGE img_platform_small;
 
 extern Camera main_camera;
+extern std::vector<Bullet *> bullet_list;
 extern std::vector<Platform> platform_list;
 extern SceneManager scene_manager;
 
@@ -103,6 +104,20 @@ public:
     void on_update(int delta) override {
         player_1->on_update(delta);
         player_2->on_update(delta);
+
+        main_camera.on_update(delta);
+
+        bullet_list.erase(std::remove_if(bullet_list.begin(), bullet_list.end(), [&](Bullet* bullet){
+            if(bullet->check_can_remove()){
+                delete bullet;
+                return true;
+            }
+            return false;
+        }), bullet_list.end());
+
+        for(Bullet* bullet : bullet_list){
+            bullet->on_update(delta);
+        }
     }
 
     void on_draw(const Camera& camera) override {
@@ -120,6 +135,10 @@ public:
 
         player_1->on_draw(camera);
         player_2->on_draw(camera);
+
+        for(const auto& bullet : bullet_list){
+            bullet->on_draw(camera);
+        }
     }
 
 private:

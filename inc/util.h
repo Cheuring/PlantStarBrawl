@@ -50,4 +50,18 @@ inline void line(const Camera& camera, int x1, int y1, int x2, int y2){
     ::line((int)(x1 - camera_pos.x), (int)(y1 - camera_pos.y), (int)(x2 - camera_pos.x), (int)(y2 - camera_pos.y));
 }
 
+inline void sketch_image(IMAGE* src, IMAGE* dest) {
+    int w = src->getwidth();
+    int h = src->getheight();
+    Resize(dest, w, h);
+    DWORD* src_buf = GetImageBuffer(src);
+    DWORD* dest_buf = GetImageBuffer(dest);
+    for(int y = 0; y < h; y++){
+        for(int x = 0; x < w; x++){
+            int idx = y * w + x;
+            dest_buf[idx] = BGR(RGB(255, 255, 255)) | (src_buf[idx] & 0xFF000000);
+        }
+    }
+}
+
 #endif // _UTIL_H_

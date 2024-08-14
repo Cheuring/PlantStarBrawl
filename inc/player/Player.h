@@ -12,6 +12,8 @@
 #include "PlayerId.h"
 #include "Vector2.h"
 
+extern bool is_debug;
+
 extern std::vector<Bullet *> bullet_list;
 extern std::vector<Platform> platform_list;
 
@@ -25,6 +27,17 @@ public:
         timer_attack_cd.set_callback([&](){
             can_attack = true;
         });
+
+        timer_invulnerable.set_wait_time(750);
+        timer_invulnerable.set_one_shot(true);
+        timer_invulnerable.set_callback([&](){
+            is_invulnerable = false;
+        });
+
+        timer_invulnerable_blink.set_wait_time(75);
+        timer_invulnerable_blink.set_callback([&](){
+            is_showing_sketch_frame = !is_showing_sketch_frame;
+        });
     }
     ~Player() = default;
 
@@ -32,7 +45,9 @@ public:
         int direction = is_right_key_down - is_left_key_down;
 
         if(direction != 0){
-            is_facing_right = direction > 0;
+            if(!is_attacking_ex)
+                is_facing_right = direction > 0;
+
             current_animation = is_facing_right ? &animation_run_right : &animation_run_left;
             float distance = run_velocity * delta * direction;
             on_run(distance);
@@ -40,9 +55,19 @@ public:
             current_animation = is_facing_right ? &animation_idle_right : &animation_idle_left;
         }
 
+        if(is_attacking_ex){
+            current_animation = is_facing_right ? &animation_attack_ex_right : &animation_attack_ex_left;
+        }
+
         current_animation->on_update(delta);
 
         timer_attack_cd.on_update(delta);
+        timer_invulnerable.on_update(delta);
+        timer_invulnerable_blink.on_update(delta);
+
+        if(is_showing_sketch_frame){
+            sketch_image(current_animation->get_current_frame(), &img_sketch);
+        }
 
         move_and_collide(delta);
     }
@@ -64,7 +89,16 @@ public:
     }
 
     virtual void on_draw(const Camera& camera) {
-        current_animation->on_draw(camera, position.x, position.y);
+        if(hp > 0 && is_invulnerable && is_showing_sketch_frame){
+            put_image_alpha(camera, position.x, position.y, &img_sketch);
+        }else{
+            current_animation->on_draw(camera, position.x, position.y);
+        }
+
+        if(is_debug){
+            setlinecolor(RGB(0, 125, 125));
+            rectangle(position.x, position.y, position.x + size.x, position.y + size.y);
+        }
     }
 
     virtual void on_input(const ExMessage& msg) {
@@ -186,7 +220,12 @@ public:
     PlayerId get_id() const {
         return id;
     }
-    
+
+    void make_invulnerable() {
+        is_invulnerable = true;
+        timer_invulnerable.restart();
+    }
+
     virtual void on_attack() = 0;
     virtual void on_attack_ex() = 0;
 
@@ -224,6 +263,12 @@ protected:
 
     bool is_attacking_ex = false;
 
+    IMAGE img_sketch;
+    bool is_invulnerable = false;
+    bool is_showing_sketch_frame = false;
+    Timer timer_invulnerable;
+    Timer timer_invulnerable_blink;
+
 protected:
     void move_and_collide(int delta) {
         velocity.y += gravity * delta;
@@ -248,6 +293,21 @@ protected:
                 }
             }
 
+        }
+
+        if(!is_invulnerable){
+            for(Bullet* bullet : bullet_list){
+                if(bullet->get_collide_target() != id || !bullet->get_valid()){
+                    continue;
+                }
+
+                if(bullet->check_collision(position, size)){
+                    make_invulnerable();
+                    bullet->on_collide();
+                    bullet->set_valid(false);
+                    hp -= bullet->get_damage();
+                }
+            }
         }
     }
 };

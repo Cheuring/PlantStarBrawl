@@ -57,6 +57,8 @@ public:
         }else{
             animation_break.on_draw(camera, (int)position.x, (int)position.y);
         }
+
+        Bullet::on_draw(camera);
     }
 
 private:
