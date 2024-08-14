@@ -63,7 +63,7 @@ Atlas atlas_pea_break;                          //  豌豆击中效果图集
 Atlas atlas_sun;                                //  太阳图片图集
 Atlas atlas_sun_explode;                        //  太阳爆炸效果图集
 Atlas atlas_sun_ex;                             //  太阳额外效果图集
-Atlas atlas_ex_explode;                         //  额外效果爆炸图集
+Atlas atlas_sun_ex_explode;                         //  额外效果爆炸图集
 Atlas atlas_sun_text;                           //  太阳文本图集
 
 Atlas atlas_run_effect;                         //  奔跑效果图集
@@ -145,7 +145,7 @@ void load_game_resources(){
     atlas_sun.load_from_file(_T(MEDIA_PATH_PREFIX "sun_%d.png"), 5);
     atlas_sun_explode.load_from_file(_T(MEDIA_PATH_PREFIX "sun_explode_%d.png"), 5);
     atlas_sun_ex.load_from_file(_T(MEDIA_PATH_PREFIX "sun_ex_%d.png"), 5);
-    atlas_ex_explode.load_from_file(_T(MEDIA_PATH_PREFIX "ex_explode_%d.png"), 5);
+    atlas_sun_ex_explode.load_from_file(_T(MEDIA_PATH_PREFIX "sun_ex_explode_%d.png"), 5);
     atlas_sun_text.load_from_file(_T(MEDIA_PATH_PREFIX "sun_text_%d.png"), 6);
 
     atlas_run_effect.load_from_file(_T(MEDIA_PATH_PREFIX "run_effect_%d.png"), 4);
