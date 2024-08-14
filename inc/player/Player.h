@@ -5,16 +5,27 @@
 #include <vector>
 
 #include "Animation.h"
+#include "Bullet.h"
 #include "Camera.h"
+#include "Timer.h"
 #include "Platform.h"
 #include "PlayerId.h"
 #include "Vector2.h"
 
+extern std::vector<Bullet *> bullet_list;
 extern std::vector<Platform> platform_list;
 
 class Player {
 public:
-    Player() = default;
+    Player() {
+        current_animation = &animation_idle_right;
+
+        timer_attack_cd.set_wait_time(attack_cd);
+        timer_attack_cd.set_one_shot(true);
+        timer_attack_cd.set_callback([&](){
+            can_attack = true;
+        });
+    }
     ~Player() = default;
 
     virtual void on_update(int delta) {
@@ -31,19 +42,25 @@ public:
 
         current_animation->on_update(delta);
 
+        timer_attack_cd.on_update(delta);
+
         move_and_collide(delta);
     }
 
     virtual void on_run(float distance) {
+        if(is_attacking_ex){
+            return;
+        }
+
         position.x += distance;
     }
 
     virtual void on_jump() {
-        if(velocity.y == 0){
-            velocity.y = jump_velocity;
-        }else {
+        if(velocity.y != 0 || is_attacking_ex){
             return;
         }
+
+        velocity.y = jump_velocity;
     }
 
     virtual void on_draw(const Camera& camera) {
@@ -68,6 +85,21 @@ public:
                             case 'w':
                                 on_jump();
                                 break;
+                            case 'F':
+                            case 'f':
+                                if(can_attack){
+                                    on_attack();
+                                    can_attack = false;
+                                    timer_attack_cd.restart();
+                                }
+                                break;
+                            case 'G':
+                            case 'g':
+                                if(mp >= 100){
+                                    on_attack_ex();
+                                    mp = 0;
+                                }
+                                break;
                         }
                         break;
                     case PlayerId::P2:
@@ -80,6 +112,21 @@ public:
                                 break;
                             case VK_UP:
                                 on_jump();
+                                break;
+                                //  . key
+                            case VK_OEM_PERIOD:
+                                if(can_attack){
+                                    on_attack();
+                                    can_attack = false;
+                                    timer_attack_cd.restart();
+                                }
+                                break;
+                                //  / key
+                            case VK_OEM_2:
+                                if(mp >= 100){
+                                    on_attack_ex();
+                                    mp = 0;
+                                }
                                 break;
                         }
                         break;
@@ -128,10 +175,28 @@ public:
         position.y = y;
     }
 
+    const Vector2& get_position() const {
+        return position;
+    }
+
+    const Vector2& get_size() const {
+        return size;
+    }
+
+    PlayerId get_id() const {
+        return id;
+    }
+    
+    virtual void on_attack() = 0;
+    virtual void on_attack_ex() = 0;
+
 protected:
     const float gravity = 1.6e-3f;
     const float run_velocity = 0.55f;
     const float jump_velocity = -0.85f;
+
+    int mp = 0;     //  Magic Point
+    int hp = 100;   //  Health Point
     
     Vector2 position;
     Vector2 velocity;
@@ -141,6 +206,8 @@ protected:
     Animation animation_idle_right;
     Animation animation_run_left;
     Animation animation_run_right;
+    Animation animation_attack_ex_left;
+    Animation animation_attack_ex_right;
 
     Animation* current_animation = nullptr;
 
@@ -150,6 +217,12 @@ protected:
     bool is_right_key_down = false;
 
     bool is_facing_right = true;
+
+    int attack_cd = 500;
+    bool can_attack = true;
+    Timer timer_attack_cd;
+
+    bool is_attacking_ex = false;
 
 protected:
     void move_and_collide(int delta) {

@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "Atlas.h"
+#include "Bullet.h"
 #include "Camera.h"
 #include "GameScene.h"
 #include "MediaSource.h"
@@ -22,6 +23,7 @@ Scene* selector_scene = nullptr;
 Camera main_camera;
 SceneManager scene_manager;
 
+std::vector<Bullet *> bullet_list;
 std::vector<Platform> platform_list;
 
 Player* player_1 = nullptr;

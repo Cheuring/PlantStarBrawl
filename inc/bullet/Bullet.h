@@ -25,6 +25,9 @@ public:
         position.x = x;
         position.y = y;
     }
+    void set_position(const Vector2& position) {
+        this->position = position;
+    }
 
     const Vector2& get_position() const {
         return position;
@@ -37,6 +40,9 @@ public:
     void set_velocity(float x, float y) {
         velocity.x = x;
         velocity.y = y;
+    }
+    void set_velocity(const Vector2& velocity) {
+        this->velocity = velocity;
     }
 
     void set_collide_target(PlayerId target_id) {
