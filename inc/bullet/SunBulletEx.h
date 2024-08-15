@@ -52,7 +52,7 @@ public:
         return is_collide_x && is_collide_y;
     }
 
-    void on_update(int delta) {
+    void on_update(int delta) override {
         if(valid){
             position += velocity * (float)delta;
             animation_idle.on_update(delta);
