@@ -272,6 +272,8 @@ public:
                 break;
         }
         player_2->set_id(PlayerId::P2);
+
+        mciSendString(_T("stop bgm_menu"), NULL, 0, NULL);
     }
 
 private:

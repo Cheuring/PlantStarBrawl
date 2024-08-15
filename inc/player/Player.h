@@ -22,6 +22,9 @@ extern Atlas atlas_run_effect;
 extern Atlas atlas_jump_effect;
 extern Atlas atlas_land_effect;
 
+extern IMAGE img_1P_cursor;
+extern IMAGE img_2P_cursor;
+
 class Player {
 public:
     Player() {
@@ -78,6 +81,12 @@ public:
         animation_land_effect.set_on_finish([&](){
             is_land_effect_visible = false;
         });
+
+        timer_cursor_visible.set_wait_time(2500);
+        timer_cursor_visible.set_one_shot(true);
+        timer_cursor_visible.set_callback([&](){
+            is_cursor_visible = false;
+        });
     }
     ~Player() = default;
 
@@ -100,6 +109,10 @@ public:
             current_animation = is_facing_right ? &animation_attack_ex_right : &animation_attack_ex_left;
         }
 
+        if(hp <= 0){
+            current_animation = last_hurt_direction.x < 0 ? &animation_die_left : &animation_die_right;
+        }
+
         current_animation->on_update(delta);
         animation_jump_effect.on_update(delta);
         animation_land_effect.on_update(delta);
@@ -108,6 +121,7 @@ public:
         timer_invulnerable.on_update(delta);
         timer_invulnerable_blink.on_update(delta);
         timer_run_effect_generation.on_update(delta);
+        timer_cursor_visible.on_update(delta);
 
         if(hp <= 0){
             timer_die_effect_generation.on_update(delta);
@@ -177,6 +191,19 @@ public:
             put_image_alpha(camera, position.x, position.y, &img_sketch);
         }else{
             current_animation->on_draw(camera, position.x, position.y);
+        }
+
+        if(is_cursor_visible){
+            switch (id) {
+                case PlayerId::P1:
+                    put_image_alpha(camera, position.x + (size.x - img_1P_cursor.getwidth()) / 2,
+                        position.y - img_1P_cursor.getheight() , &img_1P_cursor);
+                    break;
+                case PlayerId::P2:
+                    put_image_alpha(camera, position.x + (size.x - img_2P_cursor.getwidth()) / 2,
+                        position.y - img_2P_cursor.getheight() , &img_2P_cursor);
+                    break;
+            }
         }
 
         if(is_debug){
@@ -309,6 +336,10 @@ public:
         return hp;
     }
 
+    void set_hp(int hp) {
+        this->hp = hp;
+    }
+
     int get_mp() const {
         return mp;
     }
@@ -341,6 +372,8 @@ protected:
     Animation animation_attack_ex_right;
     Animation animation_jump_effect;
     Animation animation_land_effect;
+    Animation animation_die_left;
+    Animation animation_die_right;
 
     bool is_jump_effect_visible = false;
     bool is_land_effect_visible = false;
@@ -374,12 +407,21 @@ protected:
     Timer timer_run_effect_generation;
     Timer timer_die_effect_generation;
 
+    bool is_cursor_visible = true;
+    Timer timer_cursor_visible;
+
+    Vector2 last_hurt_direction;
+
 protected:
     void move_and_collide(int delta) {
         float last_velocity_y = velocity.y;
 
         velocity.y += gravity * delta;
-        position.y += velocity.y * delta;
+        position += velocity * (float)delta;
+
+        if(hp <= 0) {
+            return;
+        }
 
         if(velocity.y > 0){
             for(const auto& platform : platform_list){
@@ -416,6 +458,12 @@ protected:
                     bullet->on_collide();
                     bullet->set_valid(false);
                     hp -= bullet->get_damage();
+                    last_hurt_direction = bullet->get_position() - position;
+
+                    if(hp <= 0) {
+                        velocity.x = last_hurt_direction.x < 0 ? 0.35f : -0.35f;
+                        velocity.y = -1.f;
+                    }
                 }
             }
         }

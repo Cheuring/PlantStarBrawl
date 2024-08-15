@@ -27,12 +27,41 @@ extern Player* player_2;
 extern IMAGE* img_player_1_avatar;
 extern IMAGE* img_player_2_avatar;
 
+extern IMAGE img_1P_winner;
+extern IMAGE img_2P_winner;
+extern IMAGE img_winner_bar;
+
 class GameScene : public Scene {
 public:
     GameScene() = default;
     ~GameScene() = default;
 
     void on_enter() override {
+        is_game_over = false;
+        is_slide_out_started = false;
+
+        pos_img_winner_bar.x = -img_winner_bar.getwidth();
+        pos_img_winner_bar.y = (getheight() - img_winner_bar.getheight()) / 2;
+        pos_x_img_winner_bat_dest = (getwidth() - img_winner_bar.getwidth()) / 2;
+
+        pos_img_winner_text.x = img_1P_winner.getwidth();
+        pos_img_winner_text.y = (getheight() - img_1P_winner.getheight()) / 2;
+        pos_x_img_winner_text_dest = (getwidth() - img_1P_winner.getwidth()) / 2;
+
+        timer_winner_slide_in.restart();
+        timer_winner_slide_in.set_wait_time(2500);
+        timer_winner_slide_in.set_one_shot(true);
+        timer_winner_slide_in.set_callback([&](){
+            is_slide_out_started = true;
+        });
+
+        timer_winner_slide_out.restart();
+        timer_winner_slide_out.set_wait_time(1000);
+        timer_winner_slide_out.set_one_shot(true);
+        timer_winner_slide_out.set_callback([&](){
+            scene_manager.switch_to(SceneManager::SceneType::Menu);
+        });
+
         status_bar_1P.set_avatar(img_player_1_avatar);
         status_bar_2P.set_avatar(img_player_2_avatar);
 
@@ -81,9 +110,25 @@ public:
         small_plaform_3.shape.left = (float)small_plaform_3.render_positon.x + 40;
         small_plaform_3.shape.right = (float)small_plaform_3.render_positon.x + img_platform_small.getwidth() - 40;
         small_plaform_3.shape.y = (float)small_plaform_3.render_positon.y + img_platform_small.getheight() / 2;
+
+        mciSendString(_T("play bgm_game repeat from 0"), NULL, 0, NULL);
     }
 
     void on_exit() override {
+        delete player_1;
+        delete player_2;
+        player_1 = nullptr;
+        player_2 = nullptr;
+
+        is_debug = false;
+
+        for(auto& bullet : bullet_list){
+            delete bullet;
+        }
+        bullet_list.clear();
+        
+        main_camera.reset();
+
     }
 
     void on_input(const ExMessage& msg) override {
@@ -128,10 +173,47 @@ public:
             bullet->on_update(delta);
         }
 
+        const auto& player_1_pos = player_1->get_position();
+        const auto& player_2_pos = player_2->get_position();
+
+        if(player_1_pos.y >= getheight()){
+            player_1->set_hp(0);
+        }
+        if(player_2_pos.y >= getheight()){
+            player_2->set_hp(0);
+        }
+
+        if(player_1->get_hp() <= 0 || player_2->get_hp() <= 0){
+            if(!is_game_over) {
+                mciSendString(_T("stop bgm_game"), NULL, 0, NULL);
+                mciSendString(_T("play ui_win from 0"), NULL, 0, NULL);
+            }
+
+            is_game_over = true;
+        }
+
         status_bar_1P.set_hp(player_1->get_hp());
         status_bar_1P.set_mp(player_1->get_mp());
         status_bar_2P.set_hp(player_2->get_hp());
         status_bar_2P.set_mp(player_2->get_mp());
+
+        if(is_game_over) {
+            pos_img_winner_bar.x += (int)(speed_winner_bar * delta);
+            pos_img_winner_text.x += (int)(speed_winner_text * delta);
+
+            if(is_slide_out_started){
+                timer_winner_slide_out.on_update(delta);
+            }else{
+                timer_winner_slide_in.on_update(delta);
+
+                if(pos_img_winner_bar.x > pos_x_img_winner_bat_dest){
+                    pos_img_winner_bar.x = pos_x_img_winner_bat_dest;
+                }
+                if(pos_img_winner_text.x > pos_x_img_winner_text_dest){
+                    pos_img_winner_text.x = pos_x_img_winner_text_dest;
+                }
+            }
+        }
     }
 
     void on_draw(const Camera& camera) override {
@@ -154,17 +236,35 @@ public:
             bullet->on_draw(camera);
         }
 
-        status_bar_1P.on_draw();
-        status_bar_2P.on_draw();
+        if(is_game_over) {
+            put_image_alpha(pos_img_winner_bar.x, pos_img_winner_bar.y, &img_winner_bar);
+            put_image_alpha(pos_img_winner_text.x, pos_img_winner_text.y,
+                player_1->get_hp() > player_2->get_hp() ? &img_1P_winner : &img_2P_winner);
+        }else {
+            status_bar_1P.on_draw();
+            status_bar_2P.on_draw();
+        }
     }
 
 private:
+    const float speed_winner_bar = 3.f;
+    const float speed_winner_text = 1.5f;
+
     POINT pos_img_sky = {0, 0};
     POINT pos_img_hills = {0, 0};
 
     StatusBar status_bar_1P;
     StatusBar status_bar_2P;
 
+    bool is_game_over = false;
+
+    POINT pos_img_winner_bar = {0, 0};
+    POINT pos_img_winner_text = {0, 0};
+    int pos_x_img_winner_bat_dest = 0;
+    int pos_x_img_winner_text_dest = 0;
+    Timer timer_winner_slide_in;
+    Timer timer_winner_slide_out;
+    bool is_slide_out_started = false;
 };
 
 #endif // _GAME_SCENE_H_
