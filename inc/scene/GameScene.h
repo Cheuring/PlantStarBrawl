@@ -21,6 +21,8 @@ extern std::vector<Bullet *> bullet_list;
 extern std::vector<Platform> platform_list;
 extern SceneManager scene_manager;
 
+extern bool is_debug;
+
 extern Player* player_1;
 extern Player* player_2;
 
@@ -129,6 +131,7 @@ public:
         
         main_camera.reset();
 
+        mciSendString(_T("stop bgm_game"), NULL, 0, NULL);
     }
 
     void on_input(const ExMessage& msg) override {

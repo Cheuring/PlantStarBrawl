@@ -88,14 +88,16 @@ public:
         if(is_debug){
             setfillcolor(RGB(255, 255, 255));
             setlinecolor(RGB(255, 255, 255));
-            rectangle(position.x, position.y, position.x + size.x, position.y + size.y);
-            solidcircle(position.x + size.x / 2, position.y + size.y / 2, 5);
+            rectangle(position.x + collision_offset.x, position.y + collision_offset.y,
+                position.x + size.x - collision_offset.x, position.y + size.y - collision_offset.y);
+            solidcircle(position.x + collision_offset.x + size.x / 2, position.y + collision_offset.y + size.y / 2, 5);
         }
     }
 
 
 protected:
     Vector2 size;
+    Vector2 collision_offset;
     Vector2 position;
     Vector2 velocity;
     int damage = 10;

@@ -1,4 +1,5 @@
 #include <graphics.h>
+#include <windows.h>
 #include <vector>
 
 #include "Atlas.h"

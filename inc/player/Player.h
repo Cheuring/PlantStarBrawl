@@ -174,6 +174,16 @@ public:
         position_land_effect.y = position.y + size.y - effect_frame->getheight();
     }
 
+    virtual void on_drop() {
+        if(velocity.y == 0){
+            if(position.y + size.y == platform_list[0].shape.y){
+                return;
+            }
+            position.y += 1;
+            velocity.y = 0.1f;
+        }
+    }
+
     virtual void on_draw(const Camera& camera) {
         if(is_jump_effect_visible){
             animation_jump_effect.on_draw(camera, position_jump_effect.x, position_jump_effect.y);
@@ -230,6 +240,10 @@ public:
                             case 'w':
                                 on_jump();
                                 break;
+                            case 'S':
+                            case 's':
+                                on_drop();
+                                break;
                             case 'F':
                             case 'f':
                                 if(can_attack){
@@ -242,7 +256,9 @@ public:
                             case 'g':
                                 if(mp >= 100){
                                     on_attack_ex();
-                                    mp = 0;
+
+                                    if(!is_debug)
+                                        mp = 0;
                                 }
                                 break;
                         }
@@ -258,6 +274,9 @@ public:
                             case VK_UP:
                                 on_jump();
                                 break;
+                            case VK_DOWN:
+                                on_drop();
+                                break;
                                 //  . key
                             case VK_OEM_PERIOD:
                                 if(can_attack){
@@ -270,7 +289,9 @@ public:
                             case VK_OEM_2:
                                 if(mp >= 100){
                                     on_attack_ex();
-                                    mp = 0;
+
+                                    if(!is_debug)
+                                        mp = 0;
                                 }
                                 break;
                         }
@@ -457,7 +478,10 @@ protected:
                     make_invulnerable();
                     bullet->on_collide();
                     bullet->set_valid(false);
-                    hp -= bullet->get_damage();
+
+                    if(!is_debug)
+                        hp -= bullet->get_damage();
+
                     last_hurt_direction = bullet->get_position() - position;
 
                     if(hp <= 0) {

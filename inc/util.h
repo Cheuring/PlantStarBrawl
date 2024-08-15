@@ -5,7 +5,7 @@
 
 #include "Camera.h"
 
-const int FPS = 60;
+constexpr int FPS = 90;
 
 inline void flip_image(IMAGE* src, IMAGE* dest){
     if(src == nullptr || dest == nullptr){
