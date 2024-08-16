@@ -44,6 +44,8 @@ public:
         animation_die_right.set_loop(false);
 
         size.x = 96, size.y = 96;
+        collision_offset.x = 10;
+        collision_offset.y = 15;
 
         timer_attck_ex.set_wait_time(attack_ex_duration);
         timer_attck_ex.set_one_shot(true);

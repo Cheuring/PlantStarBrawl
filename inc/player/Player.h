@@ -27,7 +27,7 @@ extern IMAGE img_2P_cursor;
 
 class Player {
 public:
-    Player() {
+    Player(int attack_cd = 350) : attack_cd(attack_cd) {
         current_animation = &animation_idle_right;
 
         timer_attack_cd.set_wait_time(attack_cd);
@@ -218,7 +218,7 @@ public:
 
         if(is_debug){
             setlinecolor(RGB(0, 125, 125));
-            rectangle(position.x, position.y, position.x + size.x, position.y + size.y);
+            rectangle(position.x + collision_offset.x, position.y + collision_offset.y, position.x + size.x, position.y + size.y);
         }
     }
 
@@ -384,6 +384,7 @@ protected:
     Vector2 position;
     Vector2 velocity;
     Vector2 size;
+    Vector2 collision_offset;
 
     Animation animation_idle_left;
     Animation animation_idle_right;
@@ -411,7 +412,7 @@ protected:
 
     bool is_facing_right = true;
 
-    int attack_cd = 500;
+    int attack_cd = 350;
     bool can_attack = true;
     Timer timer_attack_cd;
 
@@ -474,13 +475,13 @@ protected:
                     continue;
                 }
 
-                if(bullet->check_collision(position, size)){
+                if(bullet->check_collision(position + collision_offset, size - collision_offset)){
+                    if(!is_debug)
+                        hp -= bullet->get_damage();
+
                     make_invulnerable();
                     bullet->on_collide();
                     bullet->set_valid(false);
-
-                    if(!is_debug)
-                        hp -= bullet->get_damage();
 
                     last_hurt_direction = bullet->get_position() - position;
 

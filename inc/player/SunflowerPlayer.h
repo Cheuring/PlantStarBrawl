@@ -22,7 +22,7 @@ extern Player* player_2;
 
 class SunflowerPlayer : public Player {
 public:
-    SunflowerPlayer() : Player() {
+    SunflowerPlayer() : Player(250) {
         animation_idle_left.set_atlas(&atlas_sunflower_idle_left);
         animation_idle_right.set_atlas(&atlas_sunflower_idle_right);
         animation_run_left.set_atlas(&atlas_sunflower_run_left);
@@ -60,8 +60,8 @@ public:
         });
 
         size.x = 96, size.y = 96;
-
-        attack_cd = 250;
+        collision_offset.x = 10;
+        collision_offset.y = 10;
     }
     ~SunflowerPlayer() = default;
 

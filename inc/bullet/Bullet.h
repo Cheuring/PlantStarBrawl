@@ -19,7 +19,7 @@ public:
         this->damage = damage;
     }
 
-    int get_damage() const {
+    virtual int get_damage() const {
         return damage;
     }
 
@@ -27,7 +27,7 @@ public:
         position.x = x;
         position.y = y;
     }
-    void set_position(const Vector2& position) {
+    virtual void set_position(const Vector2& position) {
         this->position = position;
     }
 

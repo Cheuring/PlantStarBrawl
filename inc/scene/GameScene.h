@@ -123,6 +123,7 @@ public:
         player_2 = nullptr;
 
         is_debug = false;
+        is_bgm_paused = false;
 
         for(auto& bullet : bullet_list){
             delete bullet;
@@ -148,6 +149,17 @@ public:
                 case 'q':
                 case 'Q':
                     is_debug = !is_debug;
+                    break;
+                case 'M':
+                case 'm':
+                    if(is_bgm_paused){
+                        mciSendString(_T("resume bgm_game"), NULL, 0, NULL);
+                        is_bgm_paused = false;
+                    }
+                    else{
+                        mciSendString(_T("pause bgm_game"), NULL, 0, NULL);
+                        is_bgm_paused = true;
+                    }
                     break;
                 default:
                     break;
@@ -260,6 +272,7 @@ private:
     StatusBar status_bar_2P;
 
     bool is_game_over = false;
+    bool is_bgm_paused = false;
 
     POINT pos_img_winner_bar = {0, 0};
     POINT pos_img_winner_text = {0, 0};

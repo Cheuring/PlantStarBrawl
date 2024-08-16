@@ -41,10 +41,13 @@ public:
         passed_time += delta;
         if(passed_time >= wait_time){
             if((!one_shot || (one_shot && !shotted)) && callback){
+                shotted = true;
+                passed_time = 0;
                 callback();
+            }else{
+                shotted = true;
+                passed_time = 0;
             }
-            shotted = true;
-            passed_time = 0;
         }
     }
 
