@@ -66,6 +66,7 @@ public:
         Player::on_update(delta);
 
         if(is_attacking_ex){
+            main_camera.shake(5, 100);
             timer_attack_ex.on_update(delta);
         }
     }

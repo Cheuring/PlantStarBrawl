@@ -33,6 +33,8 @@ IMAGE img_sunflower_selector_background_left;   //  向日葵选择器背景左�
 IMAGE img_sunflower_selector_background_right;  //  向日葵选择器背景右侧图片
 IMAGE img_gloomshroom_selector_background_left; //  朦胧菇选择器背景左侧图片
 IMAGE img_gloomshroom_selector_background_right;//  朦胧菇选择器背景右侧图片
+IMAGE img_nut_selector_background_left;         //  坚果选择器背景左侧图片
+IMAGE img_nut_selector_background_right;        //  坚果选择器背景右侧图片
 
 IMAGE img_sky;                                  //  天空图片
 IMAGE img_hills;                                //  山丘图片
@@ -69,6 +71,15 @@ Atlas atlas_gloomshroom_attack_ex_right;        //  朦胧菇攻击状态右侧�
 Atlas atlas_gloomshroom_die_left;               //  朦胧菇死亡状态左侧图集
 Atlas atlas_gloomshroom_die_right;              //  朦胧菇死亡状态右侧图集
 
+Atlas atlas_nut_idle_left;                      //  坚果闲置状态左侧图集
+Atlas atlas_nut_idle_right;                     //  坚果闲置状态右侧图集
+Atlas atlas_nut_run_left;                       //  坚果奔跑状态左侧图集
+Atlas atlas_nut_run_right;                      //  坚果奔跑状态右侧图集
+Atlas atlas_nut_attack_ex_left;                 //  坚果攻击状态左侧图集
+Atlas atlas_nut_attack_ex_right;                //  坚果攻击状态右侧图集
+Atlas atlas_nut_die_left;                       //  坚果死亡状态左侧图集
+Atlas atlas_nut_die_right;                      //  坚果死亡状态右侧图集
+
 IMAGE img_pea;                                  //  豌豆图片
 Atlas atlas_pea_break;                          //  豌豆击中效果图集
 
@@ -81,6 +92,8 @@ Atlas atlas_sun_text;                           //  太阳文本图集
 Atlas atlas_bubbles;                            //  泡泡图集
 Atlas atlas_bubbles_ex;                         //  泡泡额外图集
 
+Atlas atlas_nut_explode;                        //  坚果爆炸效果图集
+
 Atlas atlas_run_effect;                         //  奔跑效果图集
 Atlas atlas_jump_effect;                        //  跳跃效果图集
 Atlas atlas_land_effect;                        //  着陆效果图集
@@ -92,6 +105,7 @@ IMAGE img_winner_bar;                           //  胜利条图片
 IMAGE img_avatar_peashooter;                    //  豌豆射手头像图片
 IMAGE img_avatar_sunflower;                     //  向日葵头像图片
 IMAGE img_avatar_gloomshroom;                   //  朦胧菇头像图片
+IMAGE img_avatar_nut;                           //  坚果头像图片
 
 
 void flip_atlas(Atlas& src, Atlas& dest){
@@ -131,6 +145,8 @@ void load_game_resources(){
     flip_image(&img_sunflower_selector_background_right, &img_sunflower_selector_background_left);
     loadimage(&img_gloomshroom_selector_background_right, _T(MEDIA_PATH_PREFIX "gloomshroom_selector_background.png"));
     flip_image(&img_gloomshroom_selector_background_right, &img_gloomshroom_selector_background_left);
+    loadimage(&img_nut_selector_background_right, _T(MEDIA_PATH_PREFIX "nut_selector_background.png"));
+    flip_image(&img_nut_selector_background_right, &img_nut_selector_background_left);
 
     loadimage(&img_sky, _T(MEDIA_PATH_PREFIX "sky.png"));
     loadimage(&img_hills, _T(MEDIA_PATH_PREFIX "hills.png"));
@@ -167,6 +183,15 @@ void load_game_resources(){
     atlas_gloomshroom_die_right.load_from_file(_T(MEDIA_PATH_PREFIX "gloomshroom_die_%d.png"), 3);
     flip_atlas(atlas_gloomshroom_die_right, atlas_gloomshroom_die_left);
 
+    atlas_nut_idle_right.load_from_file(_T(MEDIA_PATH_PREFIX "nut_idle_%d.png"), 3);
+    flip_atlas(atlas_nut_idle_right, atlas_nut_idle_left);
+    atlas_nut_run_right.load_from_file(_T(MEDIA_PATH_PREFIX "nut_run_%d.png"), 3);
+    flip_atlas(atlas_nut_run_right, atlas_nut_run_left);
+    atlas_nut_attack_ex_right.load_from_file(_T(MEDIA_PATH_PREFIX "nut_attack_ex_%d.png"), 5);
+    flip_atlas(atlas_nut_attack_ex_right, atlas_nut_attack_ex_left);
+    atlas_nut_die_right.load_from_file(_T(MEDIA_PATH_PREFIX "nut_die_%d.png"), 3);
+    flip_atlas(atlas_nut_die_right, atlas_nut_die_left);
+
     loadimage(&img_pea, _T(MEDIA_PATH_PREFIX "pea.png"));
     atlas_pea_break.load_from_file(_T(MEDIA_PATH_PREFIX "pea_break_%d.png"), 3);
 
@@ -179,6 +204,8 @@ void load_game_resources(){
     atlas_bubbles.load_from_file(_T(MEDIA_PATH_PREFIX "bubbles_%d.png"), 7);
     atlas_bubbles_ex.load_from_file(_T(MEDIA_PATH_PREFIX "bubbles_ex_%d.png"), 7);
 
+    atlas_nut_explode.load_from_file(_T(MEDIA_PATH_PREFIX "nut_explode_%d.png"), 5);
+
     atlas_run_effect.load_from_file(_T(MEDIA_PATH_PREFIX "run_effect_%d.png"), 4);
     atlas_jump_effect.load_from_file(_T(MEDIA_PATH_PREFIX "jump_effect_%d.png"), 5);
     atlas_land_effect.load_from_file(_T(MEDIA_PATH_PREFIX "land_effect_%d.png"), 2);
@@ -190,6 +217,7 @@ void load_game_resources(){
     loadimage(&img_avatar_peashooter, _T(MEDIA_PATH_PREFIX "avatar_peashooter.png"));
     loadimage(&img_avatar_sunflower, _T(MEDIA_PATH_PREFIX "avatar_sunflower.png"));
     loadimage(&img_avatar_gloomshroom, _T(MEDIA_PATH_PREFIX "avatar_gloomshroom.png"));
+    loadimage(&img_avatar_nut, _T(MEDIA_PATH_PREFIX "avatar_nut.png"));
 
     mciSendString(_T("open " MEDIA_PATH_PREFIX "bgm_game.mp3 alias bgm_game"), NULL, 0, NULL);
     mciSendString(_T("open " MEDIA_PATH_PREFIX "bgm_menu.mp3 alias bgm_menu"), NULL, 0, NULL);
@@ -204,6 +232,8 @@ void load_game_resources(){
     mciSendString(_T("open " MEDIA_PATH_PREFIX "sun_text.mp3 alias sun_text"), NULL, 0, NULL);
     mciSendString(_T("open " MEDIA_PATH_PREFIX "bubbles_shot.mp3 alias bubbles_shot"), NULL, 0, NULL);
     mciSendString(_T("open " MEDIA_PATH_PREFIX "bubbles_shot_ex.mp3 alias bubbles_shot_ex"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "nut_explode.mp3 alias nut_explode"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "nut_dash.wav alias nut_dash"), NULL, 0, NULL);
     mciSendString(_T("open " MEDIA_PATH_PREFIX "ui_confirm.wav alias ui_confirm"), NULL, 0, NULL);
     mciSendString(_T("open " MEDIA_PATH_PREFIX "ui_switch.wav alias ui_switch"), NULL, 0, NULL);
     mciSendString(_T("open " MEDIA_PATH_PREFIX "ui_win.wav alias ui_win"), NULL, 0, NULL);

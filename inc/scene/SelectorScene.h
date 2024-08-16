@@ -4,6 +4,7 @@
 #include "Animation.h"
 #include "Atlas.h"
 #include "GloomShroomPlayer.h"
+#include "NutPlayer.h"
 #include "PeashooterPlayer.h"
 #include "PlayerId.h"
 #include "SunflowerPlayer.h"
@@ -39,6 +40,8 @@ extern IMAGE img_sunflower_selector_background_left;
 extern IMAGE img_sunflower_selector_background_right;
 extern IMAGE img_gloomshroom_selector_background_left;
 extern IMAGE img_gloomshroom_selector_background_right;
+extern IMAGE img_nut_selector_background_left;
+extern IMAGE img_nut_selector_background_right;
 
 extern Atlas atlas_peashooter_idle_right;
 extern Atlas atlas_peashooter_idle_left;
@@ -46,10 +49,13 @@ extern Atlas atlas_sunflower_idle_right;
 extern Atlas atlas_sunflower_idle_left;
 extern Atlas atlas_gloomshroom_idle_right;
 extern Atlas atlas_gloomshroom_idle_left;
+extern Atlas atlas_nut_idle_right;
+extern Atlas atlas_nut_idle_left;
 
 extern IMAGE img_avatar_peashooter;
 extern IMAGE img_avatar_sunflower;
 extern IMAGE img_avatar_gloomshroom;
+extern IMAGE img_avatar_nut;
 
 
 class SelectorScene : public Scene {
@@ -75,6 +81,12 @@ public:
 
         animation_gloomshroom_left.set_atlas(&atlas_gloomshroom_idle_left);
         animation_gloomshroom_left.set_interval(100);
+
+        animation_nut.set_atlas(&atlas_nut_idle_right);
+        animation_nut.set_interval(100);
+
+        animation_nut_left.set_atlas(&atlas_nut_idle_left);
+        animation_nut_left.set_interval(100);
 
         static const int OFFSET_X = 50;
 
@@ -117,6 +129,8 @@ public:
         animation_sunflower_left.on_update(delta);
         animation_gloomshroom.on_update(delta);
         animation_gloomshroom_left.on_update(delta);
+        animation_nut.on_update(delta);
+        animation_nut_left.on_update(delta);
 
         selector_background_scroll_offset_x += 5;
         if(selector_background_scroll_offset_x >= img_peashooter_selector_background_left.getwidth()){
@@ -141,6 +155,10 @@ public:
             case PlayerType::Gloomshroom:
                 img_p1_selector_background = &img_gloomshroom_selector_background_right;
                 break;
+
+            case PlayerType::Nut:
+                img_p1_selector_background = &img_nut_selector_background_right;
+                break;
         }
 
         switch (player_1P) {
@@ -155,6 +173,10 @@ public:
             
             case PlayerType::Gloomshroom:
                 img_p2_selector_background = &img_gloomshroom_selector_background_left;
+                break;
+
+            case PlayerType::Nut:
+                img_p2_selector_background = &img_nut_selector_background_left;
                 break;
         }
 
@@ -190,6 +212,11 @@ public:
                 pos_img_1P_name.x = pos_img_1P_gravestone.x + (img_gravestone_left.getwidth() - textwidth(str_gloomshroom_name)) / 2;
                 outtextxy_shaded(pos_img_1P_name.x, pos_img_1P_name.y, str_gloomshroom_name);
                 break;
+            case PlayerType::Nut:
+                animation_nut.on_draw(camera, pos_animation_1P.x, pos_animation_1P.y);
+                pos_img_1P_name.x = pos_img_1P_gravestone.x + (img_gravestone_left.getwidth() - textwidth(str_nut_name)) / 2;
+                outtextxy_shaded(pos_img_1P_name.x, pos_img_1P_name.y, str_nut_name);
+                break;
         }
 
         switch (player_2P) {
@@ -207,6 +234,11 @@ public:
                 animation_gloomshroom_left.on_draw(camera, pos_animation_2P.x, pos_animation_2P.y);
                 pos_img_2P_name.x = pos_img_2P_gravestone.x + (img_gravestone_right.getwidth() - textwidth(str_gloomshroom_name)) / 2;
                 outtextxy_shaded(pos_img_2P_name.x, pos_img_2P_name.y, str_gloomshroom_name);
+                break;
+            case PlayerType::Nut:
+                animation_nut_left.on_draw(camera, pos_animation_2P.x, pos_animation_2P.y);
+                pos_img_2P_name.x = pos_img_2P_gravestone.x + (img_gravestone_right.getwidth() - textwidth(str_nut_name)) / 2;
+                outtextxy_shaded(pos_img_2P_name.x, pos_img_2P_name.y, str_nut_name);
                 break;
         }
 
@@ -294,6 +326,10 @@ public:
                 player_1 = new GloomShroomPlayer();
                 img_player_1_avatar = &img_avatar_gloomshroom;
                 break;
+            case PlayerType::Nut:
+                player_1 = new NutPlayer();
+                img_player_1_avatar = &img_avatar_nut;
+                break;
         }
         player_1->set_id(PlayerId::P1);
 
@@ -310,6 +346,10 @@ public:
                 player_2 = new GloomShroomPlayer();
                 img_player_2_avatar = &img_avatar_gloomshroom;
                 break;
+            case PlayerType::Nut:
+                player_2 = new NutPlayer();
+                img_player_2_avatar = &img_avatar_nut;
+                break;
         }
         player_2->set_id(PlayerId::P2);
 
@@ -321,6 +361,7 @@ private:
         Peashooter,
         Sunflower,
         Gloomshroom,
+        Nut,
         Invalid
     };
 
@@ -347,6 +388,8 @@ private:
     Animation animation_sunflower_left;
     Animation animation_gloomshroom;
     Animation animation_gloomshroom_left;
+    Animation animation_nut;
+    Animation animation_nut_left;
 
     PlayerType player_1P = PlayerType::Peashooter;
     PlayerType player_2P = PlayerType::Sunflower;
@@ -354,6 +397,7 @@ private:
     LPCTSTR str_peashooter_name = _T("婉逗射手");
     LPCTSTR str_sunflower_name = _T("龙日葵");
     LPCTSTR str_gloomshroom_name = _T("末日菇");
+    LPCTSTR str_nut_name = _T("贱贱果");
 
     int selector_background_scroll_offset_x = 0;
 
