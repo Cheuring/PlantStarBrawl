@@ -15,7 +15,7 @@ class SunBulletEx : public Bullet {
 public:
     SunBulletEx() {
         size.x = 288, size.y = 288;
-        collision_offset.x = 20, collision_offset.y = 20;
+        collision_offset.x = 65, collision_offset.y = 65;
         damage = 20;
 
         animation_idle.set_atlas(&atlas_sun_ex);
@@ -41,15 +41,6 @@ public:
         main_camera.shake(20, 350);
 
         mciSendString(_T("play sun_explode_ex from 0"), NULL, 0, NULL);
-    }
-
-    bool check_collision(const Vector2& position, const Vector2& size) override {
-        bool is_collide_x = (std::max(this->position.x + this->size.x - this->collision_offset.x, position.x + size.x)
-            - std::min(this->position.x + this->collision_offset.x, position.x)) <= (this->size.x + size.x - this->collision_offset.x * 2);
-        bool is_collide_y = (std::max(this->position.y + this->size.y - this->collision_offset.y, position.y + size.y)
-            - std::min(this->position.y + this->collision_offset.y, position.y)) <= (this->size.y + size.y - this->collision_offset.y * 2);
-
-        return is_collide_x && is_collide_y;
     }
 
     void on_update(int delta) override {

@@ -76,21 +76,23 @@ public:
     }
 
     virtual bool check_collision(const Vector2& position, const Vector2& size) {
-        return this->position.x + this->size.x / 2 >= position.x
-            && this->position.x + this->size.x / 2 <= position.x + size.x
-            && this->position.y + this->size.y / 2 >= position.y
-            && this->position.y + this->size.y / 2 <= position.y + size.y;
+        bool is_collide_x = (std::max(this->position.x + this->size.x - this->collision_offset.x, position.x + size.x)
+            - std::min(this->position.x + this->collision_offset.x, position.x)) <= (this->size.x + size.x - this->collision_offset.x * 2);
+        bool is_collide_y = (std::max(this->position.y + this->size.y - this->collision_offset.y, position.y + size.y)
+            - std::min(this->position.y + this->collision_offset.y, position.y)) <= (this->size.y + size.y - this->collision_offset.y * 2);
+
+        return is_collide_x && is_collide_y;
     }
 
 
     virtual void on_update(int delta) = 0;
     virtual void on_draw(const Camera& camera) const {
         if(is_debug){
-            setfillcolor(RGB(255, 255, 255));
-            setlinecolor(RGB(255, 255, 255));
+            setfillcolor(RGB(128, 0, 128));
+            setlinecolor(RGB(128, 0, 128));
             rectangle(position.x + collision_offset.x, position.y + collision_offset.y,
                 position.x + size.x - collision_offset.x, position.y + size.y - collision_offset.y);
-            solidcircle(position.x + collision_offset.x + size.x / 2, position.y + collision_offset.y + size.y / 2, 5);
+            solidcircle(position.x + size.x / 2, position.y + size.y / 2, 5);
         }
     }
 

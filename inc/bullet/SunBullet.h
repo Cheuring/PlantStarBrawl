@@ -15,6 +15,7 @@ class SunBullet : public Bullet {
 public:
     SunBullet() {
         size.x = 96, size.y = 96;
+        collision_offset.x = 25, collision_offset.y = 25;
         damage = 15;
 
         animation_idle.set_atlas(&atlas_sun);

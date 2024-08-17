@@ -120,7 +120,7 @@ public:
         auto& target_size = target_player->get_size();
         auto& target_position = target_player->get_position();
         bullet_position.x = target_position.x + (target_size.x - bullet_size.x) / 2;
-        bullet_position.y = - bullet_size.y;
+        bullet_position.y = -bullet_size.y * 0.75;
         bullet_velocity.x = 0;
         bullet_velocity.y = speed_sun_ex;
 
@@ -140,7 +140,7 @@ public:
 
 
 private:
-    const float speed_sun_ex = 0.15f;
+    const float speed_sun_ex = 0.30f;
     const Vector2 velocity_sun = {0.25f, -0.5f};
 
     Animation animation_sun_text;

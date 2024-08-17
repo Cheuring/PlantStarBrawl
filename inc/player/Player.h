@@ -218,7 +218,7 @@ public:
 
         if(is_debug){
             setlinecolor(RGB(0, 125, 125));
-            rectangle(position.x + collision_offset.x, position.y + collision_offset.y, position.x + size.x, position.y + size.y);
+            rectangle(position.x + collision_offset.x, position.y + collision_offset.y, position.x + size.x - collision_offset.x, position.y + size.y);
         }
     }
 
@@ -475,7 +475,7 @@ protected:
                     continue;
                 }
 
-                if(bullet->check_collision(position + collision_offset, size - collision_offset)){
+                if(bullet->check_collision(position + collision_offset, {size.x - collision_offset.x * 2, size.y - collision_offset.y})){
                     if(!is_debug)
                         hp -= bullet->get_damage();
 

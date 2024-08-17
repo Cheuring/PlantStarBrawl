@@ -11,6 +11,7 @@ class PeaBullet : public Bullet {
 public:
     PeaBullet() {
         size.x = 64, size.y = 64;
+        collision_offset.x = 25, collision_offset.y = 25;
         damage = 10;
 
         animation_break.set_atlas(&atlas_pea_break);
