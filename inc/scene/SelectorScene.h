@@ -365,22 +365,22 @@ private:
         Invalid
     };
 
-    POINT pos_img_VS = { 0, 0 };                //  VS å›¾ç‰‡ä½ç½®
-    POINT pos_img_tip = { 0, 0 };               //  æç¤ºä¿¡æ¯çš„æ ‡å›¾ç‰‡ä½ç½®
-    POINT pos_img_1P = { 0, 0 };                //  1P çš„æ ‡å›¾ç‰‡ä½ç½®
-    POINT pos_img_2P = { 0, 0 };                //  2P çš„æ ‡å›¾ç‰‡ä½ç½®
-    POINT pos_img_1P_desc = { 0, 0 };           //  1P æè¿°ä½ç½®
-    POINT pos_img_2P_desc = { 0, 0 };           //  2P æè¿°ä½ç½®
-    POINT pos_img_1P_name = { 0, 0 };           //  1P åç§°ä½ç½®
-    POINT pos_img_2P_name = { 0, 0 };           //  2P åç§°ä½ç½®
-    POINT pos_animation_1P = { 0, 0 };          //  1P åŠ¨ç”»ä½ç½®
-    POINT pos_animation_2P = { 0, 0 };          //  2P åŠ¨ç”»ä½ç½®
-    POINT pos_img_1P_gravestone = { 0, 0 };     //  1P å¢“ç¢‘ä½ç½®
-    POINT pos_img_2P_gravestone = { 0, 0 };     //  2P å¢“ç¢‘ä½ç½®
-    POINT pos_1P_selector_btn_left = { 0, 0 };  //  1P è§’è‰²åˆ‡æ¢æŒ‰é’®ä½ç½®
-    POINT pos_1P_selector_btn_right = { 0, 0 }; //  1P è§’è‰²åˆ‡æ¢æŒ‰é’®ä½ç½®
-    POINT pos_2P_selector_btn_left = { 0, 0 };  //  2P è§’è‰²åˆ‡æ¢æŒ‰é’®ä½ç½®
-    POINT pos_2P_selector_btn_right = { 0, 0 }; //  2P è§’è‰²åˆ‡æ¢æŒ‰é’®ä½ç½®
+    POINT pos_img_VS = { 0, 0 };                //  VS Í¼Æ¬Î»ÖÃ
+    POINT pos_img_tip = { 0, 0 };               //  ÌáÊ¾ĞÅÏ¢µÄ±êÍ¼Æ¬Î»ÖÃ
+    POINT pos_img_1P = { 0, 0 };                //  1P µÄ±êÍ¼Æ¬Î»ÖÃ
+    POINT pos_img_2P = { 0, 0 };                //  2P µÄ±êÍ¼Æ¬Î»ÖÃ
+    POINT pos_img_1P_desc = { 0, 0 };           //  1P ÃèÊöÎ»ÖÃ
+    POINT pos_img_2P_desc = { 0, 0 };           //  2P ÃèÊöÎ»ÖÃ
+    POINT pos_img_1P_name = { 0, 0 };           //  1P Ãû³ÆÎ»ÖÃ
+    POINT pos_img_2P_name = { 0, 0 };           //  2P Ãû³ÆÎ»ÖÃ
+    POINT pos_animation_1P = { 0, 0 };          //  1P ¶¯»­Î»ÖÃ
+    POINT pos_animation_2P = { 0, 0 };          //  2P ¶¯»­Î»ÖÃ
+    POINT pos_img_1P_gravestone = { 0, 0 };     //  1P Ä¹±®Î»ÖÃ
+    POINT pos_img_2P_gravestone = { 0, 0 };     //  2P Ä¹±®Î»ÖÃ
+    POINT pos_1P_selector_btn_left = { 0, 0 };  //  1P ½ÇÉ«ÇĞ»»°´Å¥Î»ÖÃ
+    POINT pos_1P_selector_btn_right = { 0, 0 }; //  1P ½ÇÉ«ÇĞ»»°´Å¥Î»ÖÃ
+    POINT pos_2P_selector_btn_left = { 0, 0 };  //  2P ½ÇÉ«ÇĞ»»°´Å¥Î»ÖÃ
+    POINT pos_2P_selector_btn_right = { 0, 0 }; //  2P ½ÇÉ«ÇĞ»»°´Å¥Î»ÖÃ
 
     Animation animation_peashooter;
     Animation animation_peashooter_left;
@@ -394,10 +394,10 @@ private:
     PlayerType player_1P = PlayerType::Peashooter;
     PlayerType player_2P = PlayerType::Sunflower;
 
-    LPCTSTR str_peashooter_name = _T("å©‰é€—å°„æ‰‹");
-    LPCTSTR str_sunflower_name = _T("é¾™æ—¥è‘µ");
-    LPCTSTR str_gloomshroom_name = _T("æœ«æ—¥è‡");
-    LPCTSTR str_nut_name = _T("è´±è´±æœ");
+    LPCTSTR str_peashooter_name = _T("Íñ¶ºÉäÊÖ");
+    LPCTSTR str_sunflower_name = _T("ÁúÈÕ¿û");
+    LPCTSTR str_gloomshroom_name = _T("Ä©ÈÕ¹½");
+    LPCTSTR str_nut_name = _T("¼ú¼ú¹û");
 
     int selector_background_scroll_offset_x = 0;
 

@@ -217,6 +217,9 @@ public:
         }
 
         if(is_debug){
+            setfillcolor(RGB(0, 0, 255));
+            solidcircle(position.x, position.y, 3);
+            
             setlinecolor(RGB(0, 125, 125));
             rectangle(position.x + collision_offset.x, position.y + collision_offset.y, position.x + size.x - collision_offset.x, position.y + size.y);
         }

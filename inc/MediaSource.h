@@ -1,7 +1,7 @@
 #ifndef _MEDIA_H_
 #define _MEDIA_H_
 
-#define MEDIA_PATH_PREFIX "C:/Users/Salamanca/Desktop/PlantStarBrawl/media/"
+#define MEDIA_PATH_PREFIX "C:/Users/Salamanca/Desktop/PlantStarBrawl/assets/"
 
 #include <graphics.h>
 

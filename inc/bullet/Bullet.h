@@ -88,11 +88,12 @@ public:
     virtual void on_update(int delta) = 0;
     virtual void on_draw(const Camera& camera) const {
         if(is_debug){
-            setfillcolor(RGB(128, 0, 128));
+            setfillcolor(RGB(0, 0, 255));
+            solidcircle(position.x, position.y, 3);
+
             setlinecolor(RGB(128, 0, 128));
             rectangle(position.x + collision_offset.x, position.y + collision_offset.y,
                 position.x + size.x - collision_offset.x, position.y + size.y - collision_offset.y);
-            solidcircle(position.x + size.x / 2, position.y + size.y / 2, 5);
         }
     }
 

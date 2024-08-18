@@ -87,12 +87,13 @@ public:
         animation.on_draw(camera, (int)position.x - size.x / 2, (int)position.y - size.y / 2);
 
         if(is_debug && valid) {
-            setfillcolor(RGB(255, 255, 255));
+            setfillcolor(RGB(0, 0, 255));
+            solidcircle(position.x, position.y, 3);
+            
             setlinecolor(RGB(255, 255, 255));
             for(int i = 0; i < 8; ++i) {
                 rectangle(pos[i].x + collision_offset.x, pos[i].y + collision_offset.y,
                     pos[i].x + bullet_size.x - collision_offset.x, pos[i].y + bullet_size.y - collision_offset.y);
-                solidcircle(pos[i].x + collision_offset.x + bullet_size.x / 2, pos[i].y + collision_offset.y + bullet_size.y / 2, 5);
             }
         }
     }
