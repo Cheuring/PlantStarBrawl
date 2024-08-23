@@ -107,6 +107,14 @@ IMAGE img_avatar_sunflower;                     //  向日葵头像图片
 IMAGE img_avatar_gloomshroom;                   //  朦胧菇头像图片
 IMAGE img_avatar_nut;                           //  坚果头像图片
 
+IMAGE img_buff_recover_hp;                      //  恢复hp状态图标
+IMAGE img_buff_recover_mp;                      //  恢复mp状态图标
+IMAGE img_buff_hurry;                           //  加速状态图标
+IMAGE img_buff_invisible;                       //  隐身状态图标
+
+Atlas atlas_buffbox_yellow;                     //  黄色buff框图集
+Atlas atlas_buffbox_blue;                       //  蓝色buff框图集
+Atlas atlas_buffbox_pink;                       //  粉色buff框图集
 
 void flip_atlas(Atlas& src, Atlas& dest){
     dest.clear();
@@ -218,6 +226,15 @@ void load_game_resources(){
     loadimage(&img_avatar_sunflower, _T(MEDIA_PATH_PREFIX "avatar_sunflower.png"));
     loadimage(&img_avatar_gloomshroom, _T(MEDIA_PATH_PREFIX "avatar_gloomshroom.png"));
     loadimage(&img_avatar_nut, _T(MEDIA_PATH_PREFIX "avatar_nut.png"));
+
+    loadimage(&img_buff_recover_hp, _T(MEDIA_PATH_PREFIX "buff_icon_recover.png"));
+    redToBlue(&img_buff_recover_hp, &img_buff_recover_mp);
+    loadimage(&img_buff_hurry, _T(MEDIA_PATH_PREFIX "buff_icon_hurry.png"));
+    loadimage(&img_buff_invisible, _T(MEDIA_PATH_PREFIX "buff_icon_invisible.png"));
+
+    atlas_buffbox_yellow.load_from_file(_T(MEDIA_PATH_PREFIX "buff_box_yellow_%d.png"), 4);
+    atlas_buffbox_blue.load_from_file(_T(MEDIA_PATH_PREFIX "buff_box_blue_%d.png"), 4);
+    atlas_buffbox_pink.load_from_file(_T(MEDIA_PATH_PREFIX "buff_box_pink_%d.png"), 4);
 
     mciSendString(_T("open " MEDIA_PATH_PREFIX "bgm_game.mp3 alias bgm_game"), NULL, 0, NULL);
     mciSendString(_T("open " MEDIA_PATH_PREFIX "bgm_menu.mp3 alias bgm_menu"), NULL, 0, NULL);

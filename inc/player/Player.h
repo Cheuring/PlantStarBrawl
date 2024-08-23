@@ -3,6 +3,7 @@
 
 #include <graphics.h>
 #include <vector>
+#include <list>
 
 #include "Animation.h"
 #include "Bullet.h"
@@ -16,6 +17,7 @@
 extern bool is_debug;
 
 extern std::vector<Bullet *> bullet_list;
+extern std::vector<BuffBullet *> buff_bullet_list;
 extern std::vector<Platform> platform_list;
 
 extern Atlas atlas_run_effect;
@@ -87,6 +89,46 @@ public:
         timer_cursor_visible.set_callback([&](){
             is_cursor_visible = false;
         });
+
+        timer_buff_hurry.set_wait_time(4000);
+        timer_buff_hurry.set_one_shot(true);
+        timer_buff_hurry.set_callback([&](){
+            deleteBuff(BuffId::HURRY);
+        });
+
+        timer_buff_invisible.set_wait_time(8000);
+        timer_buff_invisible.set_one_shot(true);
+        timer_buff_invisible.set_callback([&](){
+            deleteBuff(BuffId::INVISIBLE);
+        });
+
+        timer_buff_recover_hp.set_wait_time(5000);
+        timer_buff_recover_hp.set_one_shot(true);
+        timer_buff_recover_hp.set_callback([&](){
+            deleteBuff(BuffId::RECOVER_HP);
+        });
+
+        timer_buff_recover_hp_helper.set_wait_time(1000);
+        timer_buff_recover_hp_helper.set_one_shot(false);
+        timer_buff_recover_hp_helper.set_callback([&](){
+            hp += 5;
+            hp = std::min(hp, 100);
+        });
+
+        timer_buff_recover_mp.set_wait_time(5000);
+        timer_buff_recover_mp.set_one_shot(true);
+        timer_buff_recover_mp.set_callback([&](){
+            deleteBuff(BuffId::RECOVER_MP);
+        });
+        timer_buff_recover_mp_helper.pause();
+
+        timer_buff_recover_mp_helper.set_wait_time(1000);
+        timer_buff_recover_mp_helper.set_one_shot(false);
+        timer_buff_recover_mp_helper.set_callback([&](){
+            mp += 5;
+            mp = std::min(mp, 100);
+        });
+        timer_buff_recover_hp_helper.pause();
     }
     ~Player() = default;
 
@@ -109,10 +151,6 @@ public:
             current_animation = is_facing_right ? &animation_attack_ex_right : &animation_attack_ex_left;
         }
 
-        if(hp <= 0){
-            current_animation = last_hurt_direction.x < 0 ? &animation_die_left : &animation_die_right;
-        }
-
         current_animation->on_update(delta);
         animation_jump_effect.on_update(delta);
         animation_land_effect.on_update(delta);
@@ -122,6 +160,17 @@ public:
         timer_invulnerable_blink.on_update(delta);
         timer_run_effect_generation.on_update(delta);
         timer_cursor_visible.on_update(delta);
+
+        timer_buff_hurry.on_update(delta);
+        timer_buff_invisible.on_update(delta);
+        timer_buff_recover_hp.on_update(delta);
+        timer_buff_recover_mp.on_update(delta);
+        timer_buff_recover_hp_helper.on_update(delta);
+        timer_buff_recover_mp_helper.on_update(delta);
+
+        if(hp <= 0){
+            current_animation = last_hurt_direction.x < 0 ? &animation_die_left : &animation_die_right;
+        }
 
         if(hp <= 0){
             timer_die_effect_generation.on_update(delta);
@@ -197,10 +246,12 @@ public:
             particle.on_draw(camera);
         }
 
-        if(hp > 0 && is_invulnerable && is_showing_sketch_frame){
-            put_image_alpha(camera, position.x, position.y, &img_sketch);
-        }else{
-            current_animation->on_draw(camera, position.x, position.y);
+        if(!is_invisible){
+            if(hp > 0 && is_invulnerable && is_showing_sketch_frame){
+                put_image_alpha(camera, position.x, position.y, &img_sketch);
+            }else{
+                current_animation->on_draw(camera, position.x, position.y);
+            }
         }
 
         if(is_cursor_visible){
@@ -373,13 +424,17 @@ public:
         timer_invulnerable.restart();
     }
 
+    const std::list<BuffId>& getBuffList(){
+        return buff_list;
+    }
+
     virtual void on_attack() = 0;
     virtual void on_attack_ex() = 0;
 
 protected:
     const float gravity = 1.6e-3f;
-    const float run_velocity = 0.55f;
     const float jump_velocity = -0.85f;
+    float run_velocity = 0.55f;
 
     int mp = 0;     //  Magic Point
     int hp = 100;   //  Health Point
@@ -437,7 +492,108 @@ protected:
 
     Vector2 last_hurt_direction;
 
+    std::list<BuffId> buff_list;
+    std::unordered_map<BuffId, decltype(buff_list.begin())> buffid_map;
+    Timer timer_buff_recover_hp;
+    Timer timer_buff_recover_hp_helper;
+    Timer timer_buff_recover_mp;
+    Timer timer_buff_recover_mp_helper;
+    Timer timer_buff_hurry;
+    Timer timer_buff_invisible;
+
+    bool is_invisible = false;
+
 protected:
+    void addBuff(BuffId buffid) {
+        switch(buffid){
+            case BuffId::RECOVER_HP:
+                if(buffid_map.find(BuffId::RECOVER_HP) == buffid_map.end()){
+                    buff_list.push_back(BuffId::RECOVER_HP);
+                    buffid_map[BuffId::RECOVER_HP] = std::prev(buff_list.end());
+                    timer_buff_recover_hp.restart();
+                    timer_buff_recover_hp_helper.restart();
+                    timer_buff_recover_hp_helper.resume();
+                }else{
+                    buff_list.splice(buff_list.end(), buff_list, buffid_map[BuffId::RECOVER_HP]);
+                    timer_buff_recover_hp.restart();
+                    timer_buff_recover_hp_helper.restart();
+                }
+                break;
+            case BuffId::RECOVER_MP:
+                if(buffid_map.find(BuffId::RECOVER_MP) == buffid_map.end()){
+                    buff_list.push_back(BuffId::RECOVER_MP);
+                    buffid_map[BuffId::RECOVER_MP] = std::prev(buff_list.end());
+                    timer_buff_recover_mp.restart();
+                    timer_buff_recover_mp_helper.restart();
+                    timer_buff_recover_mp_helper.resume();
+                }else{
+                    buff_list.splice(buff_list.end(), buff_list, buffid_map[BuffId::RECOVER_MP]);
+                    timer_buff_recover_mp.restart();
+                    timer_buff_recover_mp_helper.restart();
+                }
+                break;
+            case BuffId::HURRY:
+                if(buffid_map.find(BuffId::HURRY) == buffid_map.end()){
+                    buff_list.push_back(BuffId::HURRY);
+                    buffid_map[BuffId::HURRY] = std::prev(buff_list.end());
+                    run_velocity *= 2;
+                    timer_buff_hurry.restart();
+                }else{
+                    buff_list.splice(buff_list.end(), buff_list, buffid_map[BuffId::HURRY]);
+                    timer_buff_hurry.restart();
+                }
+                break;
+            case BuffId::INVISIBLE:
+                if(buffid_map.find(BuffId::INVISIBLE) == buffid_map.end()){
+                    buff_list.push_back(BuffId::INVISIBLE);
+                    buffid_map[BuffId::INVISIBLE] = std::prev(buff_list.end());
+                    is_invisible = true;
+                    timer_buff_invisible.restart();
+                }else{
+                    buff_list.splice(buff_list.end(), buff_list, buffid_map[BuffId::INVISIBLE]);
+                    timer_buff_invisible.restart();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    void deleteBuff(BuffId buffid) {
+        switch(buffid) {
+            case BuffId::RECOVER_HP:
+                if(buffid_map.find(BuffId::RECOVER_HP) != buffid_map.end()){
+                    buff_list.erase(buffid_map[BuffId::RECOVER_HP]);
+                    buffid_map.erase(BuffId::RECOVER_HP);
+                    timer_buff_recover_hp_helper.pause();
+                }
+                break;
+            case BuffId::RECOVER_MP:
+                if(buffid_map.find(BuffId::RECOVER_MP) != buffid_map.end()){
+                    buff_list.erase(buffid_map[BuffId::RECOVER_MP]);
+                    buffid_map.erase(BuffId::RECOVER_MP);
+                    timer_buff_recover_mp_helper.pause();
+                }
+                break;
+            case BuffId::HURRY:
+                if(buffid_map.find(BuffId::HURRY) != buffid_map.end()){
+                    buff_list.erase(buffid_map[BuffId::HURRY]);
+                    buffid_map.erase(BuffId::HURRY);
+                    run_velocity = 0.55f;
+                }
+                break;
+            case BuffId::INVISIBLE:
+                if(buffid_map.find(BuffId::INVISIBLE) != buffid_map.end()){
+                    buff_list.erase(buffid_map[BuffId::INVISIBLE]);
+                    buffid_map.erase(BuffId::INVISIBLE);
+                    is_invisible = false;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
     void move_and_collide(int delta) {
         float last_velocity_y = velocity.y;
 
@@ -483,16 +639,28 @@ protected:
                         hp -= bullet->get_damage();
 
                     make_invulnerable();
+                    last_hurt_direction = bullet->get_position() - position;
+
                     bullet->on_collide();
                     bullet->set_valid(false);
-
-                    last_hurt_direction = bullet->get_position() - position;
 
                     if(hp <= 0) {
                         velocity.x = last_hurt_direction.x < 0 ? 0.35f : -0.35f;
                         velocity.y = -1.f;
                     }
                 }
+            }
+        }
+
+        for(BuffBullet* buff : buff_bullet_list){
+            if(!buff->get_valid()){
+                continue;
+            }
+
+            if(buff->check_collision(position + collision_offset, {size.x - collision_offset.x * 2, size.y - collision_offset.y})){
+                addBuff(buff->getBuffId());
+                buff->on_collide();
+                buff->set_valid(false);
             }
         }
     }

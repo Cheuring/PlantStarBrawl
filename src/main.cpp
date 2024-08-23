@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Atlas.h"
+#include "BuffBullet.h"
 #include "Bullet.h"
 #include "Camera.h"
 #include "GameScene.h"
@@ -25,6 +26,7 @@ Camera main_camera;
 SceneManager scene_manager;
 
 std::vector<Bullet *> bullet_list;
+std::vector<BuffBullet *> buff_bullet_list;
 std::vector<Platform> platform_list;
 
 Player* player_1 = nullptr;
@@ -46,7 +48,7 @@ int main(){
     BeginBatchDraw();
 
     menu_scene = new MenuScene();
-    game_scene = new GameScene();
+    // game_scene = new GameScene();
     selector_scene = new SelectorScene();
 
     scene_manager.set_current_scene(menu_scene);

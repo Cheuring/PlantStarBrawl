@@ -3,6 +3,7 @@
 
 #include <graphics.h>
 
+#include "BuffBullet.h"
 #include "Camera.h"
 #include "Platform.h"
 #include "Player.h"
@@ -18,6 +19,7 @@ extern IMAGE img_platform_small;
 
 extern Camera main_camera;
 extern std::vector<Bullet *> bullet_list;
+extern std::vector<BuffBullet *> buff_bullet_list;
 extern std::vector<Platform> platform_list;
 extern SceneManager scene_manager;
 
@@ -35,7 +37,7 @@ extern IMAGE img_winner_bar;
 
 class GameScene : public Scene {
 public:
-    GameScene() = default;
+    GameScene() : status_bar_1P(player_1->getBuffList()), status_bar_2P(player_2->getBuffList()) {}
     ~GameScene() = default;
 
     void on_enter() override {
@@ -62,6 +64,15 @@ public:
         timer_winner_slide_out.set_one_shot(true);
         timer_winner_slide_out.set_callback([&](){
             scene_manager.switch_to(SceneManager::SceneType::Menu);
+        });
+
+        timer_buff_generate.restart();
+        timer_buff_generate.set_wait_time(2000);
+        timer_buff_generate.set_one_shot(false);
+        timer_buff_generate.set_callback([&](){
+            int rand_buff_num = rand() % 4;
+            BuffBullet* buff_bullet = new BuffBullet(rand_buff_num);
+            buff_bullet_list.push_back(buff_bullet);
         });
 
         status_bar_1P.set_avatar(img_player_1_avatar);
@@ -129,6 +140,11 @@ public:
             delete bullet;
         }
         bullet_list.clear();
+
+        for(auto& buff : buff_bullet_list){
+            delete buff;
+        }
+        buff_bullet_list.clear();
         
         main_camera.reset();
 
@@ -184,9 +200,23 @@ public:
             return false;
         }), bullet_list.end());
 
+        buff_bullet_list.erase(std::remove_if(buff_bullet_list.begin(), buff_bullet_list.end(), [&](BuffBullet* buff){
+            if(buff->check_can_remove()){
+                delete buff;
+                return true;
+            }
+            return false;
+        }), buff_bullet_list.end());
+
         for(Bullet* bullet : bullet_list){
             bullet->on_update(delta);
         }
+
+        for(BuffBullet* buff : buff_bullet_list){
+            buff->on_update(delta);
+        }
+
+        timer_buff_generate.on_update(delta);
 
         const auto& player_1_pos = player_1->get_position();
         const auto& player_2_pos = player_2->get_position();
@@ -251,6 +281,10 @@ public:
             bullet->on_draw(camera);
         }
 
+        for(const auto& buff : buff_bullet_list){
+            buff->on_draw(camera);
+        }
+
         if(is_game_over) {
             put_image_alpha(pos_img_winner_bar.x, pos_img_winner_bar.y, &img_winner_bar);
             put_image_alpha(pos_img_winner_text.x, pos_img_winner_text.y,
@@ -281,6 +315,8 @@ private:
     Timer timer_winner_slide_in;
     Timer timer_winner_slide_out;
     bool is_slide_out_started = false;
+
+    Timer timer_buff_generate;
 };
 
 #endif // _GAME_SCENE_H_

@@ -64,4 +64,21 @@ inline void sketch_image(IMAGE* src, IMAGE* dest) {
     }
 }
 
+inline void redToBlue(IMAGE* src, IMAGE* dest) {
+    int w = src->getwidth();
+    int h = src->getheight();
+    Resize(dest, w, h);
+    DWORD* src_buf = GetImageBuffer(src);
+    DWORD* dest_buf = GetImageBuffer(dest);
+    for(int y = 0; y < h; ++y){
+        for(int x = 0; x < w; ++x){
+            int idx = y * w + x;
+            int r = GetRValue(src_buf[idx]);
+            int g = GetGValue(src_buf[idx]);
+            int b = GetBValue(src_buf[idx]);
+            dest_buf[idx] = RGB(b, g, r) | (src_buf[idx] & 0xFF000000);
+        }
+    }
+}
+
 #endif // _UTIL_H_
