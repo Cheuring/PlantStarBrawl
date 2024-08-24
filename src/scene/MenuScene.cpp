@@ -2,6 +2,10 @@
 
 void MenuScene::OnEnter() {
     mciSendString(_T("play bgm_menu repeat from 0"), NULL, 0, NULL);
+    if(game_scene != nullptr){
+        delete game_scene;
+        game_scene = nullptr;
+    }
 }
 
 void MenuScene::OnDraw(const Camera& camera) {

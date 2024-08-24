@@ -6,6 +6,7 @@
 
 extern IMAGE img_menu_background;
 extern SceneManager scene_manager;
+extern Scene* game_scene;
 
 class MenuScene : public Scene {
 public:
