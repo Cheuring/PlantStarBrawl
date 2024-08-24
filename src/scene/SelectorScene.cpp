@@ -1,3 +1,5 @@
+#include <iostream>  //  Debug
+
 #include "SelectorScene.h"
 
 void SelectorScene::OnEnter() {
@@ -194,58 +196,93 @@ void SelectorScene::OnDraw(const Camera& camera) {
     PutImageAlpha(pos_img_tip.x, pos_img_tip.y, &img_selector_tip);
 }
 
-void SelectorScene::OnInput(const ExMessage& msg) {
-    switch (msg.message) {
-        case WM_KEYDOWN:
-            switch (msg.vkcode){
-                case 'A':
-                case 'a':
-                    is_btn_1P_left_down = true;
-                    break;
-                case 'D':
-                case 'd':
-                    is_btn_1P_right_down = true;
-                    break;
-                case VK_LEFT:
-                    is_btn_2P_left_down = true;
-                    break;
-                case VK_RIGHT:
-                    is_btn_2P_right_down = true;
-                    break;
-            }
-            break;
-        case WM_KEYUP:
-            switch (msg.vkcode){
-                case 'A':
-                case 'a':
-                    is_btn_1P_left_down = false;
-                    player_1P = (PlayerType)(((int)PlayerType::Invalid + (int)player_1P - 1) % (int)PlayerType::Invalid);
-                    mciSendString(_T("play ui_switch from 0"), nullptr, 0, nullptr);
-                    break;
-                case 'D':
-                case 'd':
-                    is_btn_1P_right_down = false;
-                    player_1P = (PlayerType)(((int)player_1P + 1) % (int)PlayerType::Invalid);
-                    mciSendString(_T("play ui_switch from 0"), nullptr, 0, nullptr);
-                    break;
-                case VK_LEFT:
-                    is_btn_2P_left_down = false;
-                    player_2P = (PlayerType)(((int)PlayerType::Invalid + (int)player_2P - 1) % (int)PlayerType::Invalid);
-                    mciSendString(_T("play ui_switch from 0"), nullptr, 0, nullptr);
-                    break;
-                case VK_RIGHT:
-                    is_btn_2P_right_down = false;
-                    player_2P = (PlayerType)(((int)player_2P + 1) % (int)PlayerType::Invalid);
-                    mciSendString(_T("play ui_switch from 0"), nullptr, 0, nullptr);
-                    break;
-                case VK_RETURN:
-                    scene_manager.SwitchTo(SceneManager::SceneType::Game);
-                    mciSendString(_T("play ui_confirm from 0"), nullptr, 0, nullptr);
-                    break;
-            }
-            break;
-        default:
-            break;
+void SelectorScene::OnInput(const ExMessage& msg, bool is_1P) {
+    if(is_1P) {
+        switch (msg.message) {
+            case WM_KEYDOWN:
+                switch (msg.vkcode){
+                    case 'A':
+                    case 'a':
+                        is_btn_1P_left_down = true;
+                        break;
+                    case 'D':
+                    case 'd':
+                        is_btn_1P_right_down = true;
+                        break;
+                    default:
+                        std::cout << "Selector 1P: key " << msg.vkcode << '\n';
+                        break;
+                }
+                break;
+            case WM_KEYUP:
+                switch (msg.vkcode){
+                    case 'A':
+                    case 'a':
+                        is_btn_1P_left_down = false;
+                        player_1P = (PlayerType)(((int)PlayerType::Invalid + (int)player_1P - 1) % (int)PlayerType::Invalid);
+                        mciSendString(_T("play ui_switch from 0"), nullptr, 0, nullptr);
+                        break;
+                    case 'D':
+                    case 'd':
+                        is_btn_1P_right_down = false;
+                        player_1P = (PlayerType)(((int)player_1P + 1) % (int)PlayerType::Invalid);
+                        mciSendString(_T("play ui_switch from 0"), nullptr, 0, nullptr);
+                        break;
+                    case VK_RETURN:
+                        scene_manager.SwitchTo(SceneManager::SceneType::Game);
+                        mciSendString(_T("play ui_confirm from 0"), nullptr, 0, nullptr);
+                        break;
+                    default:
+                        std::cout << "Selector 1P: key " << msg.vkcode << '\n';
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+    }else {
+        switch (msg.message) {
+            case WM_KEYDOWN:
+                switch (msg.vkcode){
+                    case 'A':
+                    case 'a':
+                        is_btn_2P_left_down = true;
+                        break;
+                    case 'D':
+                    case 'd':
+                        is_btn_2P_right_down = true;
+                        break;
+                    default:
+                        std::cout << "Selector 2P: key " << msg.vkcode << '\n';
+                        break;
+                }
+                break;
+            case WM_KEYUP:
+                switch (msg.vkcode){
+                    case 'A':
+                    case 'a':
+                        is_btn_2P_left_down = false;
+                        player_2P = (PlayerType)(((int)PlayerType::Invalid + (int)player_2P - 1) % (int)PlayerType::Invalid);
+                        mciSendString(_T("play ui_switch from 0"), nullptr, 0, nullptr);
+                        break;
+                    case 'D':
+                    case 'd':
+                        is_btn_2P_right_down = false;
+                        player_2P = (PlayerType)(((int)player_2P + 1) % (int)PlayerType::Invalid);
+                        mciSendString(_T("play ui_switch from 0"), nullptr, 0, nullptr);
+                        break;
+                    case VK_RETURN:
+                        scene_manager.SwitchTo(SceneManager::SceneType::Game);
+                        mciSendString(_T("play ui_confirm from 0"), nullptr, 0, nullptr);
+                        break;
+                    default:
+                        std::cout << "Selector 2P: key " << msg.vkcode << '\n';
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
     }
 }
 

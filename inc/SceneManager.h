@@ -20,7 +20,7 @@ public:
 
     void SetCurrentScene(Scene* scene);
     void SwitchTo(SceneType type);
-    void OnInput(const ExMessage& msg);
+    void OnInput(const ExMessage& msg, bool is_1P);
     void OnUpdate(int delta);
     void OnDraw(const Camera& camera);
 

@@ -33,14 +33,14 @@ void GameScene::OnEnter() {
         scene_manager.SwitchTo(SceneManager::SceneType::Menu);
     });
 
-    timer_buff_generate.Restart();
-    timer_buff_generate.SetWaitTime(2000);
-    timer_buff_generate.SetOneShot(false);
-    timer_buff_generate.SetCallback([&](){
-        int rand_buff_num = rand() % 4;
-        BuffBullet* buff_bullet = new BuffBullet(rand_buff_num);
-        buff_bullet_list.push_back(buff_bullet);
-    });
+    // timer_buff_generate.Restart();
+    // timer_buff_generate.SetWaitTime(2000);
+    // timer_buff_generate.SetOneShot(false);
+    // timer_buff_generate.SetCallback([&](){
+    //     int rand_buff_num = rand() % 4;
+    //     BuffBullet* buff_bullet = new BuffBullet(rand_buff_num);
+    //     buff_bullet_list.push_back(buff_bullet);
+    // });
 
     status_bar_1P.SetAvatar(img_player_1_avatar);
     status_bar_2P.SetAvatar(img_player_2_avatar);
@@ -110,9 +110,12 @@ void GameScene::OnExit() {
     mciSendString(_T("stop bgm_game"), NULL, 0, NULL);
 }
 
-void GameScene::OnInput(const ExMessage& msg) {
-    player_1->OnInput(msg);
-    player_2->OnInput(msg);
+void GameScene::OnInput(const ExMessage& msg, bool is_1P) {
+    if(is_1P) {
+        player_1->OnInput(msg);
+    }else {
+        player_2->OnInput(msg);
+    }
 
     switch (msg.message) {
         case WM_KEYUP:
@@ -175,7 +178,7 @@ void GameScene::OnUpdate(int delta) {
         buff->OnUpdate(delta);
     }
 
-    timer_buff_generate.OnUpdate(delta);
+    // timer_buff_generate.OnUpdate(delta);
 
     const auto& player_1_pos = player_1->GetPosition();
     const auto& player_2_pos = player_2->GetPosition();

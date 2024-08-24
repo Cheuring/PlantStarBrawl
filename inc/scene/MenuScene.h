@@ -16,7 +16,7 @@ public:
     void OnEnter() override;
     void OnUpdate(int delta) override {}
     void OnDraw(const Camera& camera) override;
-    void OnInput(const ExMessage& msg) override;
+    void OnInput(const ExMessage& msg, bool is_1P) override;
     void OnExit() override {}
 
 private:
