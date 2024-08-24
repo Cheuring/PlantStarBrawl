@@ -24,16 +24,7 @@ public:
     Platform() = default;
     ~Platform() = default;
 
-    void on_draw(const Camera& camera) const{
-        put_image_alpha(camera, render_position.x, render_position.y, img);
-
-        if(is_debug){
-            setfillcolor(RGB(0, 0, 255));
-            solidcircle(render_position.x, render_position.y, 3);
-            setlinecolor(RGB(255, 0, 0));
-            line(camera, (int)shape.left, (int)shape.y, (int)shape.right, (int)shape.y);
-        }
-    }
+    void OnDraw(const Camera& camera) const;
 };
 
 #endif // _PLATFORM_H_

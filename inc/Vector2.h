@@ -35,21 +35,17 @@ public:
         return Vector2(x * s, y * s);
     }
 
-    friend Vector2 operator*(float s, const Vector2& v) {
-        return Vector2(v.x * s, v.y * s);
-    }
-
     void operator*=(float s) {
         x *= s;
         y *= s;
     }
 
-    float length() const {
+    float Length() const {
         return sqrt(x * x + y * y);
     }
 
-    Vector2 normalize() const {
-        float len = length();
+    Vector2 Normalize() const {
+        float len = Length();
         if(len == 0) return Vector2(0, 0);
         
         return Vector2(x / len, y / len);

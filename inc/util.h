@@ -2,14 +2,16 @@
 #define _UTIL_H_
 
 #include <graphics.h>
+#include <stdexcept>
 
 #include "Camera.h"
+#include "Vector2.h"
 
 constexpr int FPS = 90;
 
-inline void flip_image(IMAGE* src, IMAGE* dest){
+inline void FlipImage(IMAGE* src, IMAGE* dest) {
     if(src == nullptr || dest == nullptr){
-        throw std::runtime_error("flip_image: src or dest is nullptr");
+        throw std::runtime_error("FlipImage: src or dest is nullptr");
     }
     int w = src->getwidth();
     int h = src->getheight();
@@ -25,32 +27,34 @@ inline void flip_image(IMAGE* src, IMAGE* dest){
     }
 }
 
-inline void put_image_alpha(int dst_x, int dst_y, IMAGE* img){
+inline void PutImageAlpha(int dst_x, int dst_y, IMAGE* img) {
     int w = img->getwidth();
     int h = img->getheight();
     AlphaBlend(GetImageHDC(GetWorkingImage()), dst_x, dst_y, w, h,
         GetImageHDC(img), 0, 0, w, h, { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA});
 }
-inline void put_image_alpha(int dst_x, int dst_y, int width, int height, IMAGE* img, int src_x, int src_y){
+
+inline void PutImageAlpha(int dst_x, int dst_y, int width, int height, IMAGE* img, int src_x, int src_y) {
     int w = width > 0 ? width : img->getwidth();
     int h = height > 0 ? height : img->getheight();
     AlphaBlend(GetImageHDC(GetWorkingImage()), dst_x, dst_y, w, h,
         GetImageHDC(img), src_x, src_y, w, h, { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA});
 }
-inline void put_image_alpha(const Camera& camera, int dst_x, int dst_y, IMAGE* img){
+
+inline void PutImageAlpha(const Camera& camera, int dst_x, int dst_y, IMAGE* img) {
     int w = img->getwidth();
     int h = img->getheight();
-    const Vector2& camera_pos = camera.get_position();
+    const Vector2& camera_pos = camera.GetPosition();
     AlphaBlend(GetImageHDC(GetWorkingImage()), (int)(dst_x - camera_pos.x), (int)(dst_y - camera_pos.y),
     w, h, GetImageHDC(img), 0, 0, w, h, { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA});
 }
 
-inline void line(const Camera& camera, int x1, int y1, int x2, int y2){
-    const Vector2& camera_pos = camera.get_position();
+inline void Line(const Camera& camera, int x1, int y1, int x2, int y2){
+    const Vector2& camera_pos = camera.GetPosition();
     ::line((int)(x1 - camera_pos.x), (int)(y1 - camera_pos.y), (int)(x2 - camera_pos.x), (int)(y2 - camera_pos.y));
 }
 
-inline void sketch_image(IMAGE* src, IMAGE* dest) {
+inline void SketchImage(IMAGE* src, IMAGE* dest) {
     int w = src->getwidth();
     int h = src->getheight();
     Resize(dest, w, h);
@@ -64,7 +68,7 @@ inline void sketch_image(IMAGE* src, IMAGE* dest) {
     }
 }
 
-inline void redToBlue(IMAGE* src, IMAGE* dest) {
+inline void RedToBlue(IMAGE* src, IMAGE* dest) {
     int w = src->getwidth();
     int h = src->getheight();
     Resize(dest, w, h);

@@ -38,7 +38,7 @@ IMAGE* img_player_2_avatar = nullptr;
 int main(){
     ExMessage msg;
 
-    load_game_resources();
+    LoadGameResources();
 
     initgraph(1280, 720);
 
@@ -51,23 +51,23 @@ int main(){
     // game_scene = new GameScene();
     selector_scene = new SelectorScene();
 
-    scene_manager.set_current_scene(menu_scene);
+    scene_manager.SetCurrentScene(menu_scene);
 
     while(true){
         DWORD frame_start_time = GetTickCount();
 
         while(peekmessage(&msg)){
-            scene_manager.on_input(msg);
+            scene_manager.OnInput(msg);
         }
 
         static DWORD last_tick_time = GetTickCount();
         DWORD current_tick_time = GetTickCount();
         DWORD delta = current_tick_time - last_tick_time;
-        scene_manager.on_update(delta);
+        scene_manager.OnUpdate(delta);
         last_tick_time = current_tick_time;
 
         cleardevice();
-        scene_manager.on_draw(main_camera);
+        scene_manager.OnDraw(main_camera);
         FlushBatchDraw();
 
         DWORD frame_end_time = GetTickCount();
@@ -77,7 +77,7 @@ int main(){
         }
     }
 
-    // scene->on_exit();
+    // scene->OnExit();
     // delete scene;
 
     EndBatchDraw();

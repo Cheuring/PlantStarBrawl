@@ -22,7 +22,7 @@ include_directories(${SCENE_DIR})
 include_directories(${PLAYER_DIR})
 include_directories(${BULLET_DIR})
 
-file(GLOB SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+file(GLOB_RECURSE SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 
 add_executable(${PROJECT_NAME} ${SRC} ${ICON_DIR}/icon.rc)
 target_link_libraries(${PROJECT_NAME} Winmm easyx MSIMG32)

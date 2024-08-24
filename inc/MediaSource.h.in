@@ -116,16 +116,16 @@ Atlas atlas_buffbox_yellow;                     //  黄色buff框图集
 Atlas atlas_buffbox_blue;                       //  蓝色buff框图集
 Atlas atlas_buffbox_pink;                       //  粉色buff框图集
 
-void flip_atlas(Atlas& src, Atlas& dest){
-    dest.clear();
-    for(int i = 0; i < src.get_size(); i++){
+void FlipAtlas(Atlas& src, Atlas& dest){
+    dest.Clear();
+    for(int i = 0; i < src.GetSize(); i++){
         IMAGE img_flip;
-        flip_image(src.get_image(i), &img_flip);
-        dest.add_image(img_flip);
+        FlipImage(src.GetImage(i), &img_flip);
+        dest.AddImage(img_flip);
     }
 }
 
-void load_game_resources(){
+void LoadGameResources(){
     AddFontResourceEx(_T(MEDIA_PATH_PREFIX "zpix.ttf"), FR_PRIVATE, NULL);
 
     loadimage(&img_menu_background, _T(MEDIA_PATH_PREFIX "menu_background.png"));
@@ -136,25 +136,25 @@ void load_game_resources(){
     loadimage(&img_1P_desc, _T(MEDIA_PATH_PREFIX "1P_desc.png"));
     loadimage(&img_2P_desc, _T(MEDIA_PATH_PREFIX "2P_desc.png"));
     loadimage(&img_gravestone_right, _T(MEDIA_PATH_PREFIX "gravestone.png"));
-    flip_image(&img_gravestone_right, &img_gravestone_left);
+    FlipImage(&img_gravestone_right, &img_gravestone_left);
     loadimage(&img_selector_tip, _T(MEDIA_PATH_PREFIX "selector_tip.png"));
     loadimage(&img_selector_background, _T(MEDIA_PATH_PREFIX "selector_background.png"));
     loadimage(&img_1P_selector_btn_idle_right, _T(MEDIA_PATH_PREFIX "1P_selector_btn_idle.png"));
-    flip_image(&img_1P_selector_btn_idle_right, &img_1P_selector_btn_idle_left);
+    FlipImage(&img_1P_selector_btn_idle_right, &img_1P_selector_btn_idle_left);
     loadimage(&img_1P_selector_btn_down_right, _T(MEDIA_PATH_PREFIX "1P_selector_btn_down.png"));
-    flip_image(&img_1P_selector_btn_down_right, &img_1P_selector_btn_down_left);
+    FlipImage(&img_1P_selector_btn_down_right, &img_1P_selector_btn_down_left);
     loadimage(&img_2P_selector_btn_idle_right, _T(MEDIA_PATH_PREFIX "2P_selector_btn_idle.png"));
-    flip_image(&img_2P_selector_btn_idle_right, &img_2P_selector_btn_idle_left);
+    FlipImage(&img_2P_selector_btn_idle_right, &img_2P_selector_btn_idle_left);
     loadimage(&img_2P_selector_btn_down_right, _T(MEDIA_PATH_PREFIX "2P_selector_btn_down.png"));
-    flip_image(&img_2P_selector_btn_down_right, &img_2P_selector_btn_down_left);
+    FlipImage(&img_2P_selector_btn_down_right, &img_2P_selector_btn_down_left);
     loadimage(&img_peashooter_selector_background_right, _T(MEDIA_PATH_PREFIX "peashooter_selector_background.png"));
-    flip_image(&img_peashooter_selector_background_right, &img_peashooter_selector_background_left);
+    FlipImage(&img_peashooter_selector_background_right, &img_peashooter_selector_background_left);
     loadimage(&img_sunflower_selector_background_right, _T(MEDIA_PATH_PREFIX "sunflower_selector_background.png"));
-    flip_image(&img_sunflower_selector_background_right, &img_sunflower_selector_background_left);
+    FlipImage(&img_sunflower_selector_background_right, &img_sunflower_selector_background_left);
     loadimage(&img_gloomshroom_selector_background_right, _T(MEDIA_PATH_PREFIX "gloomshroom_selector_background.png"));
-    flip_image(&img_gloomshroom_selector_background_right, &img_gloomshroom_selector_background_left);
+    FlipImage(&img_gloomshroom_selector_background_right, &img_gloomshroom_selector_background_left);
     loadimage(&img_nut_selector_background_right, _T(MEDIA_PATH_PREFIX "nut_selector_background.png"));
-    flip_image(&img_nut_selector_background_right, &img_nut_selector_background_left);
+    FlipImage(&img_nut_selector_background_right, &img_nut_selector_background_left);
 
     loadimage(&img_sky, _T(MEDIA_PATH_PREFIX "sky.png"));
     loadimage(&img_hills, _T(MEDIA_PATH_PREFIX "hills.png"));
@@ -164,59 +164,59 @@ void load_game_resources(){
     loadimage(&img_1P_cursor, _T(MEDIA_PATH_PREFIX "1P_cursor.png"));
     loadimage(&img_2P_cursor, _T(MEDIA_PATH_PREFIX "2P_cursor.png"));
 
-    atlas_peashooter_idle_right.load_from_file(_T(MEDIA_PATH_PREFIX "peashooter_idle_%d.png"), 9);
-    flip_atlas(atlas_peashooter_idle_right, atlas_peashooter_idle_left);
-    atlas_peashooter_run_right.load_from_file(_T(MEDIA_PATH_PREFIX "peashooter_run_%d.png"), 5);
-    flip_atlas(atlas_peashooter_run_right, atlas_peashooter_run_left);
-    atlas_peashooter_attack_ex_right.load_from_file(_T(MEDIA_PATH_PREFIX "peashooter_attack_ex_%d.png"), 3);
-    flip_atlas(atlas_peashooter_attack_ex_right, atlas_peashooter_attack_ex_left);
-    atlas_peashooter_die_right.load_from_file(_T(MEDIA_PATH_PREFIX "peashooter_die_%d.png"), 4);
-    flip_atlas(atlas_peashooter_die_right, atlas_peashooter_die_left);
+    atlas_peashooter_idle_right.LoadFromFile(_T(MEDIA_PATH_PREFIX "peashooter_idle_%d.png"), 9);
+    FlipAtlas(atlas_peashooter_idle_right, atlas_peashooter_idle_left);
+    atlas_peashooter_run_right.LoadFromFile(_T(MEDIA_PATH_PREFIX "peashooter_run_%d.png"), 5);
+    FlipAtlas(atlas_peashooter_run_right, atlas_peashooter_run_left);
+    atlas_peashooter_attack_ex_right.LoadFromFile(_T(MEDIA_PATH_PREFIX "peashooter_attack_ex_%d.png"), 3);
+    FlipAtlas(atlas_peashooter_attack_ex_right, atlas_peashooter_attack_ex_left);
+    atlas_peashooter_die_right.LoadFromFile(_T(MEDIA_PATH_PREFIX "peashooter_die_%d.png"), 4);
+    FlipAtlas(atlas_peashooter_die_right, atlas_peashooter_die_left);
 
-    atlas_sunflower_idle_right.load_from_file(_T(MEDIA_PATH_PREFIX "sunflower_idle_%d.png"), 8);
-    flip_atlas(atlas_sunflower_idle_right, atlas_sunflower_idle_left);
-    atlas_sunflower_run_right.load_from_file(_T(MEDIA_PATH_PREFIX "sunflower_run_%d.png"), 5);
-    flip_atlas(atlas_sunflower_run_right, atlas_sunflower_run_left);
-    atlas_sunflower_attack_ex_right.load_from_file(_T(MEDIA_PATH_PREFIX "sunflower_attack_ex_%d.png"), 9);
-    flip_atlas(atlas_sunflower_attack_ex_right, atlas_sunflower_attack_ex_left);
-    atlas_sunflower_die_right.load_from_file(_T(MEDIA_PATH_PREFIX "sunflower_die_%d.png"), 2);
-    flip_atlas(atlas_sunflower_die_right, atlas_sunflower_die_left);
+    atlas_sunflower_idle_right.LoadFromFile(_T(MEDIA_PATH_PREFIX "sunflower_idle_%d.png"), 8);
+    FlipAtlas(atlas_sunflower_idle_right, atlas_sunflower_idle_left);
+    atlas_sunflower_run_right.LoadFromFile(_T(MEDIA_PATH_PREFIX "sunflower_run_%d.png"), 5);
+    FlipAtlas(atlas_sunflower_run_right, atlas_sunflower_run_left);
+    atlas_sunflower_attack_ex_right.LoadFromFile(_T(MEDIA_PATH_PREFIX "sunflower_attack_ex_%d.png"), 9);
+    FlipAtlas(atlas_sunflower_attack_ex_right, atlas_sunflower_attack_ex_left);
+    atlas_sunflower_die_right.LoadFromFile(_T(MEDIA_PATH_PREFIX "sunflower_die_%d.png"), 2);
+    FlipAtlas(atlas_sunflower_die_right, atlas_sunflower_die_left);
 
-    atlas_gloomshroom_idle_right.load_from_file(_T(MEDIA_PATH_PREFIX "gloomshroom_idle_%d.png"), 4);
-    flip_atlas(atlas_gloomshroom_idle_right, atlas_gloomshroom_idle_left);
-    atlas_gloomshroom_run_right.load_from_file(_T(MEDIA_PATH_PREFIX "gloomshroom_run_%d.png"), 3);
-    flip_atlas(atlas_gloomshroom_run_right, atlas_gloomshroom_run_left);
-    atlas_gloomshroom_attack_ex_right.load_from_file(_T(MEDIA_PATH_PREFIX "gloomshroom_attack_ex_%d.png"), 7);
-    flip_atlas(atlas_gloomshroom_attack_ex_right, atlas_gloomshroom_attack_ex_left);
-    atlas_gloomshroom_die_right.load_from_file(_T(MEDIA_PATH_PREFIX "gloomshroom_die_%d.png"), 3);
-    flip_atlas(atlas_gloomshroom_die_right, atlas_gloomshroom_die_left);
+    atlas_gloomshroom_idle_right.LoadFromFile(_T(MEDIA_PATH_PREFIX "gloomshroom_idle_%d.png"), 4);
+    FlipAtlas(atlas_gloomshroom_idle_right, atlas_gloomshroom_idle_left);
+    atlas_gloomshroom_run_right.LoadFromFile(_T(MEDIA_PATH_PREFIX "gloomshroom_run_%d.png"), 3);
+    FlipAtlas(atlas_gloomshroom_run_right, atlas_gloomshroom_run_left);
+    atlas_gloomshroom_attack_ex_right.LoadFromFile(_T(MEDIA_PATH_PREFIX "gloomshroom_attack_ex_%d.png"), 7);
+    FlipAtlas(atlas_gloomshroom_attack_ex_right, atlas_gloomshroom_attack_ex_left);
+    atlas_gloomshroom_die_right.LoadFromFile(_T(MEDIA_PATH_PREFIX "gloomshroom_die_%d.png"), 3);
+    FlipAtlas(atlas_gloomshroom_die_right, atlas_gloomshroom_die_left);
 
-    atlas_nut_idle_right.load_from_file(_T(MEDIA_PATH_PREFIX "nut_idle_%d.png"), 3);
-    flip_atlas(atlas_nut_idle_right, atlas_nut_idle_left);
-    atlas_nut_run_right.load_from_file(_T(MEDIA_PATH_PREFIX "nut_run_%d.png"), 3);
-    flip_atlas(atlas_nut_run_right, atlas_nut_run_left);
-    atlas_nut_attack_ex_right.load_from_file(_T(MEDIA_PATH_PREFIX "nut_attack_ex_%d.png"), 5);
-    flip_atlas(atlas_nut_attack_ex_right, atlas_nut_attack_ex_left);
-    atlas_nut_die_right.load_from_file(_T(MEDIA_PATH_PREFIX "nut_die_%d.png"), 3);
-    flip_atlas(atlas_nut_die_right, atlas_nut_die_left);
+    atlas_nut_idle_right.LoadFromFile(_T(MEDIA_PATH_PREFIX "nut_idle_%d.png"), 3);
+    FlipAtlas(atlas_nut_idle_right, atlas_nut_idle_left);
+    atlas_nut_run_right.LoadFromFile(_T(MEDIA_PATH_PREFIX "nut_run_%d.png"), 3);
+    FlipAtlas(atlas_nut_run_right, atlas_nut_run_left);
+    atlas_nut_attack_ex_right.LoadFromFile(_T(MEDIA_PATH_PREFIX "nut_attack_ex_%d.png"), 5);
+    FlipAtlas(atlas_nut_attack_ex_right, atlas_nut_attack_ex_left);
+    atlas_nut_die_right.LoadFromFile(_T(MEDIA_PATH_PREFIX "nut_die_%d.png"), 3);
+    FlipAtlas(atlas_nut_die_right, atlas_nut_die_left);
 
     loadimage(&img_pea, _T(MEDIA_PATH_PREFIX "pea.png"));
-    atlas_pea_break.load_from_file(_T(MEDIA_PATH_PREFIX "pea_break_%d.png"), 3);
+    atlas_pea_break.LoadFromFile(_T(MEDIA_PATH_PREFIX "pea_break_%d.png"), 3);
 
-    atlas_sun.load_from_file(_T(MEDIA_PATH_PREFIX "sun_%d.png"), 5);
-    atlas_sun_explode.load_from_file(_T(MEDIA_PATH_PREFIX "sun_explode_%d.png"), 5);
-    atlas_sun_ex.load_from_file(_T(MEDIA_PATH_PREFIX "sun_ex_%d.png"), 5);
-    atlas_sun_ex_explode.load_from_file(_T(MEDIA_PATH_PREFIX "sun_ex_explode_%d.png"), 5);
-    atlas_sun_text.load_from_file(_T(MEDIA_PATH_PREFIX "sun_text_%d.png"), 6);
+    atlas_sun.LoadFromFile(_T(MEDIA_PATH_PREFIX "sun_%d.png"), 5);
+    atlas_sun_explode.LoadFromFile(_T(MEDIA_PATH_PREFIX "sun_explode_%d.png"), 5);
+    atlas_sun_ex.LoadFromFile(_T(MEDIA_PATH_PREFIX "sun_ex_%d.png"), 5);
+    atlas_sun_ex_explode.LoadFromFile(_T(MEDIA_PATH_PREFIX "sun_ex_explode_%d.png"), 5);
+    atlas_sun_text.LoadFromFile(_T(MEDIA_PATH_PREFIX "sun_text_%d.png"), 6);
 
-    atlas_bubbles.load_from_file(_T(MEDIA_PATH_PREFIX "bubbles_%d.png"), 7);
-    atlas_bubbles_ex.load_from_file(_T(MEDIA_PATH_PREFIX "bubbles_ex_%d.png"), 7);
+    atlas_bubbles.LoadFromFile(_T(MEDIA_PATH_PREFIX "bubbles_%d.png"), 7);
+    atlas_bubbles_ex.LoadFromFile(_T(MEDIA_PATH_PREFIX "bubbles_ex_%d.png"), 7);
 
-    atlas_nut_explode.load_from_file(_T(MEDIA_PATH_PREFIX "nut_explode_%d.png"), 5);
+    atlas_nut_explode.LoadFromFile(_T(MEDIA_PATH_PREFIX "nut_explode_%d.png"), 5);
 
-    atlas_run_effect.load_from_file(_T(MEDIA_PATH_PREFIX "run_effect_%d.png"), 4);
-    atlas_jump_effect.load_from_file(_T(MEDIA_PATH_PREFIX "jump_effect_%d.png"), 5);
-    atlas_land_effect.load_from_file(_T(MEDIA_PATH_PREFIX "land_effect_%d.png"), 2);
+    atlas_run_effect.LoadFromFile(_T(MEDIA_PATH_PREFIX "run_effect_%d.png"), 4);
+    atlas_jump_effect.LoadFromFile(_T(MEDIA_PATH_PREFIX "jump_effect_%d.png"), 5);
+    atlas_land_effect.LoadFromFile(_T(MEDIA_PATH_PREFIX "land_effect_%d.png"), 2);
 
     loadimage(&img_1P_winner, _T(MEDIA_PATH_PREFIX "1P_winner.png"));
     loadimage(&img_2P_winner, _T(MEDIA_PATH_PREFIX "2P_winner.png"));
@@ -228,13 +228,13 @@ void load_game_resources(){
     loadimage(&img_avatar_nut, _T(MEDIA_PATH_PREFIX "avatar_nut.png"));
 
     loadimage(&img_buff_recover_hp, _T(MEDIA_PATH_PREFIX "buff_icon_recover.png"));
-    redToBlue(&img_buff_recover_hp, &img_buff_recover_mp);
+    RedToBlue(&img_buff_recover_hp, &img_buff_recover_mp);
     loadimage(&img_buff_hurry, _T(MEDIA_PATH_PREFIX "buff_icon_hurry.png"));
     loadimage(&img_buff_invisible, _T(MEDIA_PATH_PREFIX "buff_icon_invisible.png"));
 
-    atlas_buffbox_yellow.load_from_file(_T(MEDIA_PATH_PREFIX "buff_box_yellow_%d.png"), 4);
-    atlas_buffbox_blue.load_from_file(_T(MEDIA_PATH_PREFIX "buff_box_blue_%d.png"), 4);
-    atlas_buffbox_pink.load_from_file(_T(MEDIA_PATH_PREFIX "buff_box_pink_%d.png"), 4);
+    atlas_buffbox_yellow.LoadFromFile(_T(MEDIA_PATH_PREFIX "buff_box_yellow_%d.png"), 4);
+    atlas_buffbox_blue.LoadFromFile(_T(MEDIA_PATH_PREFIX "buff_box_blue_%d.png"), 4);
+    atlas_buffbox_pink.LoadFromFile(_T(MEDIA_PATH_PREFIX "buff_box_pink_%d.png"), 4);
 
     mciSendString(_T("open " MEDIA_PATH_PREFIX "bgm_game.mp3 alias bgm_game"), NULL, 0, NULL);
     mciSendString(_T("open " MEDIA_PATH_PREFIX "bgm_menu.mp3 alias bgm_menu"), NULL, 0, NULL);
