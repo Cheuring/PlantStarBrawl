@@ -6,7 +6,7 @@
 #include <stdexcept>
 
 constexpr int PORT = 5099;
-#pragma comment(lib, "ws2_32.lib")
+// #pragma comment(lib, "ws2_32.lib")
 
 class MySocket {
 public:

@@ -1,3 +1,4 @@
+#include "MySocket.h"
 #include <graphics.h>
 #include <thread>
 #include <windows.h>
@@ -11,7 +12,6 @@
 #include "GameScene.h"
 #include "MediaSource.h"
 #include "MenuScene.h"
-#include "MySocket.h"
 #include "Platform.h"
 #include "Player.h"
 #include "Scene.h"
@@ -64,7 +64,8 @@ void GameCircle() {
     }
 }
 
-void LocalInput(ExMessage& msg) {
+void LocalInput() {
+    ExMessage msg;
     while(true) {
         while(peekmessage(&msg)){
             if(msg.message == WM_KEYDOWN){
@@ -107,8 +108,6 @@ void HandleRecv() {
 }
 
 int main(){
-    ExMessage msg;
-
     LoadGameResources();
 
     initgraph(1280, 720);
