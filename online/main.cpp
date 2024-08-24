@@ -40,7 +40,7 @@ int main(){
 
     LoadGameResources();
 
-    initgraph(1280, 720);
+    initgraph(1280, 720, SHOWCONSOLE);
 
     settextstyle(28, 0, _T("zpix"));
     setbkmode(TRANSPARENT);
@@ -57,7 +57,7 @@ int main(){
         DWORD frame_start_time = GetTickCount();
 
         while(peekmessage(&msg)){
-            scene_manager.OnInput(msg);
+            scene_manager.OnInput(msg, true);
         }
 
         static DWORD last_tick_time = GetTickCount();

@@ -220,17 +220,18 @@ void SelectorScene::OnInput(const ExMessage& msg, bool is_1P) {
                     case 'a':
                         is_btn_1P_left_down = false;
                         player_1P = (PlayerType)(((int)PlayerType::Invalid + (int)player_1P - 1) % (int)PlayerType::Invalid);
-                        mciSendString(_T("play ui_switch from 0"), nullptr, 0, nullptr);
+                        std::cout << "start playing ui_switch\n"; //  Debug
+                        mciSendString(_T("play ui_switch from 0"), NULL, 0, NULL);
                         break;
                     case 'D':
                     case 'd':
                         is_btn_1P_right_down = false;
                         player_1P = (PlayerType)(((int)player_1P + 1) % (int)PlayerType::Invalid);
-                        mciSendString(_T("play ui_switch from 0"), nullptr, 0, nullptr);
+                        mciSendString(_T("play ui_switch from 0"), NULL, 0, NULL);
                         break;
                     case VK_RETURN:
                         scene_manager.SwitchTo(SceneManager::SceneType::Game);
-                        mciSendString(_T("play ui_confirm from 0"), nullptr, 0, nullptr);
+                        mciSendString(_T("play ui_confirm from 0"), NULL, 0, NULL);
                         break;
                     default:
                         std::cout << "Selector 1P: key " << msg.vkcode << '\n';
@@ -263,17 +264,19 @@ void SelectorScene::OnInput(const ExMessage& msg, bool is_1P) {
                     case 'a':
                         is_btn_2P_left_down = false;
                         player_2P = (PlayerType)(((int)PlayerType::Invalid + (int)player_2P - 1) % (int)PlayerType::Invalid);
-                        mciSendString(_T("play ui_switch from 0"), nullptr, 0, nullptr);
+                        std::cout << "start playing ui_switch\n"; //  Debug
+                        mciSendString(_T("play ui_switch from 0"), NULL, 0, NULL);
                         break;
                     case 'D':
                     case 'd':
                         is_btn_2P_right_down = false;
                         player_2P = (PlayerType)(((int)player_2P + 1) % (int)PlayerType::Invalid);
-                        mciSendString(_T("play ui_switch from 0"), nullptr, 0, nullptr);
+                        std::cout << "start playing ui_switch\n"; //  Debug
+                        mciSendString(_T("play ui_switch from 0"), NULL, 0, NULL);
                         break;
                     case VK_RETURN:
                         scene_manager.SwitchTo(SceneManager::SceneType::Game);
-                        mciSendString(_T("play ui_confirm from 0"), nullptr, 0, nullptr);
+                        mciSendString(_T("play ui_confirm from 0"), NULL, 0, NULL);
                         break;
                     default:
                         std::cout << "Selector 2P: key " << msg.vkcode << '\n';

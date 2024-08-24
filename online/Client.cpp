@@ -110,7 +110,7 @@ void HandleRecv() {
 int main(){
     LoadGameResources();
 
-    initgraph(1280, 720);
+    initgraph(1280, 720, EW_SHOWCONSOLE);
 
     settextstyle(28, 0, _T("zpix"));
     setbkmode(TRANSPARENT);

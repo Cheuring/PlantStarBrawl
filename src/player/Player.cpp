@@ -1,4 +1,5 @@
 #include "Player.h"
+#include <iostream>
 
 Player::Player(int attack_cd) : attack_cd(attack_cd) {
     current_animation = &animation_idle_right;
@@ -249,107 +250,61 @@ void Player::OnDraw(const Camera& camera) {
 void Player::OnInput(const ExMessage& msg) {
     switch (msg.message){
         case WM_KEYDOWN:
-            switch (id) {
-                case PlayerId::P1:
-                    switch (msg.vkcode) {
-                        case 'A':
-                        case 'a':
-                            is_left_key_down = true;
-                            break;
-                        case 'D':
-                        case 'd':
-                            is_right_key_down = true;
-                            break;
-                        case 'W':
-                        case 'w':
-                            OnJump();
-                            break;
-                        case 'S':
-                        case 's':
-                            OnDrop();
-                            break;
-                        case 'F':
-                        case 'f':
-                            if(can_attack){
-                                OnAttack();
-                                can_attack = false;
-                                timer_attack_cd.Restart();
-                            }
-                            break;
-                        case 'G':
-                        case 'g':
-                            if(mp >= 100){
-                                OnAttackEx();
-
-                                if(!is_debug)
-                                    mp = 0;
-                            }
-                            break;
+            switch (msg.vkcode) {
+                case 'A':
+                case 'a':
+                    is_left_key_down = true;
+                    std::cout << (id == PlayerId::P1 ? "P1" : "P2") << " left key down" << std::endl;
+                    break;
+                case 'D':
+                case 'd':
+                    is_right_key_down = true;
+                    std::cout << (id == PlayerId::P1 ? "P1" : "P2") << " right key down" << std::endl;
+                    break;
+                case 'W':
+                case 'w':
+                    OnJump();
+                    break;
+                case 'S':
+                case 's':
+                    OnDrop();
+                    break;
+                case 'J':
+                case 'j':
+                    if(can_attack){
+                        OnAttack();
+                        can_attack = false;
+                        timer_attack_cd.Restart();
                     }
                     break;
-                case PlayerId::P2:
-                    switch (msg.vkcode) {
-                        case VK_LEFT:
-                            is_left_key_down = true;
-                            break;
-                        case VK_RIGHT:
-                            is_right_key_down = true;
-                            break;
-                        case VK_UP:
-                            OnJump();
-                            break;
-                        case VK_DOWN:
-                            OnDrop();
-                            break;
-                            //  . key
-                        case VK_OEM_PERIOD:
-                            if(can_attack){
-                                OnAttack();
-                                can_attack = false;
-                                timer_attack_cd.Restart();
-                            }
-                            break;
-                            //  / key
-                        case VK_OEM_2:
-                            if(mp >= 100){
-                                OnAttackEx();
+                case 'K':
+                case 'k':
+                    if(mp >= 100){
+                        OnAttackEx();
 
-                                if(!is_debug)
-                                    mp = 0;
-                            }
-                            break;
+                        if(!is_debug)
+                            mp = 0;
                     }
+                    break;
+                default:
                     break;
             }
             break;
         case WM_KEYUP:
-            switch (id) {
-                case PlayerId::P1:
-                    switch (msg.vkcode) {
-                        case 'A':
-                        case 'a':
-                            is_left_key_down = false;
-                            break;
-                        case 'D':
-                        case 'd':
-                            is_right_key_down = false;
-                            break;
-                    }
+            switch(msg.vkcode){
+                case 'A':
+                case 'a':
+                    is_left_key_down = false;
+                    std::cout << (id == PlayerId::P1 ? "P1" : "P2") << " left key up" << std::endl;
                     break;
-                case PlayerId::P2:
-                    switch (msg.vkcode) {
-                        case VK_LEFT:
-                            is_left_key_down = false;
-                            break;
-                        case VK_RIGHT:
-                            is_right_key_down = false;
-                            break;
-                    }
+                case 'D':
+                case 'd':
+                    is_right_key_down = false;
+                    std::cout << (id == PlayerId::P1 ? "P1" : "P2") << " right key up" << std::endl;
+                    break;
+                default:
                     break;
             }
-            break;
-        default:
-            break;
     }
 }
 
