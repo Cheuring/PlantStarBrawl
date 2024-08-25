@@ -1,3 +1,4 @@
+#include "MySocket.h"
 #include <graphics.h>
 #include <windows.h>
 #include <vector>
@@ -17,6 +18,9 @@
 #include "util.h"
 
 bool is_debug = false;
+bool is_stop_menu_bgm = false;
+bool is_start_menu_bgm = false;
+bool is_stop_game_bgm = false;
 
 Scene* menu_scene = nullptr;
 Scene* game_scene = nullptr;
@@ -54,6 +58,19 @@ int main(){
     scene_manager.SetCurrentScene(menu_scene);
 
     while(true){
+        if(is_stop_menu_bgm){
+            mciSendString(_T("stop bgm_menu"), NULL, 0, NULL);
+            is_stop_menu_bgm = false;
+        }
+        if(is_start_menu_bgm){
+            mciSendString(_T("play bgm_menu repeat from 0"), NULL, 0, NULL);
+            is_start_menu_bgm = false;
+        }
+        if(is_stop_game_bgm){
+            mciSendString(_T("stop bgm_game"), NULL, 0, NULL);
+            is_stop_game_bgm = false;
+        }
+
         DWORD frame_start_time = GetTickCount();
 
         while(peekmessage(&msg)){

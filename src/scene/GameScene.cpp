@@ -192,6 +192,7 @@ void GameScene::OnUpdate(int delta) {
 
     if(player_1->GetHp() <= 0 || player_2->GetHp() <= 0){
         if(!is_game_over) {
+            is_stop_game_bgm = true;
             mciSendString(_T("stop bgm_game"), NULL, 0, NULL);
             mciSendString(_T("play ui_win from 0"), NULL, 0, NULL);
         }

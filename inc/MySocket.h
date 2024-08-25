@@ -10,7 +10,7 @@ constexpr int PORT = 5099;
 
 class MySocket {
 public:
-    MySocket(bool is_server){
+    MySocket(bool is_server, const std::string& ip = "127.0.0.1"){
         WSADATA wsaData;
         if(WSAStartup(MAKEWORD(2, 2), &wsaData) != 0){
             throw std::runtime_error("WSAStartup failed!");
@@ -49,7 +49,7 @@ public:
             SOCKADDR_IN sockAddr;
             sockAddr.sin_family = PF_INET;
             sockAddr.sin_port = htons(PORT);
-            sockAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+            sockAddr.sin_addr.s_addr = inet_addr(ip.c_str());
             
             clntSock = socket(PF_INET, SOCK_STREAM, 0);
             if(clntSock == INVALID_SOCKET){

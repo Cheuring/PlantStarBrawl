@@ -20,6 +20,9 @@
 #include "util.h"
 
 bool is_debug = false;
+bool is_stop_menu_bgm = false;
+bool is_start_menu_bgm = false;
+bool is_stop_game_bgm = false;
 
 Scene* menu_scene = nullptr;
 Scene* game_scene = nullptr;
@@ -38,7 +41,6 @@ Player* player_2 = nullptr;
 IMAGE* img_player_1_avatar = nullptr;
 IMAGE* img_player_2_avatar = nullptr;
 
-MySocket client(false);
 std::string sendBuf;
 std::string recvBuf;
 
@@ -64,9 +66,32 @@ void GameCircle() {
     }
 }
 
-void LocalInput() {
+void LocalInput(MySocket& client) {
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "bgm_game.mp3 alias bgm_game"), NULL, 0, NULL);
+    // mciSendString(_T("open " MEDIA_PATH_PREFIX "bgm_menu.mp3 alias bgm_menu"), NULL, 0, NULL);
+    // mciSendString(_T("open " MEDIA_PATH_PREFIX "pea_break_1.mp3 alias pea_break_1"), NULL, 0, NULL);
+    // mciSendString(_T("open " MEDIA_PATH_PREFIX "pea_break_2.mp3 alias pea_break_2"), NULL, 0, NULL);
+    // mciSendString(_T("open " MEDIA_PATH_PREFIX "pea_break_3.mp3 alias pea_break_3"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "pea_shoot_1.mp3 alias pea_shoot_1"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "pea_shoot_2.mp3 alias pea_shoot_2"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "pea_shoot_ex.mp3 alias pea_shoot_ex"), NULL, 0, NULL);
+    // mciSendString(_T("open " MEDIA_PATH_PREFIX "sun_explode.mp3 alias sun_explode"), NULL, 0, NULL);
+    // mciSendString(_T("open " MEDIA_PATH_PREFIX "sun_explode_ex.mp3 alias sun_explode_ex"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "sun_text.mp3 alias sun_text"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "bubbles_shot.mp3 alias bubbles_shot"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "bubbles_shot_ex.mp3 alias bubbles_shot_ex"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "nut_explode.mp3 alias nut_explode"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "nut_dash.wav alias nut_dash"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "ui_confirm.wav alias ui_confirm"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "ui_switch.wav alias ui_switch"), NULL, 0, NULL);
+    // mciSendString(_T("open " MEDIA_PATH_PREFIX "ui_win.wav alias ui_win"), NULL, 0, NULL);
     ExMessage msg;
     while(true) {
+        if(is_stop_game_bgm){
+            mciSendString(_T("stop bgm_game"), NULL, 0, NULL);
+            is_stop_game_bgm = false;
+        }
+        
         while(peekmessage(&msg)){
             if(msg.message == WM_KEYDOWN){
                 sendBuf.push_back(msg.vkcode);
@@ -86,7 +111,25 @@ void LocalInput() {
     }
 }
 
-void HandleRecv() {
+void HandleRecv(MySocket& client) {
+    // mciSendString(_T("open " MEDIA_PATH_PREFIX "bgm_game.mp3 alias bgm_game"), NULL, 0, NULL);
+    // mciSendString(_T("open " MEDIA_PATH_PREFIX "bgm_menu.mp3 alias bgm_menu"), NULL, 0, NULL);
+    // mciSendString(_T("open " MEDIA_PATH_PREFIX "pea_break_1.mp3 alias pea_break_1"), NULL, 0, NULL);
+    // mciSendString(_T("open " MEDIA_PATH_PREFIX "pea_break_2.mp3 alias pea_break_2"), NULL, 0, NULL);
+    // mciSendString(_T("open " MEDIA_PATH_PREFIX "pea_break_3.mp3 alias pea_break_3"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "pea_shoot_1.mp3 alias pea_shoot_1"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "pea_shoot_2.mp3 alias pea_shoot_2"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "pea_shoot_ex.mp3 alias pea_shoot_ex"), NULL, 0, NULL);
+    // mciSendString(_T("open " MEDIA_PATH_PREFIX "sun_explode.mp3 alias sun_explode"), NULL, 0, NULL);
+    // mciSendString(_T("open " MEDIA_PATH_PREFIX "sun_explode_ex.mp3 alias sun_explode_ex"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "sun_text.mp3 alias sun_text"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "bubbles_shot.mp3 alias bubbles_shot"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "bubbles_shot_ex.mp3 alias bubbles_shot_ex"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "nut_explode.mp3 alias nut_explode"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "nut_dash.wav alias nut_dash"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "ui_confirm.wav alias ui_confirm"), NULL, 0, NULL);
+    mciSendString(_T("open " MEDIA_PATH_PREFIX "ui_switch.wav alias ui_switch"), NULL, 0, NULL);
+    // mciSendString(_T("open " MEDIA_PATH_PREFIX "ui_win.wav alias ui_win"), NULL, 0, NULL);
     ExMessage msg;
     while(true) {
         client.recvMsg(recvBuf);
@@ -108,6 +151,10 @@ void HandleRecv() {
 }
 
 int main(){
+    std::string ip;
+    std::cin >> ip;
+    MySocket client(false, ip);
+
     LoadGameResources();
 
     initgraph(1280, 720, EW_SHOWCONSOLE);
@@ -123,13 +170,22 @@ int main(){
 
     scene_manager.SetCurrentScene(menu_scene);
 
-    std::thread thread_send(LocalInput);
+    std::thread thread_send(LocalInput, std::ref(client));
     thread_send.detach();
 
-    std::thread thread_recv(HandleRecv);
+    std::thread thread_recv(HandleRecv, std::ref(client));
     thread_recv.detach();
 
     while(true) {
+        if(is_stop_menu_bgm){
+            mciSendString(_T("stop bgm_menu"), NULL, 0, NULL);
+            is_stop_menu_bgm = false;
+        }
+        if(is_start_menu_bgm){
+            mciSendString(_T("play bgm_menu repeat from 0"), NULL, 0, NULL);
+            is_start_menu_bgm = false;
+        }
+        
         DWORD frame_start_time = GetTickCount();
 
         static DWORD last_tick_time = GetTickCount();
