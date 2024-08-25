@@ -15,6 +15,7 @@ public:
     virtual void OnUpdate(int delta) = 0;
     virtual void OnDraw(const Camera& camera) = 0;
     virtual void OnInput(const ExMessage& msg, bool is_1P) = 0;
+    virtual void OnInput(const ExMessage& msg) = 0;
     virtual void OnExit() = 0;
 
 private:

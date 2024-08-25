@@ -289,6 +289,61 @@ void SelectorScene::OnInput(const ExMessage& msg, bool is_1P) {
     }
 }
 
+void SelectorScene::OnInput(const ExMessage& msg) {
+    switch (msg.message) {
+        case WM_KEYDOWN:
+            switch (msg.vkcode){
+                case 'A':
+                case 'a':
+                    is_btn_1P_left_down = true;
+                    break;
+                case 'D':
+                case 'd':
+                    is_btn_1P_right_down = true;
+                    break;
+                case VK_LEFT:
+                    is_btn_2P_left_down = true;
+                    break;
+                case VK_RIGHT:
+                    is_btn_2P_right_down = true;
+                    break;
+            }
+            break;
+        case WM_KEYUP:
+            switch (msg.vkcode){
+                case 'A':
+                case 'a':
+                    is_btn_1P_left_down = false;
+                    player_1P = (PlayerType)(((int)PlayerType::Invalid + (int)player_1P - 1) % (int)PlayerType::Invalid);
+                    mciSendString(_T("play ui_switch from 0"), nullptr, 0, nullptr);
+                    break;
+                case 'D':
+                case 'd':
+                    is_btn_1P_right_down = false;
+                    player_1P = (PlayerType)(((int)player_1P + 1) % (int)PlayerType::Invalid);
+                    mciSendString(_T("play ui_switch from 0"), nullptr, 0, nullptr);
+                    break;
+                case VK_LEFT:
+                    is_btn_2P_left_down = false;
+                    player_2P = (PlayerType)(((int)PlayerType::Invalid + (int)player_2P - 1) % (int)PlayerType::Invalid);
+                    mciSendString(_T("play ui_switch from 0"), nullptr, 0, nullptr);
+                    break;
+                case VK_RIGHT:
+                    is_btn_2P_right_down = false;
+                    player_2P = (PlayerType)(((int)player_2P + 1) % (int)PlayerType::Invalid);
+                    mciSendString(_T("play ui_switch from 0"), nullptr, 0, nullptr);
+                    break;
+                case VK_RETURN:
+                    scene_manager.SwitchTo(SceneManager::SceneType::Game);
+                    mciSendString(_T("play ui_confirm from 0"), nullptr, 0, nullptr);
+                    break;
+            }
+            break;
+        default:
+            break;
+    }
+}
+
 void SelectorScene::OnExit() {
     switch (player_1P) {
         case PlayerType::Peashooter:

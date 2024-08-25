@@ -29,6 +29,10 @@ void SceneManager::OnInput(const ExMessage& msg, bool is_1P){
     current_scene->OnInput(msg, is_1P);
 }
 
+void SceneManager::OnInput(const ExMessage& msg){
+    current_scene->OnInput(msg);
+}
+
 void SceneManager::OnUpdate(int delta){
     current_scene->OnUpdate(delta);
 }

@@ -41,6 +41,7 @@ public:
     virtual void OnDrop();
     virtual void OnDraw(const Camera& camera);
     virtual void OnInput(const ExMessage& msg);
+    virtual void OnInputLocal(const ExMessage& msg);
 
     void SetId(PlayerId ID);
     void SetPosition(float x, float y);

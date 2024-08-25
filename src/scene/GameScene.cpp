@@ -152,6 +152,41 @@ void GameScene::OnInput(const ExMessage& msg, bool is_1P) {
     }
 }
 
+void GameScene::OnInput(const ExMessage& msg) {
+    player_1->OnInputLocal(msg);
+    player_2->OnInputLocal(msg);
+
+    switch (msg.message) {
+        case WM_KEYUP:
+            switch (msg.vkcode)
+            {
+            case VK_ESCAPE:
+                scene_manager.SwitchTo(SceneManager::SceneType::Menu);
+                break;
+            case 'q':
+            case 'Q':
+                is_debug = !is_debug;
+                break;
+            case 'M':
+            case 'm':
+                if(is_bgm_paused){
+                    mciSendString(_T("resume bgm_game"), NULL, 0, NULL);
+                    is_bgm_paused = false;
+                }
+                else{
+                    mciSendString(_T("pause bgm_game"), NULL, 0, NULL);
+                    is_bgm_paused = true;
+                }
+                break;
+            default:
+                break;
+            }
+            break;
+        default:
+            break;
+    }
+}
+
 void GameScene::OnUpdate(int delta) {
     player_1->OnUpdate(delta);
     player_2->OnUpdate(delta);

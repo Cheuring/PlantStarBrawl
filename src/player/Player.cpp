@@ -308,6 +308,113 @@ void Player::OnInput(const ExMessage& msg) {
     }
 }
 
+void Player::OnInputLocal(const ExMessage& msg) {
+    switch (msg.message){
+        case WM_KEYDOWN:
+            switch (id) {
+                case PlayerId::P1:
+                    switch (msg.vkcode) {
+                        case 'A':
+                        case 'a':
+                            is_left_key_down = true;
+                            break;
+                        case 'D':
+                        case 'd':
+                            is_right_key_down = true;
+                            break;
+                        case 'W':
+                        case 'w':
+                            OnJump();
+                            break;
+                        case 'S':
+                        case 's':
+                            OnDrop();
+                            break;
+                        case 'F':
+                        case 'f':
+                            if(can_attack){
+                                OnAttack();
+                                can_attack = false;
+                                timer_attack_cd.Restart();
+                            }
+                            break;
+                        case 'G':
+                        case 'g':
+                            if(mp >= 100){
+                                OnAttackEx();
+
+                                if(!is_debug)
+                                    mp = 0;
+                            }
+                            break;
+                    }
+                    break;
+                case PlayerId::P2:
+                    switch (msg.vkcode) {
+                        case VK_LEFT:
+                            is_left_key_down = true;
+                            break;
+                        case VK_RIGHT:
+                            is_right_key_down = true;
+                            break;
+                        case VK_UP:
+                            OnJump();
+                            break;
+                        case VK_DOWN:
+                            OnDrop();
+                            break;
+                            //  . key
+                        case VK_OEM_PERIOD:
+                            if(can_attack){
+                                OnAttack();
+                                can_attack = false;
+                                timer_attack_cd.Restart();
+                            }
+                            break;
+                            //  / key
+                        case VK_OEM_2:
+                            if(mp >= 100){
+                                OnAttackEx();
+
+                                if(!is_debug)
+                                    mp = 0;
+                            }
+                            break;
+                    }
+                    break;
+            }
+            break;
+        case WM_KEYUP:
+            switch (id) {
+                case PlayerId::P1:
+                    switch (msg.vkcode) {
+                        case 'A':
+                        case 'a':
+                            is_left_key_down = false;
+                            break;
+                        case 'D':
+                        case 'd':
+                            is_right_key_down = false;
+                            break;
+                    }
+                    break;
+                case PlayerId::P2:
+                    switch (msg.vkcode) {
+                        case VK_LEFT:
+                            is_left_key_down = false;
+                            break;
+                        case VK_RIGHT:
+                            is_right_key_down = false;
+                            break;
+                    }
+                    break;
+            }
+            break;
+        default:
+            break;
+    }
+}
+
 void Player::SetId(PlayerId Id) {
     if(Id == PlayerId::P2) {
         is_facing_right = false;

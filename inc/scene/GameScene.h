@@ -43,6 +43,7 @@ public:
     void OnEnter() override;
     void OnExit() override;
     void OnInput(const ExMessage& msg, bool is_1P) override;
+    void OnInput(const ExMessage& msg) override;
     void OnUpdate(int delta) override;
     void OnDraw(const Camera& camera) override;
 

@@ -1,4 +1,3 @@
-#include "MySocket.h"
 #include <graphics.h>
 #include <windows.h>
 #include <vector>
@@ -18,9 +17,6 @@
 #include "util.h"
 
 bool is_debug = false;
-bool is_stop_menu_bgm = false;
-bool is_start_menu_bgm = false;
-bool is_stop_game_bgm = false;
 
 Scene* menu_scene = nullptr;
 Scene* game_scene = nullptr;
@@ -44,7 +40,7 @@ int main(){
 
     LoadGameResources();
 
-    initgraph(1280, 720, SHOWCONSOLE);
+    initgraph(1280, 720);
 
     settextstyle(28, 0, _T("zpix"));
     setbkmode(TRANSPARENT);
@@ -52,29 +48,15 @@ int main(){
     BeginBatchDraw();
 
     menu_scene = new MenuScene();
-    // game_scene = new GameScene();
     selector_scene = new SelectorScene();
 
     scene_manager.SetCurrentScene(menu_scene);
 
     while(true){
-        if(is_stop_menu_bgm){
-            mciSendString(_T("stop bgm_menu"), NULL, 0, NULL);
-            is_stop_menu_bgm = false;
-        }
-        if(is_start_menu_bgm){
-            mciSendString(_T("play bgm_menu repeat from 0"), NULL, 0, NULL);
-            is_start_menu_bgm = false;
-        }
-        if(is_stop_game_bgm){
-            mciSendString(_T("stop bgm_game"), NULL, 0, NULL);
-            is_stop_game_bgm = false;
-        }
-
         DWORD frame_start_time = GetTickCount();
 
         while(peekmessage(&msg)){
-            scene_manager.OnInput(msg, true);
+            scene_manager.OnInput(msg);
         }
 
         static DWORD last_tick_time = GetTickCount();

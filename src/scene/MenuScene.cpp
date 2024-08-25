@@ -20,3 +20,11 @@ void MenuScene::OnInput(const ExMessage& msg, bool is_1P) {
         scene_manager.SwitchTo(SceneManager::SceneType::Selector);
     }
 }
+
+void MenuScene::OnInput(const ExMessage& msg) {
+    if(msg.message == WM_KEYUP){
+        mciSendString(_T("play ui_confirm from 0"), NULL, 0, NULL);
+        std::cout<< "start playing ui_confirm" << std::endl;
+        scene_manager.SwitchTo(SceneManager::SceneType::Selector);
+    }
+}
