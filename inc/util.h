@@ -8,6 +8,7 @@
 #include "Vector2.h"
 
 constexpr int FPS = 60;
+constexpr int LOGICAL_FPS = 20;
 
 inline void FlipImage(IMAGE* src, IMAGE* dest) {
     if(src == nullptr || dest == nullptr){

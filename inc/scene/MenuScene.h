@@ -4,8 +4,6 @@
 #include "Scene.h"
 #include "SceneManager.h"
 
-extern bool is_start_menu_bgm;
-
 extern IMAGE img_menu_background;
 extern SceneManager scene_manager;
 extern Scene* game_scene;

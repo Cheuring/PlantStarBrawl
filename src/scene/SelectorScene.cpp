@@ -332,6 +332,5 @@ void SelectorScene::OnExit() {
 
     game_scene = new GameScene();
 
-    // mciSendString(_T("stop bgm_menu"), NULL, 0, NULL);
-    is_stop_menu_bgm = true;
+    mciSendString(_T("stop bgm_menu"), NULL, 0, NULL);
 }

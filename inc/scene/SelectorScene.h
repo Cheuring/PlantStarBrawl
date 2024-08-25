@@ -12,8 +12,6 @@
 #include "Scene.h"
 #include "SceneManager.h"
 
-extern bool is_stop_menu_bgm;
-
 extern Player* player_1;
 extern Player* player_2;
 extern SceneManager scene_manager;

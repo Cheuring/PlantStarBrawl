@@ -24,7 +24,6 @@ extern std::vector<Platform> platform_list;
 extern SceneManager scene_manager;
 
 extern bool is_debug;
-extern bool is_stop_game_bgm;
 
 extern Player* player_1;
 extern Player* player_2;
