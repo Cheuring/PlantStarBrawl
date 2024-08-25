@@ -1,5 +1,9 @@
 #include "GameScene.h"
+#include <ctime>
 
+GameScene::GameScene() : status_bar_1P(player_1->GetBuffList()), status_bar_2P(player_2->GetBuffList()) {
+    srand((unsigned int)time(nullptr));
+}
 GameScene::~GameScene() {
     delete player_1;
     delete player_2;
@@ -33,14 +37,14 @@ void GameScene::OnEnter() {
         scene_manager.SwitchTo(SceneManager::SceneType::Menu);
     });
 
-    // timer_buff_generate.Restart();
-    // timer_buff_generate.SetWaitTime(2000);
-    // timer_buff_generate.SetOneShot(false);
-    // timer_buff_generate.SetCallback([&](){
-    //     int rand_buff_num = rand() % 4;
-    //     BuffBullet* buff_bullet = new BuffBullet(rand_buff_num);
-    //     buff_bullet_list.push_back(buff_bullet);
-    // });
+    timer_buff_generate.Restart();
+    timer_buff_generate.SetWaitTime(2000);
+    timer_buff_generate.SetOneShot(false);
+    timer_buff_generate.SetCallback([&](){
+        int rand_buff_num = rand() % 4;
+        BuffBullet* buff_bullet = new BuffBullet(rand_buff_num, rand());
+        buff_bullet_list.push_back(buff_bullet);
+    });
 
     status_bar_1P.SetAvatar(img_player_1_avatar);
     status_bar_2P.SetAvatar(img_player_2_avatar);
@@ -178,7 +182,7 @@ void GameScene::OnUpdate(int delta) {
         buff->OnUpdate(delta);
     }
 
-    // timer_buff_generate.OnUpdate(delta);
+    timer_buff_generate.OnUpdate(delta);
 
     const auto& player_1_pos = player_1->GetPosition();
     const auto& player_2_pos = player_2->GetPosition();

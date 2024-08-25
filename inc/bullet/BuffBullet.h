@@ -11,7 +11,7 @@ extern Atlas atlas_buffbox_yellow;
 
 class BuffBullet : public Bullet {
 public:
-    BuffBullet(int buffNum);
+    BuffBullet(int buffNum, int rand_num);
     ~BuffBullet() = default;
 
     auto GetBuffId() const -> BuffId;

@@ -38,7 +38,7 @@ extern IMAGE img_winner_bar;
 
 class GameScene : public Scene {
 public:
-    GameScene() : status_bar_1P(player_1->GetBuffList()), status_bar_2P(player_2->GetBuffList()) {}
+    GameScene();
     ~GameScene();
 
     void OnEnter() override;

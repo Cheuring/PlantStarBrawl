@@ -1,12 +1,12 @@
 #include "BuffBullet.h"
 
-BuffBullet::BuffBullet(int buffNum){
+BuffBullet::BuffBullet(int buffNum, int rand_num){
     size.x = 80, size.y = 80;
     collision_offset.x = 14, collision_offset.y = 14;
 
     velocity.y = 0.1f;
     position.y = -size.y / 2;
-    position.x = rand() % (getwidth() - (int)size.x);
+    position.x = rand_num % (getwidth() - (int)size.x);
 
     switch(buffNum){
         case 0:
