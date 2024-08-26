@@ -98,7 +98,7 @@ void GameScene::OnEnter() {
     mciSendString(_T("play bgm_game repeat from 0"), NULL, 0, NULL);
 }
 
-void GameScene::OnExit() {
+void GameScene::OnExit(GameType type) {
     for(auto& bullet : bullet_list){
         delete bullet;
     }

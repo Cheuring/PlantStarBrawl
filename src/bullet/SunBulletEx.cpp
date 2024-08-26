@@ -3,7 +3,7 @@
 SunBulletEx::SunBulletEx(){
     size.x = 288, size.y = 288;
     collision_offset.x = 65, collision_offset.y = 65;
-    damage = 35;
+    damage = 40;
 
     animation_idle.SetAtlas(&atlas_sun_ex);
     animation_idle.SetInterval(50);

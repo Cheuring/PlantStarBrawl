@@ -1,6 +1,7 @@
 #ifndef _SCENE_MANAGER_H
 #define _SCENE_MANAGER_H
 
+#include "GameType.h"
 #include "Scene.h"
 
 extern Scene* menu_scene;
@@ -15,7 +16,7 @@ public:
         Selector,
     };
 
-    SceneManager() = default;
+    SceneManager(GameType type);
     ~SceneManager() = default;
 
     void SetCurrentScene(Scene* scene);
@@ -28,6 +29,7 @@ public:
 
 private:
     Scene* current_scene = nullptr;
+    GameType game_type;
 };
 
 

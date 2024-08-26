@@ -1,6 +1,6 @@
 #include "PeashooterPlayer.h"
 
-PeashooterPlayer::PeashooterPlayer() : Player() {
+PeashooterPlayer::PeashooterPlayer() : Player(250) {
     animation_idle_left.SetAtlas(&atlas_peashooter_idle_left);
     animation_idle_right.SetAtlas(&atlas_peashooter_idle_right);
     animation_run_left.SetAtlas(&atlas_peashooter_run_left);

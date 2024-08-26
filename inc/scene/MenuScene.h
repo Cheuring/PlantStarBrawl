@@ -1,6 +1,7 @@
 #ifndef _MEMU_SCENE_H_
 #define _MEMU_SCENE_H_
 
+#include "GameType.h"
 #include "Scene.h"
 #include "SceneManager.h"
 
@@ -18,7 +19,7 @@ public:
     void OnDraw(const Camera& camera) override;
     void OnInput(const ExMessage& msg, bool is_1P) override;
     void OnInput(const ExMessage& msg) override;
-    void OnExit() override {}
+    void OnExit(GameType type) override {}
 
 private:
 };

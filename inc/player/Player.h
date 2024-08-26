@@ -53,6 +53,7 @@ public:
     auto GetMp() const -> int;
     void MakeInvulnerable();
     auto GetBuffList() const -> const std::list<BuffId>&;
+    void SetLocal(bool is_local);
 
     virtual void OnAttack() = 0;
     virtual void OnAttackEx() = 0;
@@ -96,7 +97,7 @@ protected:
 
     bool is_facing_right = true;
 
-    int attack_cd = 350;
+    int attack_cd;
     bool can_attack = true;
     Timer timer_attack_cd;
 
@@ -128,6 +129,7 @@ protected:
     Timer timer_buff_invisible;
 
     bool is_invisible = false;
+    bool is_local;
 
 protected:
     void AddBuff(BuffId buffid);

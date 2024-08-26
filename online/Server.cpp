@@ -10,6 +10,7 @@
 #include "Bullet.h"
 #include "Camera.h"
 #include "GameScene.h"
+#include "GameType.h"
 #include "MediaSource.h"
 #include "MenuScene.h"
 #include "Platform.h"
@@ -26,7 +27,7 @@ Scene* game_scene = nullptr;
 Scene* selector_scene = nullptr;
 
 Camera main_camera;
-SceneManager scene_manager;
+SceneManager scene_manager(GameType::SERVER);
 
 std::vector<Bullet *> bullet_list;
 std::vector<BuffBullet *> buff_bullet_list;

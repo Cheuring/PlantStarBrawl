@@ -1,12 +1,14 @@
 #include "SceneManager.h"
 
+SceneManager::SceneManager(GameType type) : game_type(type) {}
+
 void SceneManager::SetCurrentScene(Scene* scene){
     current_scene = scene;
     current_scene->OnEnter();
 }
 
 void SceneManager::SwitchTo(SceneType type){
-    current_scene->OnExit();
+    current_scene->OnExit(game_type);
     switch (type)
     {
     case SceneType::Menu:

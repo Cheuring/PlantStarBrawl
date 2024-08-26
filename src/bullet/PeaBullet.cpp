@@ -3,7 +3,7 @@
 PeaBullet::PeaBullet() {
     size.x = 64, size.y = 64;
     collision_offset.x = 25, collision_offset.y = 25;
-    damage = 10;
+    damage = 20;
 
     animation_break.SetAtlas(&atlas_pea_break);
     animation_break.SetInterval(100);

@@ -2,7 +2,7 @@
 
 NutBullet::NutBullet() {
     size.x = 288, size.y = 288;
-    damage = 40;
+    damage = 50;
     valid = false;
 
     animation_explode.SetAtlas(&atlas_nut_explode);

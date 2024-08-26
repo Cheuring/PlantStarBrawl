@@ -5,6 +5,7 @@
 
 #include "BuffBullet.h"
 #include "Camera.h"
+#include "GameType.h"
 #include "Platform.h"
 #include "Player.h"
 #include "Scene.h"
@@ -41,7 +42,7 @@ public:
     ~GameScene();
 
     void OnEnter() override;
-    void OnExit() override;
+    void OnExit(GameType type) override;
     void OnInput(const ExMessage& msg, bool is_1P) override;
     void OnInput(const ExMessage& msg) override;
     void OnUpdate(int delta) override;

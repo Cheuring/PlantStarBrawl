@@ -238,7 +238,7 @@ void Player::OnDraw(const Camera& camera) {
         }
     }
 
-    if(is_debug){
+    if(is_debug || (is_invisible && is_local)){
         setfillcolor(RGB(0, 0, 255));
         solidcircle(position.x, position.y, 3);
         
@@ -459,6 +459,10 @@ void Player::MakeInvulnerable() {
 
 auto Player::GetBuffList() const -> const std::list<BuffId>& {
     return buff_list;
+}
+
+void Player::SetLocal(bool is_local) {
+    this->is_local = is_local;
 }
 
 void Player::AddBuff(BuffId buffid) {

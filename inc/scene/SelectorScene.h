@@ -4,6 +4,7 @@
 #include "Animation.h"
 #include "Atlas.h"
 #include "GameScene.h"
+#include "GameType.h"
 #include "GloomShroomPlayer.h"
 #include "NutPlayer.h"
 #include "PeashooterPlayer.h"
@@ -70,7 +71,7 @@ public:
     void OnDraw(const Camera& camera) override;
     void OnInput(const ExMessage& msg, bool is_1P) override;
     void OnInput(const ExMessage& msg) override;
-    void OnExit() override;
+    void OnExit(GameType type) override;
 
 private:
     enum class PlayerType {

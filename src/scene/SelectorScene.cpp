@@ -344,7 +344,7 @@ void SelectorScene::OnInput(const ExMessage& msg) {
     }
 }
 
-void SelectorScene::OnExit() {
+void SelectorScene::OnExit(GameType type) {
     switch (player_1P) {
         case PlayerType::Peashooter:
             player_1 = new PeashooterPlayer();
@@ -364,6 +364,9 @@ void SelectorScene::OnExit() {
             break;
     }
     player_1->SetId(PlayerId::P1);
+    if(type == GameType::SERVER){
+        player_1->SetLocal(true);
+    }
 
     switch (player_2P) {
         case PlayerType::Peashooter:
@@ -384,6 +387,9 @@ void SelectorScene::OnExit() {
             break;
     }
     player_2->SetId(PlayerId::P2);
+    if(type == GameType::CLIENT){
+        player_2->SetLocal(true);
+    }
 
     game_scene = new GameScene();
 
