@@ -9,6 +9,8 @@ private:
 	int left = 0, top = 0, right = 0, bottom = 0;	// 控件坐标
 	char* text = NULL;							// 控件内容
 	size_t maxlen = 0;									// 文本框最大内容长度
+	bool binput = false;							// 是否输入中
+	int counter = 0;								// 光标闪烁计数器
  
 public:
 	void Create(int x1, int y1, int x2, int y2, int max)
@@ -51,6 +53,15 @@ public:
 		setfillcolor(0xeeeeee);			// 设置填充颜色
 		fillrectangle(left, top, right, bottom);
 		outtextxy(left + 10, top + 5, text);
+
+		if(binput){
+			int width = textwidth(text);
+			counter = (counter + 1) % 40;
+			if (counter < 20)
+				line(left + 10 + width + 1, top + 3, left + 10 + width + 1, bottom - 3);				// 画光标
+			// else
+			// 	clearrectangle(left + 10 + width + 1, top + 3, left + 10 + width + 1, bottom - 3);		// 擦光标
+		}
  
 		// 恢复环境值
 		setlinecolor(oldlinecolor);
@@ -72,8 +83,8 @@ public:
 		outtextxy(left + 10, top + 5, text);
  
 		int width = textwidth(text);	// 字符串总宽度
-		int counter = 0;				// 光标闪烁计数器
-		bool binput = true;				// 是否输入中
+		counter = 0;				// 光标闪烁计数器
+		binput = true;				// 是否输入中
  
 		ExMessage msg;
 		while (binput)
@@ -124,14 +135,14 @@ public:
 			}
  
 			// 绘制光标（光标闪烁周期为 20ms * 32）
-			counter = (counter + 1) % 32;
-			if (counter < 16)
-				line(left + 10 + width + 1, top + 3, left + 10 + width + 1, bottom - 3);				// 画光标
-			else
-				clearrectangle(left + 10 + width + 1, top + 3, left + 10 + width + 1, bottom - 3);		// 擦光标
+			// counter = (counter + 1) % 32;
+			// if (counter < 16)
+			// 	line(left + 10 + width + 1, top + 3, left + 10 + width + 1, bottom - 3);				// 画光标
+			// else
+			// 	clearrectangle(left + 10 + width + 1, top + 3, left + 10 + width + 1, bottom - 3);		// 擦光标
  
-			// 延时 20ms
-			Sleep(20);
+			// // 延时 20ms
+			// Sleep(20);
 		}
  
 		clearrectangle(left + 10 + width + 1, top + 3, left + 10 + width + 1, bottom - 3);	// 擦光标
@@ -204,64 +215,3 @@ public:
 };
  
  
- 
-// // 定义控件
-// EasyTextBox txtName;
-// EasyTextBox txtPwd;
-// EasyButton btnOK;
- 
- 
- 
-// 按钮 btnOK 的点击事件
-// void On_btnOk_Click()
-// {
-// 	if (strcmp("123456", txtPwd.Text()))
-// 		MessageBox(GetHWnd(), "密码错误", "错误", MB_OK);
-// 	else
-// 	{
-// 		char s[100] = "Hello, ";
-// 		strcat_s(s, 100, txtName.Text());
-// 		MessageBox(GetHWnd(), s, "Hello", MB_OK);
-// 	}
-// }
- 
- 
- 
-// 主函数
-// int main()
-// {
-// 	// 创建图形窗口
-// 	initgraph(640, 480,SHOWCONSOLE);
- 
-// 	// 简单绘制界面
-// 	setbkcolor(0xeeeeee);
-// 	cleardevice();
-// 	settextcolor(BLACK);
-// 	outtextxy(50, 55, "用户名：");
-// 	txtName.Create(120, 50, 400, 75, 10);						// 创建用户名文本框控件
-// 	outtextxy(50, 105, "密 码：");
-// 	txtPwd.Create(120, 100, 400, 125, 10);						// 创建密码文本框控件
-// 	btnOK.Create(320, 150, 400, 175, "OK", On_btnOk_Click);	// 创建按钮控件
- 
-// 	ExMessage msg;
-// 	while (true)
-// 	{
-// 		msg = getmessage(EX_MOUSE);			// 获取消息输入
- 
-// 		if (msg.message == WM_LBUTTONDOWN)
-// 		{
-// 			// 判断控件
-// 			if (txtName.Check(msg.x, msg.y))	txtName.OnMessage();
- 
-// 			// 判断控件
-// 			if (txtPwd.Check(msg.x, msg.y))		txtPwd.OnMessage();
- 
-// 			// 判断控件
-// 			if (btnOK.Check(msg.x, msg.y))		btnOK.OnMessage();
-// 		}
-// 	}
- 
-// 	// 关闭绘图窗口
-// 	closegraph();
-// 	return 0;
-// }

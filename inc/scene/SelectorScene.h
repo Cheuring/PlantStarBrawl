@@ -9,6 +9,7 @@
 #include "NutPlayer.h"
 #include "PeashooterPlayer.h"
 #include "PlayerId.h"
+#include "PlayerType.h"
 #include "SunflowerPlayer.h"
 #include "Scene.h"
 #include "SceneManager.h"
@@ -74,13 +75,6 @@ public:
     void OnExit(GameType type) override;
 
 private:
-    enum class PlayerType {
-        Peashooter,
-        Sunflower,
-        Gloomshroom,
-        Nut,
-        Invalid
-    };
 
     POINT pos_img_VS = { 0, 0 };                //  VS ͼƬλ��
     POINT pos_img_tip = { 0, 0 };               //  ��ʾ��Ϣ�ı�ͼƬλ��

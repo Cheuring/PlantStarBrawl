@@ -5,7 +5,7 @@
 #include <vector>
 #include <iostream>
 
-#include "Atlas.h"
+#include "AnimationWidget.h"
 #include "BuffBullet.h"
 #include "Bullet.h"
 #include "Camera.h"
@@ -16,6 +16,7 @@
 #include "MenuScene.h"
 #include "Platform.h"
 #include "Player.h"
+#include "PlayerType.h"
 #include "Scene.h"
 #include "SelectorScene.h"
 #include "SceneManager.h"
@@ -48,6 +49,8 @@ MySocket client;
 EasyTextBox text_ip;
 EasyButton btn_connect;
 
+AnimationWidget widget_sunflower(PlayerType::Sunflower, 1080, 520);
+
 inline void HandleInput(std::string &buf, bool is_server) {
     ExMessage msg;
     if(buf.size() > 1){
@@ -61,13 +64,12 @@ inline void HandleInput(std::string &buf, bool is_server) {
             msg.vkcode = buf[i];
             scene_manager.OnInput(msg, is_server);
         }
-        // std::cout << "Client recvBuf: " << recvBuf << std::endl;
         buf.clear();
         buf.push_back('#');
     }
 }
 
-void GameCircle() {
+inline void GameCircle() {
     while(true) {
         DWORD frame_start_time = GetTickCount();
 
@@ -111,31 +113,28 @@ void LocalInput(MySocket& client) {
     }
 }
 
-void HandleRecv(MySocket& client) {
-    ExMessage msg;
-    while(true) {
+void WidgetUpdate(){
+    while(!is_connected){
         DWORD frame_start_time = GetTickCount();
 
-        client.recvMsg(recvBuf);
-        if(!recvBuf.empty()){
-            int len = recvBuf.size();
-            for(int i = 0; i + 1 < len; i += 2){
-                if(recvBuf[i+1] == '1'){
-                    msg.message = WM_KEYUP;
-                }else{
-                    msg.message = WM_KEYDOWN;
-                }
-                msg.vkcode = recvBuf[i];
-                scene_manager.OnInput(msg, true);
-            }
-            std::cout << "Client recvBuf: " << recvBuf << std::endl;
-            recvBuf.clear();
-        }
+        static DWORD last_tick_time = GetTickCount();
+        DWORD current_tick_time = GetTickCount();
+        DWORD delta = current_tick_time - last_tick_time;
+
+        widget_sunflower.OnUpdate(delta);
+        last_tick_time = current_tick_time;
+
+        cleardevice();
+        outtextxy(220, 210, "Server IP:");
+        text_ip.Show();
+        btn_connect.Show();
+        widget_sunflower.OnDraw(main_camera);
+        FlushBatchDraw();
 
         DWORD frame_end_time = GetTickCount();
         DWORD frame_duration = frame_end_time - frame_start_time;
-        if(frame_duration < 1000 / LOGICAL_FPS){
-            Sleep(1000 / LOGICAL_FPS - frame_duration);
+        if(frame_duration < 1000 / FPS){
+            Sleep(1000 / FPS - frame_duration);
         }
     }
 }
@@ -143,6 +142,7 @@ void HandleRecv(MySocket& client) {
 void OnClick() {
     std::string error_msg;
     if(!client.Connect(text_ip.Text(), error_msg)){
+        error_msg += "\nPlease try again.";
         MessageBox(GetHWnd(), error_msg.c_str(), "Error", MB_OK);
     }else{
         is_connected = true;
@@ -161,9 +161,14 @@ int main(){
 	cleardevice();
 	settextcolor(BLACK);
 
-    outtextxy(200, 200, "server IP:");
+    BeginBatchDraw();
+
+    outtextxy(220, 210, "Server IP:");
     text_ip.Create(400, 200, 800, 250, 20);
     btn_connect.Create(600, 300, 800, 350, "Connect", OnClick);
+
+    std::thread thread_widget(WidgetUpdate);
+    thread_widget.detach();
 
     ExMessage temp_msg;
     while(!is_connected) {
@@ -177,7 +182,6 @@ int main(){
     }
 
 
-    BeginBatchDraw();
 
     menu_scene = new MenuScene();
     selector_scene = new SelectorScene();
@@ -186,9 +190,6 @@ int main(){
 
     std::thread thread_send(LocalInput, std::ref(client));
     thread_send.detach();
-
-    // std::thread thread_recv(HandleRecv, std::ref(client));
-    // thread_recv.detach();
 
     GameCircle();
 

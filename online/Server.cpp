@@ -5,11 +5,10 @@
 #include <vector>
 #include <iostream>
 
-#include "Atlas.h"
+#include "AnimationWidget.h"
 #include "BuffBullet.h"
 #include "Bullet.h"
 #include "Camera.h"
-// #include "Common.h"
 #include "GameScene.h"
 #include "GameType.h"
 #include "MediaSource.h"
@@ -22,6 +21,7 @@
 #include "util.h"
 
 bool is_debug = false;
+bool is_connected = false;
 
 Scene* menu_scene = nullptr;
 Scene* game_scene = nullptr;
@@ -44,6 +44,8 @@ MySocket server;
 std::string sendBuf("#");
 std::string recvBuf;
 
+AnimationWidget widget_sunflower(PlayerType::Peashooter, 1080, 520);
+
 inline void HandleInput(std::string &buf, bool is_server) {
     ExMessage msg;
     if(buf.size() > 1){
@@ -63,7 +65,7 @@ inline void HandleInput(std::string &buf, bool is_server) {
     }
 }
 
-void GameCircle() {
+inline void GameCircle() {
     while(true) {
         DWORD frame_start_time = GetTickCount();
 
@@ -107,31 +109,27 @@ void LocalInput() {
     }
 }
 
-void HandleRecv() {
-    ExMessage msg;
-    while(true) {
+void WidgetUpdate(){
+    while(!is_connected){
         DWORD frame_start_time = GetTickCount();
 
-        server.recvMsg(recvBuf);
-        if(!recvBuf.empty()){
-            int len = recvBuf.size();
-            for(int i = 0; i + 1 < len; i += 2){
-                if(recvBuf[i+1] == '1'){
-                    msg.message = WM_KEYUP;
-                }else{
-                    msg.message = WM_KEYDOWN;
-                }
-                msg.vkcode = recvBuf[i];
-                scene_manager.OnInput(msg, false);
-            }
-            std::cout << "Server recvBuf: " << recvBuf << std::endl;
-            recvBuf.clear();
-        }
+        static DWORD last_tick_time = GetTickCount();
+        DWORD current_tick_time = GetTickCount();
+        DWORD delta = current_tick_time - last_tick_time;
+
+        widget_sunflower.OnUpdate(delta);
+        last_tick_time = current_tick_time;
+
+        cleardevice();
+        outtextxy(200, 200, ("server ip:  " + server.GetLocalIP()).c_str());
+        outtextxy(200, 300, "waiting for connection...");
+        widget_sunflower.OnDraw(main_camera);
+        FlushBatchDraw();
 
         DWORD frame_end_time = GetTickCount();
         DWORD frame_duration = frame_end_time - frame_start_time;
-        if(frame_duration < 1000 / LOGICAL_FPS){
-            Sleep(1000 / LOGICAL_FPS - frame_duration);
+        if(frame_duration < 1000 / FPS){
+            Sleep(1000 / FPS - frame_duration);
         }
     }
 }
@@ -144,11 +142,19 @@ int main(){
     settextstyle(28, 0, _T("zpix"));
     setbkmode(TRANSPARENT);
 
-    outtextxy(200, 200, ("server ip:" + server.GetLocalIP()).c_str());
+    setbkcolor(0xeeeeee);
+	cleardevice();
+	settextcolor(BLACK);
+    BeginBatchDraw();
+
+    outtextxy(200, 200, ("server ip:  " + server.GetLocalIP()).c_str());
     outtextxy(200, 300, "waiting for connection...");
+
+    std::thread thread_widget(WidgetUpdate);
+    thread_widget.detach();
     server.Accept();
 
-    BeginBatchDraw();
+    is_connected = true;
 
     menu_scene = new MenuScene();
     selector_scene = new SelectorScene();
@@ -157,9 +163,6 @@ int main(){
 
     std::thread thread_send(LocalInput);
     thread_send.detach();
-
-    // std::thread thread_recv(HandleRecv);
-    // thread_recv.detach();
 
     GameCircle();
 
