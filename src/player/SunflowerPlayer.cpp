@@ -1,6 +1,6 @@
 #include "SunflowerPlayer.h"
 
-SunflowerPlayer::SunflowerPlayer() : Player(350) {
+SunflowerPlayer::SunflowerPlayer() : Player(400) {
     animation_idle_left.SetAtlas(&atlas_sunflower_idle_left);
     animation_idle_right.SetAtlas(&atlas_sunflower_idle_right);
     animation_run_left.SetAtlas(&atlas_sunflower_run_left);

@@ -9,6 +9,7 @@
 #include "BuffBullet.h"
 #include "Bullet.h"
 #include "Camera.h"
+// #include "Common.h"
 #include "GameScene.h"
 #include "GameType.h"
 #include "MediaSource.h"
@@ -39,7 +40,7 @@ Player* player_2 = nullptr;
 IMAGE* img_player_1_avatar = nullptr;
 IMAGE* img_player_2_avatar = nullptr;
 
-MySocket server(true);
+MySocket server;
 std::string sendBuf("#");
 std::string recvBuf;
 
@@ -142,6 +143,10 @@ int main(){
 
     settextstyle(28, 0, _T("zpix"));
     setbkmode(TRANSPARENT);
+
+    outtextxy(200, 200, ("server ip:" + server.GetLocalIP()).c_str());
+    outtextxy(200, 300, "waiting for connection...");
+    server.Accept();
 
     BeginBatchDraw();
 

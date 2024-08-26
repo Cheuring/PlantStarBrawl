@@ -9,6 +9,7 @@
 #include "BuffBullet.h"
 #include "Bullet.h"
 #include "Camera.h"
+#include "Common.h"
 #include "GameScene.h"
 #include "GameType.h"
 #include "MediaSource.h"
@@ -21,6 +22,7 @@
 #include "util.h"
 
 bool is_debug = false;
+bool is_connected = false;
 
 Scene* menu_scene = nullptr;
 Scene* game_scene = nullptr;
@@ -41,7 +43,10 @@ IMAGE* img_player_2_avatar = nullptr;
 
 std::string sendBuf("#");
 std::string recvBuf;
-MySocket client(false);
+MySocket client;
+
+EasyTextBox text_ip;
+EasyButton btn_connect;
 
 inline void HandleInput(std::string &buf, bool is_server) {
     ExMessage msg;
@@ -135,17 +140,42 @@ void HandleRecv(MySocket& client) {
     }
 }
 
-int main(){
-    // std::string ip;
-    // std::cin >> ip;
-    // MySocket client(false, ip);
+void OnClick() {
+    std::string error_msg;
+    if(!client.Connect(text_ip.Text(), error_msg)){
+        MessageBox(GetHWnd(), error_msg.c_str(), "Error", MB_OK);
+    }else{
+        is_connected = true;
+    }
+}
 
+int main(){
     LoadGameResources();
 
     initgraph(1280, 720);
 
     settextstyle(28, 0, _T("zpix"));
     setbkmode(TRANSPARENT);
+
+    setbkcolor(0xeeeeee);
+	cleardevice();
+	settextcolor(BLACK);
+
+    outtextxy(200, 200, "server IP:");
+    text_ip.Create(400, 200, 800, 250, 20);
+    btn_connect.Create(600, 300, 800, 350, "Connect", OnClick);
+
+    ExMessage temp_msg;
+    while(!is_connected) {
+        temp_msg = getmessage(EX_MOUSE);
+        if(temp_msg.message == WM_LBUTTONDOWN){
+            if(text_ip.Check(temp_msg.x, temp_msg.y)) text_ip.OnMessage();
+
+            if(btn_connect.Check(temp_msg.x, temp_msg.y)) btn_connect.OnMessage();
+            
+        }
+    }
+
 
     BeginBatchDraw();
 
