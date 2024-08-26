@@ -2,9 +2,13 @@
 ## Brief introduction
 A project for the course "Programming Practice".
 
-Mainly inspired by [@Voidmatrix](https://www.bilibili.com/video/BV1jx4y1t7eP/?spm_id_from=333.788&vd_source=fe11182595b7da452c0a2309055a8004), adding two characters and brand new buff game mechanics. Additionally, there is a beta online version.
+Mainly inspired by [***@Voidmatrix***](https://www.bilibili.com/video/BV1jx4y1t7eP/?spm_id_from=333.788&vd_source=fe11182595b7da452c0a2309055a8004), adding two characters and brand new buff game mechanics. Additionally, there is a beta online version.
 
 ## GetStart
+first you need to install [**easyx**](https://easyx.cn/) and configure it correctly
+
+then you can clone this project and run
+
 ```shell
 mkdir build
 cd build
