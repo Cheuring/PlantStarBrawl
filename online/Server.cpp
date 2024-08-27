@@ -4,6 +4,7 @@
 #include <windows.h>
 #include <vector>
 #include <iostream>
+#include <mutex>
 
 #include "AnimationWidget.h"
 #include "BuffBullet.h"
@@ -44,6 +45,8 @@ MySocket server;
 std::string sendBuf("#");
 std::string recvBuf;
 
+std::mutex mutex;
+
 AnimationWidget widget_sunflower(PlayerType::Peashooter, 1080, 520);
 
 inline void HandleInput(std::string &buf, bool is_server) {
@@ -61,7 +64,7 @@ inline void HandleInput(std::string &buf, bool is_server) {
         }
         // std::cout << "Client recvBuf: " << recvBuf << std::endl;
         buf.clear();
-        buf.push_back('#');
+        // buf.push_back('#');
     }
 }
 
@@ -85,8 +88,14 @@ inline void GameCircle() {
             Sleep(1000 / FPS - frame_duration);
         }
 
-        server.sendMsg(sendBuf);
-        HandleInput(sendBuf, true);
+        mutex.lock();
+        std::string tmp = std::move(sendBuf);
+        sendBuf.clear();
+        sendBuf.push_back('#');
+        mutex.unlock();
+
+        server.sendMsg(tmp);
+        HandleInput(tmp, true);
         server.recvMsg(recvBuf);
         HandleInput(recvBuf, false);
     }
@@ -95,6 +104,7 @@ inline void GameCircle() {
 void LocalInput() {
     ExMessage msg;
     while(true) {
+        mutex.lock();
         while(peekmessage(&msg, WH_KEYBOARD)){
             if(msg.message == WM_KEYDOWN){
                 sendBuf.push_back(msg.vkcode);
@@ -106,6 +116,9 @@ void LocalInput() {
                 // scene_manager.OnInput(msg, true);
             }
         }
+        mutex.unlock();
+
+        Sleep(10);
     }
 }
 

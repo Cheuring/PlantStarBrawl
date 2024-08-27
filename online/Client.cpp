@@ -4,6 +4,7 @@
 #include <windows.h>
 #include <vector>
 #include <iostream>
+#include <mutex>
 
 #include "AnimationWidget.h"
 #include "BuffBullet.h"
@@ -46,6 +47,8 @@ std::string sendBuf("#");
 std::string recvBuf;
 MySocket client;
 
+std::mutex mutex;
+
 EasyTextBox text_ip;
 EasyButton btn_connect;
 
@@ -65,7 +68,7 @@ inline void HandleInput(std::string &buf, bool is_server) {
             scene_manager.OnInput(msg, is_server);
         }
         buf.clear();
-        buf.push_back('#');
+        // buf.push_back('#');
     }
 }
 
@@ -91,14 +94,22 @@ inline void GameCircle() {
 
         client.recvMsg(recvBuf);
         HandleInput(recvBuf, true);
-        client.sendMsg(sendBuf);
-        HandleInput(sendBuf, false);
+
+        mutex.lock();
+        std::string tmp = std::move(sendBuf);
+        sendBuf.clear();
+        sendBuf.push_back('#');
+        mutex.unlock();
+
+        client.sendMsg(tmp);
+        HandleInput(tmp, false);
     }
 }
 
 void LocalInput(MySocket& client) {
     ExMessage msg;
     while(true) {
+        mutex.lock();
         while(peekmessage(&msg, WH_KEYBOARD)){
             if(msg.message == WM_KEYDOWN){
                 sendBuf.push_back(msg.vkcode);
@@ -110,6 +121,9 @@ void LocalInput(MySocket& client) {
                 // scene_manager.OnInput(msg, false);
             }
         }
+        mutex.unlock();
+
+        Sleep(10);
     }
 }
 
