@@ -76,22 +76,22 @@ public:
 
 private:
 
-    POINT pos_img_VS = { 0, 0 };                //  VS ͼƬλ��
-    POINT pos_img_tip = { 0, 0 };               //  ��ʾ��Ϣ�ı�ͼƬλ��
-    POINT pos_img_1P = { 0, 0 };                //  1P �ı�ͼƬλ��
-    POINT pos_img_2P = { 0, 0 };                //  2P �ı�ͼƬλ��
-    POINT pos_img_1P_desc = { 0, 0 };           //  1P ����λ��
-    POINT pos_img_2P_desc = { 0, 0 };           //  2P ����λ��
-    POINT pos_img_1P_name = { 0, 0 };           //  1P ����λ��
-    POINT pos_img_2P_name = { 0, 0 };           //  2P ����λ��
-    POINT pos_animation_1P = { 0, 0 };          //  1P ����λ��
-    POINT pos_animation_2P = { 0, 0 };          //  2P ����λ��
-    POINT pos_img_1P_gravestone = { 0, 0 };     //  1P Ĺ��λ��
-    POINT pos_img_2P_gravestone = { 0, 0 };     //  2P Ĺ��λ��
-    POINT pos_1P_selector_btn_left = { 0, 0 };  //  1P ��ɫ�л���ťλ��
-    POINT pos_1P_selector_btn_right = { 0, 0 }; //  1P ��ɫ�л���ťλ��
-    POINT pos_2P_selector_btn_left = { 0, 0 };  //  2P ��ɫ�л���ťλ��
-    POINT pos_2P_selector_btn_right = { 0, 0 }; //  2P ��ɫ�л���ťλ��
+    POINT pos_img_VS = { 0, 0 };
+    POINT pos_img_tip = { 0, 0 };
+    POINT pos_img_1P = { 0, 0 };
+    POINT pos_img_2P = { 0, 0 };
+    POINT pos_img_1P_desc = { 0, 0 };
+    POINT pos_img_2P_desc = { 0, 0 };
+    POINT pos_img_1P_name = { 0, 0 };
+    POINT pos_img_2P_name = { 0, 0 };
+    POINT pos_animation_1P = { 0, 0 };
+    POINT pos_animation_2P = { 0, 0 };
+    POINT pos_img_1P_gravestone = { 0, 0 };
+    POINT pos_img_2P_gravestone = { 0, 0 };
+    POINT pos_1P_selector_btn_left = { 0, 0 };
+    POINT pos_1P_selector_btn_right = { 0, 0 };
+    POINT pos_2P_selector_btn_left = { 0, 0 };
+    POINT pos_2P_selector_btn_right = { 0, 0 };
 
     Animation animation_peashooter;
     Animation animation_peashooter_left;
@@ -105,10 +105,10 @@ private:
     PlayerType player_1P = PlayerType::Peashooter;
     PlayerType player_2P = PlayerType::Sunflower;
 
-    LPCTSTR str_peashooter_name = _T("������");
-    LPCTSTR str_sunflower_name = _T("���տ�");
-    LPCTSTR str_gloomshroom_name = _T("ĩ�չ�");
-    LPCTSTR str_nut_name = _T("������");
+    LPCTSTR str_peashooter_name = _T("������");
+    LPCTSTR str_sunflower_name = _T("���տ�");
+    LPCTSTR str_gloomshroom_name = _T("����");
+    LPCTSTR str_nut_name = _T("������");
 
     int selector_background_scroll_offset_x = 0;
 

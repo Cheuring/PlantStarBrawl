@@ -99,7 +99,7 @@ inline void GameCircle() {
 void LocalInput(MySocket& client) {
     ExMessage msg;
     while(true) {
-        while(peekmessage(&msg)){
+        while(peekmessage(&msg, WH_KEYBOARD)){
             if(msg.message == WM_KEYDOWN){
                 sendBuf.push_back(msg.vkcode);
                 sendBuf.push_back('0');
