@@ -9,7 +9,7 @@
 #include "BuffBullet.h"
 #include "Bullet.h"
 #include "Camera.h"
-#include "Common.h"
+#include "EasyWidget.h"
 #include "GameScene.h"
 #include "GameType.h"
 #include "MediaSource.h"
