@@ -141,11 +141,9 @@ void Player::OnUpdate(int delta) {
 
     if(hp <= 0){
         current_animation = last_hurt_direction.x < 0 ? &animation_die_left : &animation_die_right;
-    }
-
-    if(hp <= 0){
         timer_die_effect_generation.OnUpdate(delta);
     }
+
 
     particle_list.erase(std::remove_if(particle_list.begin(), particle_list.end(), [&](Particle& particle){
         return !particle.CheckValid();
@@ -254,12 +252,12 @@ void Player::OnInput(const ExMessage& msg) {
                 case 'A':
                 case 'a':
                     is_left_key_down = true;
-                    std::cout << (id == PlayerId::P1 ? "P1" : "P2") << " left key down" << std::endl;
+                    // std::cout << (id == PlayerId::P1 ? "P1" : "P2") << " left key down" << std::endl;
                     break;
                 case 'D':
                 case 'd':
                     is_right_key_down = true;
-                    std::cout << (id == PlayerId::P1 ? "P1" : "P2") << " right key down" << std::endl;
+                    // std::cout << (id == PlayerId::P1 ? "P1" : "P2") << " right key down" << std::endl;
                     break;
                 case 'W':
                 case 'w':
@@ -295,12 +293,12 @@ void Player::OnInput(const ExMessage& msg) {
                 case 'A':
                 case 'a':
                     is_left_key_down = false;
-                    std::cout << (id == PlayerId::P1 ? "P1" : "P2") << " left key up" << std::endl;
+                    // std::cout << (id == PlayerId::P1 ? "P1" : "P2") << " left key up" << std::endl;
                     break;
                 case 'D':
                 case 'd':
                     is_right_key_down = false;
-                    std::cout << (id == PlayerId::P1 ? "P1" : "P2") << " right key up" << std::endl;
+                    // std::cout << (id == PlayerId::P1 ? "P1" : "P2") << " right key up" << std::endl;
                     break;
                 default:
                     break;

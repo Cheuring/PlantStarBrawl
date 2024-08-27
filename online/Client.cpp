@@ -202,8 +202,8 @@ int main(){
 
     scene_manager.SetCurrentScene(menu_scene);
 
-    std::thread thread_send(LocalInput, std::ref(client));
-    thread_send.detach();
+    std::thread thread_local_input(LocalInput, std::ref(client));
+    thread_local_input.detach();
 
     GameCircle();
 

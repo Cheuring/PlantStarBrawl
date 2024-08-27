@@ -174,8 +174,8 @@ int main(){
 
     scene_manager.SetCurrentScene(menu_scene);
 
-    std::thread thread_send(LocalInput);
-    thread_send.detach();
+    std::thread thread_local_input(LocalInput);
+    thread_local_input.detach();
 
     GameCircle();
 
