@@ -54,7 +54,7 @@ void BuffBullet::OnUpdate(int delta) {
 
 void BuffBullet::OnDraw(const Camera& camera) const {
     if(valid){
-        animation_buff.OnDraw(camera, (int)position.x, (int)position.y);
+        animation_buff.OnDraw(camera, position.x, position.y);
     }
 
     Bullet::OnDraw(camera);

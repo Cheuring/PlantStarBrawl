@@ -86,12 +86,6 @@ inline void GameCircle() {
         scene_manager.OnDraw(main_camera);
         FlushBatchDraw();
 
-        DWORD frame_end_time = GetTickCount();
-        DWORD frame_duration = frame_end_time - frame_start_time;
-        if(frame_duration < 1000 / FPS){
-            Sleep(1000 / FPS - frame_duration);
-        }
-
         client.recvMsg(recvBuf);
         HandleInput(recvBuf, true);
 
@@ -103,6 +97,12 @@ inline void GameCircle() {
 
         client.sendMsg(tmp);
         HandleInput(tmp, false);
+
+        DWORD frame_end_time = GetTickCount();
+        DWORD frame_duration = frame_end_time - frame_start_time;
+        if(frame_duration < 1000 / FPS){
+            Sleep(1000 / FPS - frame_duration);
+        }
     }
 }
 

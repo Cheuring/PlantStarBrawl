@@ -73,8 +73,9 @@ void PeashooterPlayer::OnAttackEx() {
 void PeashooterPlayer::SpwanPeaBullet(float speed) {
     Bullet* bullet = new PeaBullet();
 
-    Vector2 bullet_position, bullet_velocity;
-    const Vector2& bullet_size = bullet->GetSize();
+    Vector2<int> bullet_position;
+    Vector2<float> bullet_velocity;
+    const auto& bullet_size = bullet->GetSize();
     bullet_position.x = is_facing_right
         ? position.x + size.x - bullet_size.x / 2
         : position.x - bullet_size.x / 2;

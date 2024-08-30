@@ -25,7 +25,7 @@ private:
 
     Animation animation_idle;
     Animation animation_explode;
-    Vector2 explode_render_offset;
+    Vector2<int> explode_render_offset;
 };
 
 #endif // _SUN_BULLET_H_

@@ -8,20 +8,20 @@ auto Bullet::GetDamage() const -> int {
     return damage;
 }
 
-void Bullet::SetPosition(float x, float y) {
+void Bullet::SetPosition(int x, int y) {
     position.x = x;
     position.y = y;
 }
 
-void Bullet::SetPosition(const Vector2& position) {
+void Bullet::SetPosition(const Vector2<int>& position) {
     this->position = position;
 }
 
-auto Bullet::GetPosition() const -> const Vector2& {
+auto Bullet::GetPosition() const -> const Vector2<int>& {
     return position;
 }
 
-auto Bullet::GetSize() const -> const Vector2& {
+auto Bullet::GetSize() const -> const Vector2<int>& {
     return size;
 }
 
@@ -30,7 +30,7 @@ void Bullet::SetVelocity(float x, float y) {
     velocity.y = y;
 }
 
-void Bullet::SetVelocity(const Vector2& velocity) {
+void Bullet::SetVelocity(const Vector2<float>& velocity) {
     this->velocity = velocity;
 }
 
@@ -62,7 +62,7 @@ void Bullet::OnCollide() {
     if(callback) callback();
 }
 
-auto Bullet::CheckCollision(const Vector2& position, const Vector2& size) -> bool {
+auto Bullet::CheckCollision(const Vector2<int>& position, const Vector2<int>& size) -> bool {
     bool is_collide_x = (std::max(this->position.x + this->size.x - this->collision_offset.x, position.x + size.x)
         - std::min(this->position.x + this->collision_offset.x, position.x)) <= (this->size.x + size.x - this->collision_offset.x * 2);
     bool is_collide_y = (std::max(this->position.y + this->size.y - this->collision_offset.y, position.y + size.y)

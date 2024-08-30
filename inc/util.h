@@ -45,13 +45,13 @@ inline void PutImageAlpha(int dst_x, int dst_y, int width, int height, IMAGE* im
 inline void PutImageAlpha(const Camera& camera, int dst_x, int dst_y, IMAGE* img) {
     int w = img->getwidth();
     int h = img->getheight();
-    const Vector2& camera_pos = camera.GetPosition();
+    const auto& camera_pos = camera.GetPosition();
     AlphaBlend(GetImageHDC(GetWorkingImage()), (int)(dst_x - camera_pos.x), (int)(dst_y - camera_pos.y),
     w, h, GetImageHDC(img), 0, 0, w, h, { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA});
 }
 
 inline void Line(const Camera& camera, int x1, int y1, int x2, int y2){
-    const Vector2& camera_pos = camera.GetPosition();
+    const auto& camera_pos = camera.GetPosition();
     ::line((int)(x1 - camera_pos.x), (int)(y1 - camera_pos.y), (int)(x2 - camera_pos.x), (int)(y2 - camera_pos.y));
 }
 

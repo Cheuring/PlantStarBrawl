@@ -26,7 +26,7 @@ Player::Player(int attack_cd) : attack_cd(attack_cd) {
         if(velocity.y != 0){
             return;
         }
-        Vector2 particle_position;
+        Vector2<int> particle_position;
         IMAGE* frame = atlas_run_effect.GetImage(0);
         particle_position.x = position.x + (size.x - frame->getwidth()) / 2;
         particle_position.y = position.y + size.y - frame->getheight();
@@ -35,7 +35,7 @@ Player::Player(int attack_cd) : attack_cd(attack_cd) {
 
     timer_die_effect_generation.SetWaitTime(35);
     timer_die_effect_generation.SetCallback([&](){
-        Vector2 particle_position;
+        Vector2<int> particle_position;
         IMAGE* frame = atlas_run_effect.GetImage(0);
         particle_position.x = position.x + (size.x - frame->getwidth()) / 2;
         particle_position.y = position.y + size.y - frame->getheight();
@@ -111,7 +111,7 @@ void Player::OnUpdate(int delta) {
             is_facing_right = direction > 0;
 
         current_animation = is_facing_right ? &animation_run_right : &animation_run_left;
-        float distance = run_velocity * delta * direction;
+        int distance = run_velocity * delta * direction;
         OnRun(distance);
     }else {
         current_animation = is_facing_right ? &animation_idle_right : &animation_idle_left;
@@ -160,7 +160,7 @@ void Player::OnUpdate(int delta) {
     MoveAndCollide(delta);
 }
 
-void Player::OnRun(float distance) {
+void Player::OnRun(int distance) {
     if(is_attacking_ex){
         return;
     }
@@ -420,16 +420,16 @@ void Player::SetId(PlayerId Id) {
     this->id = Id;
 }
 
-void Player::SetPosition(float x, float y) {
+void Player::SetPosition(int x, int y) {
     position.x = x;
     position.y = y;
 }
 
-auto Player::GetPosition() const -> const Vector2& {
+auto Player::GetPosition() const -> const Vector2<int>& {
     return position;
 }
 
-auto Player::GetSize() const -> const Vector2& {
+auto Player::GetSize() const -> const Vector2<int>& {
     return size;
 }
 
@@ -475,7 +475,7 @@ void Player::AddBuff(BuffId buffid) {
             }else{
                 buff_list.splice(buff_list.end(), buff_list, buffid_map[BuffId::RECOVER_HP]);
                 timer_buff_recover_hp.Restart();
-                timer_buff_recover_hp_helper.Restart();
+                // timer_buff_recover_hp_helper.Restart();
             }
             break;
         case BuffId::RECOVER_MP:
@@ -488,7 +488,7 @@ void Player::AddBuff(BuffId buffid) {
             }else{
                 buff_list.splice(buff_list.end(), buff_list, buffid_map[BuffId::RECOVER_MP]);
                 timer_buff_recover_mp.Restart();
-                timer_buff_recover_mp_helper.Restart();
+                // timer_buff_recover_mp_helper.Restart();
             }
             break;
         case BuffId::HURRY:

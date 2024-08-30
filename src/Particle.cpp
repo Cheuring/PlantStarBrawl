@@ -4,7 +4,7 @@ void Particle::SetAtlas(Atlas* atlas) {
     this->atlas = atlas;
 }
 
-void Particle::SetPosition(const Vector2& position) {
+void Particle::SetPosition(const Vector2<int>& position) {
     this->position = position;
 }
 
@@ -29,5 +29,5 @@ void Particle::OnUpdate(int delta) {
 }
 
 void Particle::OnDraw(const Camera& camera) const {
-    PutImageAlpha(camera, (int)position.x, (int)position.y, atlas->GetImage(idx_frame));
+    PutImageAlpha(camera, position.x, position.y, atlas->GetImage(idx_frame));
 }

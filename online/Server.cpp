@@ -82,12 +82,6 @@ inline void GameCircle() {
         scene_manager.OnDraw(main_camera);
         FlushBatchDraw();
 
-        DWORD frame_end_time = GetTickCount();
-        DWORD frame_duration = frame_end_time - frame_start_time;
-        if(frame_duration < 1000 / FPS){
-            Sleep(1000 / FPS - frame_duration);
-        }
-
         mutex.lock();
         std::string tmp = std::move(sendBuf);
         sendBuf.clear();
@@ -98,6 +92,12 @@ inline void GameCircle() {
         HandleInput(tmp, true);
         server.recvMsg(recvBuf);
         HandleInput(recvBuf, false);
+
+        DWORD frame_end_time = GetTickCount();
+        DWORD frame_duration = frame_end_time - frame_start_time;
+        if(frame_duration < 1000 / FPS){
+            Sleep(1000 / FPS - frame_duration);
+        }
     }
 }
 

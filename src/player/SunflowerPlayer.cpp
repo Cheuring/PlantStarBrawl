@@ -54,7 +54,7 @@ void SunflowerPlayer::OnDraw(const Camera& camera)  {
     Player::OnDraw(camera);
 
     if(is_sun_text_visible){
-        Vector2 text_position;
+        Vector2<int> text_position;
         IMAGE* frame = animation_sun_text.GetCurrentFrame();
         text_position.x = position.x - (size.x - frame->getwidth()) / 2;
         text_position.y = position.y - frame->getheight();
@@ -65,8 +65,8 @@ void SunflowerPlayer::OnDraw(const Camera& camera)  {
 void SunflowerPlayer::OnAttack() {
     Bullet* bullet = new SunBullet();
 
-    Vector2 bullet_position;
-    const Vector2& bullet_size = bullet->GetSize();
+    Vector2<int> bullet_position;
+    const auto& bullet_size = bullet->GetSize();
     bullet_position.x = position.x + (size.x - bullet_size.x) / 2;
     bullet_position.y = position.y - bullet_size.y;
 
@@ -92,7 +92,8 @@ void SunflowerPlayer::OnAttackEx() {
     Bullet* bullet = new SunBulletEx();
     Player* target_player = id == PlayerId::P1 ? player_2 : player_1;
 
-    Vector2 bullet_position, bullet_velocity;
+    Vector2<int> bullet_position;
+    Vector2<float> bullet_velocity;
     auto& bullet_size = bullet->GetSize();
     auto& target_size = target_player->GetSize();
     auto& target_position = target_player->GetPosition();

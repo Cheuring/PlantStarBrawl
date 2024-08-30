@@ -11,8 +11,8 @@ extern bool is_debug;
 class Platform{
 public:
     struct CollisionShape {
-        float y;
-        float left, right;
+        int y;
+        int left, right;
     };
 
 public:

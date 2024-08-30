@@ -34,7 +34,7 @@ auto BubblesBullet::GetDamage() const -> int {
     return damage * collision_count;
 }
 
-void BubblesBullet::SetPosition(const Vector2& position) {
+void BubblesBullet::SetPosition(const Vector2<int>& position) {
     this->position = position;
 
     pos[0] = {position.x - radius - bullet_size.x / 2, position.y - bullet_size.y / 2};
@@ -52,7 +52,7 @@ void BubblesBullet::OnCollide() {
     collision_count = 0;
 }
 
-auto BubblesBullet::CheckCollision(const Vector2& position, const Vector2& size) -> bool {
+auto BubblesBullet::CheckCollision(const Vector2<int>& position, const Vector2<int>& size) -> bool {
     if(!valid) return false;
 
     for(int i = 0; i < 8; ++i) {
@@ -84,7 +84,7 @@ void BubblesBullet::OnDraw(const Camera& camera) const {
     }
 }
 
-auto BubblesBullet::check_collision_helper(const Vector2& position_bullet, const Vector2& position_target, const Vector2& size) const -> bool {
+auto BubblesBullet::check_collision_helper(const Vector2<int>& position_bullet, const Vector2<int>& position_target, const Vector2<int>& size) const -> bool {
     bool is_collide_x = (std::max(position_bullet.x + bullet_size.x, position_target.x + size.x)
         - std::min(position_bullet.x, position_target.x)) <= (bullet_size.x + size.x);
     bool is_collide_y = (std::max(position_bullet.y + bullet_size.y, position_target.y + size.y)

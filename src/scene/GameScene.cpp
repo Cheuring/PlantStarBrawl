@@ -67,33 +67,33 @@ void GameScene::OnEnter() {
     large_plaform.img = &img_platform_large;
     large_plaform.render_position.x = 122;
     large_plaform.render_position.y = 455;
-    large_plaform.shape.left = (float)large_plaform.render_position.x + 30;
-    large_plaform.shape.right = (float)large_plaform.render_position.x + img_platform_large.getwidth() - 30;
-    large_plaform.shape.y = (float)large_plaform.render_position.y + 60;
+    large_plaform.shape.left = large_plaform.render_position.x + 30;
+    large_plaform.shape.right = large_plaform.render_position.x + img_platform_large.getwidth() - 30;
+    large_plaform.shape.y = large_plaform.render_position.y + 60;
 
     Platform& small_platform_1 = platform_list[1];
     small_platform_1.img = &img_platform_small;
     small_platform_1.render_position.x = 175;
     small_platform_1.render_position.y = 360;
-    small_platform_1.shape.left = (float)small_platform_1.render_position.x + 40;
-    small_platform_1.shape.right = (float)small_platform_1.render_position.x + img_platform_small.getwidth() - 40;
-    small_platform_1.shape.y = (float)small_platform_1.render_position.y + img_platform_small.getheight() / 2;
+    small_platform_1.shape.left = small_platform_1.render_position.x + 40;
+    small_platform_1.shape.right = small_platform_1.render_position.x + img_platform_small.getwidth() - 40;
+    small_platform_1.shape.y = small_platform_1.render_position.y + img_platform_small.getheight() / 2;
 
     Platform& small_platform_2 = platform_list[2];
     small_platform_2.img = &img_platform_small;
     small_platform_2.render_position.x = 855;
     small_platform_2.render_position.y = 360;
-    small_platform_2.shape.left = (float)small_platform_2.render_position.x + 40;
-    small_platform_2.shape.right = (float)small_platform_2.render_position.x + img_platform_small.getwidth() - 40;
-    small_platform_2.shape.y = (float)small_platform_2.render_position.y + img_platform_small.getheight() / 2;
+    small_platform_2.shape.left = small_platform_2.render_position.x + 40;
+    small_platform_2.shape.right = small_platform_2.render_position.x + img_platform_small.getwidth() - 40;
+    small_platform_2.shape.y = small_platform_2.render_position.y + img_platform_small.getheight() / 2;
 
     Platform& small_plaform_3 = platform_list[3];
     small_plaform_3.img = &img_platform_small;
     small_plaform_3.render_position.x = 515;
     small_plaform_3.render_position.y = 225;
-    small_plaform_3.shape.left = (float)small_plaform_3.render_position.x + 40;
-    small_plaform_3.shape.right = (float)small_plaform_3.render_position.x + img_platform_small.getwidth() - 40;
-    small_plaform_3.shape.y = (float)small_plaform_3.render_position.y + img_platform_small.getheight() / 2;
+    small_plaform_3.shape.left = small_plaform_3.render_position.x + 40;
+    small_plaform_3.shape.right = small_plaform_3.render_position.x + img_platform_small.getwidth() - 40;
+    small_plaform_3.shape.y = small_plaform_3.render_position.y + img_platform_small.getheight() / 2;
 
     mciSendString(_T("play bgm_game repeat from 0"), NULL, 0, NULL);
 }

@@ -33,7 +33,7 @@ public:
 
 private:
     const float speed_sun_ex = 0.30f;
-    const Vector2 velocity_sun = {0.25f, -0.5f};
+    const Vector2<float> velocity_sun = {0.25f, -0.5f};
 
     Animation animation_sun_text;
     bool is_sun_text_visible = false;

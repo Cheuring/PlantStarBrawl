@@ -9,16 +9,16 @@ public:
     Camera();
     ~Camera() = default;
 
-    auto GetPosition() const -> const Vector2&;
+    auto GetPosition() const -> const Vector2<int>&;
     void Reset();
     void OnUpdate(int delta);
-    void Shake(float strength, int duration);
+    void Shake(int strength, int duration);
 
 private:
-    Vector2 position;
+    Vector2<int> position;
     Timer timer_shake;
     bool is_shaking = false;
-    float shaking_strength = 0;
+    int shaking_strength = 0;
 };
 
 

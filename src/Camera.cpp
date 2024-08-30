@@ -8,7 +8,7 @@ Camera::Camera(){
     });
 }
 
-auto Camera::GetPosition() const -> const Vector2&{
+auto Camera::GetPosition() const -> const Vector2<int>&{
     return position;
 }
 
@@ -21,12 +21,12 @@ void Camera::OnUpdate(int delta){
     timer_shake.OnUpdate(delta);
 
     if(is_shaking){
-        position.x = (-50 + rand() % 100) / 50.0f * shaking_strength;
-        position.y = (-50 + rand() % 100) / 50.0f * shaking_strength;
+        position.x = (-50 + rand() % 100) / 50 * shaking_strength;
+        position.y = (-50 + rand() % 100) / 50 * shaking_strength;
     }
 }
 
-void Camera::Shake(float strength, int duration){
+void Camera::Shake(int strength, int duration){
     is_shaking = true;
     shaking_strength = strength;
 

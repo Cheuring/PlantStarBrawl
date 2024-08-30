@@ -25,7 +25,7 @@ void NutBullet::OnUpdate(int delta) {
 }
 
 void NutBullet::OnDraw(const Camera& camera) const {
-    animation_explode.OnDraw(camera, (int)position.x, (int)position.y);
+    animation_explode.OnDraw(camera, position.x, position.y);
 
     if(valid){
         Bullet::OnDraw(camera);

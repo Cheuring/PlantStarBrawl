@@ -17,9 +17,9 @@ public:
     ~BubblesBullet() = default;
 
     auto GetDamage() const -> int override;
-    void SetPosition(const Vector2& position) override;
+    void SetPosition(const Vector2<int>& position) override;
     void OnCollide() override;
-    auto CheckCollision(const Vector2& position, const Vector2& size) -> bool override;
+    auto CheckCollision(const Vector2<int>& position, const Vector2<int>& size) -> bool override;
     void OnUpdate(int delta) override;
     void OnDraw(const Camera& camera) const override;
     
@@ -33,11 +33,11 @@ private:
     Animation animation;
     Timer timer_valid;
 
-    Vector2 pos[8];
-    Vector2 bullet_size = {25, 25};
+    Vector2<int> pos[8];
+    Vector2<int> bullet_size = {25, 25};
 
 private:
-    auto check_collision_helper(const Vector2& position_bullet, const Vector2& position_target, const Vector2& size) const -> bool;
+    auto check_collision_helper(const Vector2<int>& position_bullet, const Vector2<int>& position_target, const Vector2<int>& size) const -> bool;
 };
 
 #endif // _BUBBLES_BULLET_H_

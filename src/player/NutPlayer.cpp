@@ -81,7 +81,7 @@ void NutPlayer::OnAttackEx() {
 
 void NutPlayer::NutExplode() {
     Bullet* bullet = new NutBullet();
-    bullet->SetPosition(position + (size - bullet->GetSize()) * 0.5f);
+    bullet->SetPosition(position + (size - bullet->GetSize()) / 2);
     bullet->SetCollideTarget(id == PlayerId::P1 ? PlayerId::P2 : PlayerId::P1);
     bullet->SetCallback([&](){
         mp += 50;

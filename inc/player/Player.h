@@ -14,6 +14,7 @@
 #include "Particle.h"
 #include "Platform.h"
 #include "PlayerId.h"
+#include "util.h"
 #include "Vector2.h"
 
 extern bool is_debug;
@@ -35,7 +36,7 @@ public:
     ~Player() = default;
 
     virtual void OnUpdate(int delta);
-    virtual void OnRun(float distance);
+    virtual void OnRun(int distance);
     virtual void OnJump();
     virtual void OnLand();
     virtual void OnDrop();
@@ -44,9 +45,9 @@ public:
     virtual void OnInputLocal(const ExMessage& msg);
 
     void SetId(PlayerId ID);
-    void SetPosition(float x, float y);
-    auto GetPosition() const -> const Vector2&;
-    auto GetSize() const -> const Vector2&;
+    void SetPosition(int x, int y);
+    auto GetPosition() const -> const Vector2<int>&;
+    auto GetSize() const -> const Vector2<int>&;
     auto GetId() const -> PlayerId;
     auto GetHp() const -> int;
     void SetHp(int hp);
@@ -66,10 +67,10 @@ protected:
     int mp = 0;     //  Magic Point
     int hp = 100;   //  Health Point
     
-    Vector2 position;
-    Vector2 velocity;
-    Vector2 size;
-    Vector2 collision_offset;
+    Vector2<int> position;
+    Vector2<float> velocity;
+    Vector2<int> size;
+    Vector2<int> collision_offset;
 
     Animation animation_idle_left;
     Animation animation_idle_right;
@@ -85,8 +86,8 @@ protected:
     bool is_jump_effect_visible = false;
     bool is_land_effect_visible = false;
 
-    Vector2 position_jump_effect;
-    Vector2 position_land_effect;
+    Vector2<int> position_jump_effect;
+    Vector2<int> position_land_effect;
 
     Animation* current_animation = nullptr;
 
@@ -117,7 +118,7 @@ protected:
     bool is_cursor_visible = true;
     Timer timer_cursor_visible;
 
-    Vector2 last_hurt_direction;
+    Vector2<int> last_hurt_direction;
 
     std::list<BuffId> buff_list;
     std::unordered_map<BuffId, decltype(buff_list.begin())> buffid_map;

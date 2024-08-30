@@ -9,12 +9,12 @@
 class Particle {
 public:
     Particle() = default;
-    Particle(const Vector2& position, int lifespan, Atlas* atlas)
+    Particle(const Vector2<int>& position, int lifespan, Atlas* atlas)
         : position(position), lifespan(lifespan), atlas(atlas) {}
     ~Particle() = default;
 
     void SetAtlas(Atlas* atlas);
-    void SetPosition(const Vector2& position);
+    void SetPosition(const Vector2<int>& position);
     void SetLifespan(int lifespan);
     auto CheckValid() const -> bool;
     void OnUpdate(int delta);
@@ -24,7 +24,7 @@ private:
     int timer = 0;
     int lifespan = 0;
     int idx_frame = 0;
-    Vector2 position;
+    Vector2<int> position;
     bool valid = true;
     Atlas* atlas = nullptr;
 
