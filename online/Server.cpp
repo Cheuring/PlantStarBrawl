@@ -1,4 +1,5 @@
 #include "MySocket.h"
+#include <assert.h>
 #include <graphics.h>
 #include <thread>
 #include <windows.h>
@@ -49,18 +50,56 @@ std::mutex mutex;
 
 AnimationWidget widget_sunflower(PlayerType::Peashooter, 1080, 520);
 
-inline void HandleInput(std::string &buf, bool is_server) {
+void HandleInput(std::string &buf, bool is_server) {
+    if(is_server){
+        std::cout << "send: " << buf << "\n";
+    }else{
+        std::cout << "recv: " << buf << "\n";
+    }
     ExMessage msg;
     if(buf.size() > 1){
-        int len = buf.size();
-        for(int i = 1; i + 1 < len; i += 2){
-            if(buf[i+1] == '1'){
-                msg.message = WM_KEYUP;
-            }else{
-                msg.message = WM_KEYDOWN;
+        int i = 1;
+        if(is_server){
+            try{
+                while(buf.at(i) != '#') ++i;
+                ++i;
+            }catch (const std::out_of_range& e) {
+                std::cerr << "HandleInput SERVER out of range: " << e.what() << std::endl;
             }
-            msg.vkcode = buf[i];
-            scene_manager.OnInput(msg, is_server);
+            
+            if(player_1 != nullptr){
+                try {
+                    while(buf.at(i) != '*') ++i;
+                    ++i;
+                    while(buf.at(i) != '*') ++i;
+                    ++i;
+                    while(buf.at(i) != '*') ++i;
+                    ++i;
+                    while(buf.at(i) != '*') ++i;
+                    ++i;
+                } catch (const std::out_of_range& e) {
+                    std::cerr << "HandleInput SERVER out of range: " << e.what() << std::endl;
+                }
+            }
+        }
+
+        int len = buf.size();
+        for(; i + 1 < len; i += 2){
+            switch(buf[i]){
+                case '1':
+                    msg.message = WM_KEYUP;
+                    msg.vkcode = buf[i+1];
+                    scene_manager.OnInput(msg, is_server);
+                    break;
+                case '0':
+                    msg.message = WM_KEYDOWN;
+                    msg.vkcode = buf[i+1];
+                    scene_manager.OnInput(msg, is_server);
+                    break;
+                default:
+                    std::cout << buf[i] << "\n";
+                    break;
+            }
         }
         // std::cout << "Client recvBuf: " << recvBuf << std::endl;
         buf.clear();
@@ -86,10 +125,19 @@ inline void GameCircle() {
         std::string tmp = std::move(sendBuf);
         sendBuf.clear();
         sendBuf.push_back('#');
+        sendBuf += std::to_string(delta) + "#";
+
+        if(player_1 != nullptr){
+            const auto& position_player_1 = player_1->GetPosition();
+            sendBuf += std::to_string(position_player_1.x) + "*" + std::to_string(position_player_1.y) + "*";
+            const auto& position_player_2 = player_2->GetPosition();
+            sendBuf += std::to_string(position_player_2.x) + "*" + std::to_string(position_player_2.y) + "*";
+        }
         mutex.unlock();
 
         server.sendMsg(tmp);
         HandleInput(tmp, true);
+
         server.recvMsg(recvBuf);
         HandleInput(recvBuf, false);
 
@@ -107,12 +155,12 @@ void LocalInput() {
         mutex.lock();
         while(peekmessage(&msg, WH_KEYBOARD)){
             if(msg.message == WM_KEYDOWN){
-                sendBuf.push_back(msg.vkcode);
                 sendBuf.push_back('0');
+                sendBuf.push_back(msg.vkcode);
                 // scene_manager.OnInput(msg, true);
             }else if(msg.message == WM_KEYUP){
-                sendBuf.push_back(msg.vkcode);
                 sendBuf.push_back('1');
+                sendBuf.push_back(msg.vkcode);
                 // scene_manager.OnInput(msg, true);
             }
         }
@@ -150,7 +198,7 @@ void WidgetUpdate(){
 int main(){
     LoadGameResources();
 
-    initgraph(1280, 720);
+    initgraph(1280, 720, EX_SHOWCONSOLE);
 
     settextstyle(28, 0, _T("zpix"));
     setbkmode(TRANSPARENT);

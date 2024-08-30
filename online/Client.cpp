@@ -1,4 +1,5 @@
 #include "MySocket.h"
+#include <assert.h>
 #include <graphics.h>
 #include <thread>
 #include <windows.h>
@@ -54,19 +55,121 @@ EasyButton btn_connect;
 
 AnimationWidget widget_sunflower(PlayerType::Sunflower, 1080, 520);
 
-inline void HandleInput(std::string &buf, bool is_server) {
+void HandleInput(std::string &buf, bool is_server) {
+    if(is_server){
+        std::cout << "recv: " << buf << "\n";
+    }else{
+        std::cout << "send: " << buf << "\n";
+    }
     ExMessage msg;
     if(buf.size() > 1){
-        int len = buf.size();
-        for(int i = 1; i + 1 < len; i += 2){
-            if(buf[i+1] == '1'){
-                msg.message = WM_KEYUP;
-            }else{
-                msg.message = WM_KEYDOWN;
+        int i = 1;
+
+        if(is_server){
+            try{
+                int delta = 0;
+                while(isdigit(buf.at(i))){
+                    delta = delta * 10 + (buf[i] - '0');
+                    ++i;
+                }
+                assert(buf[i] == '#');
+                ++i;
+
+                scene_manager.OnUpdate(delta);
+                cleardevice();
+                scene_manager.OnDraw(main_camera);
+                FlushBatchDraw();
+            }catch (const std::out_of_range& e) {
+                std::cerr << "HandleInput CLIENT out of range: " << e.what() << std::endl;
             }
-            msg.vkcode = buf[i];
-            scene_manager.OnInput(msg, is_server);
+
+            if(player_1 != nullptr) {
+                try{
+                    int x = 0, y = 0;
+                    bool is_neg = false;
+                    if(buf.at(i) == '-'){
+                        is_neg = true;
+                        ++i;
+                    }
+
+                    while(isdigit(buf.at(i))){
+                        x = x * 10 + (buf[i] - '0');
+                        ++i;
+                    }
+                    x = is_neg ? -x : x;
+                    assert(buf[i] == '*');
+                    ++i;
+
+                    is_neg = false;
+                    if(buf.at(i) == '-'){
+                        is_neg = true;
+                        ++i;
+                    }
+                    while(isdigit(buf.at(i))){
+                        y = y * 10 + (buf[i] - '0');
+                        ++i;
+                    }
+                    y = is_neg ? -y : y;
+                    assert(buf[i] == '*');
+
+                    ++i;
+                    player_1->SetPosition(x, y);
+
+                    x = 0, y = 0;
+                    is_neg = false;
+                    if(buf.at(i) == '-'){
+                        is_neg = true;
+                        ++i;
+                    }
+
+                    while(isdigit(buf.at(i))){
+                        x = x * 10 + (buf[i] - '0');
+                        ++i;
+                    }
+                    x = is_neg ? -x : x;
+                    assert(buf[i] == '*');
+                    ++i;
+
+                    is_neg = false;
+                    if(buf.at(i) == '-'){
+                        is_neg = true;
+                        ++i;
+                    }
+                    while(isdigit(buf.at(i))){
+                        y = y * 10 + (buf[i] - '0');
+                        ++i;
+                    }
+                    y = is_neg ? -y : y;
+                    assert(buf[i] == '*');
+
+                    ++i;
+                    player_2->SetPosition(x, y);
+
+                } catch (const std::out_of_range& e) {
+                    std::cerr << "HandleInput CLIENT out of range: " << e.what() << std::endl;
+                }
+            }
         }
+
+        int len = buf.size();
+        for(; i + 1 < len; i += 2){
+            switch(buf[i]){
+                case '1':
+                    msg.message = WM_KEYUP;
+                    msg.vkcode = buf[i+1];
+                    scene_manager.OnInput(msg, is_server);
+                    break;
+                case '0':
+                    msg.message = WM_KEYDOWN;
+                    msg.vkcode = buf[i+1];
+                    scene_manager.OnInput(msg, is_server);
+                    break;
+                default:
+                    std::cout << buf[i] << "\n";
+                    break;
+            }
+        }
+        // std::cout << "Client recvBuf: " << recvBuf << std::endl;
         buf.clear();
         // buf.push_back('#');
     }
@@ -74,18 +177,18 @@ inline void HandleInput(std::string &buf, bool is_server) {
 
 inline void GameCircle() {
     while(true) {
-        DWORD frame_start_time = GetTickCount();
+        // DWORD frame_start_time = GetTickCount();
 
-        static DWORD last_tick_time = GetTickCount();
-        DWORD current_tick_time = GetTickCount();
-        DWORD delta = current_tick_time - last_tick_time;
-        scene_manager.OnUpdate(delta);
-        last_tick_time = current_tick_time;
+        // static DWORD last_tick_time = GetTickCount();
+        // DWORD current_tick_time = GetTickCount();
+        // DWORD delta = current_tick_time - last_tick_time;
+        // scene_manager.OnUpdate(delta);
+        // last_tick_time = current_tick_time;
 
-        cleardevice();
-        scene_manager.OnDraw(main_camera);
-        FlushBatchDraw();
-
+        // cleardevice();
+        // scene_manager.OnDraw(main_camera);
+        // FlushBatchDraw();
+        
         client.recvMsg(recvBuf);
         HandleInput(recvBuf, true);
 
@@ -95,14 +198,17 @@ inline void GameCircle() {
         sendBuf.push_back('#');
         mutex.unlock();
 
+        // client.recvMsg(recvBuf);
+        // HandleInput(recvBuf, true);
+
         client.sendMsg(tmp);
         HandleInput(tmp, false);
 
-        DWORD frame_end_time = GetTickCount();
-        DWORD frame_duration = frame_end_time - frame_start_time;
-        if(frame_duration < 1000 / FPS){
-            Sleep(1000 / FPS - frame_duration);
-        }
+        // DWORD frame_end_time = GetTickCount();
+        // DWORD frame_duration = frame_end_time - frame_start_time;
+        // if(frame_duration < 1000 / FPS){
+        //     Sleep(1000 / FPS - frame_duration);
+        // }
     }
 }
 
@@ -112,12 +218,12 @@ void LocalInput(MySocket& client) {
         mutex.lock();
         while(peekmessage(&msg, WH_KEYBOARD)){
             if(msg.message == WM_KEYDOWN){
-                sendBuf.push_back(msg.vkcode);
                 sendBuf.push_back('0');
+                sendBuf.push_back(msg.vkcode);
                 // scene_manager.OnInput(msg, false);
             }else if(msg.message == WM_KEYUP){
-                sendBuf.push_back(msg.vkcode);
                 sendBuf.push_back('1');
+                sendBuf.push_back(msg.vkcode);
                 // scene_manager.OnInput(msg, false);
             }
         }
@@ -166,7 +272,7 @@ void OnClick() {
 int main(){
     LoadGameResources();
 
-    initgraph(1280, 720);
+    initgraph(1280, 720, EX_SHOWCONSOLE);
 
     settextstyle(28, 0, _T("zpix"));
     setbkmode(TRANSPARENT);

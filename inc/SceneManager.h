@@ -25,6 +25,7 @@ public:
     void OnInput(const ExMessage& msg);
     void OnUpdate(int delta);
     void OnDraw(const Camera& camera);
+    auto GetGameType() const -> GameType { return game_type; }
 
 
 private:

@@ -10,7 +10,7 @@ class Scene
 {
 public:
     Scene() = default;
-    ~Scene() = default;
+    virtual ~Scene() = default;
 
     virtual void OnEnter() = 0;
     virtual void OnUpdate(int delta) = 0;
