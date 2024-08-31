@@ -26,6 +26,7 @@ public:
     void OnUpdate(int delta);
     void OnDraw(const Camera& camera);
     auto GetGameType() const -> GameType { return game_type; }
+    void SetGameType(const GameType& type) { game_type = type; }
 
 
 private:

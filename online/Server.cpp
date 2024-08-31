@@ -50,7 +50,7 @@ std::string recvBuf;
 std::mutex mutex;
 std::mt19937* engine = nullptr;
 
-AnimationWidget widget_sunflower(PlayerType::Peashooter, 1080, 520);
+AnimationWidget widget_peashooter(PlayerType::Peashooter, 1080, 520);
 
 void HandleInput(std::string &buf, bool is_server) {
     // if(is_server){
@@ -187,13 +187,13 @@ void WidgetUpdate(){
         DWORD current_tick_time = GetTickCount();
         DWORD delta = current_tick_time - last_tick_time;
 
-        widget_sunflower.OnUpdate(delta);
+        widget_peashooter.OnUpdate(delta);
         last_tick_time = current_tick_time;
 
         cleardevice();
         outtextxy(200, 200, ("server ip:  " + server.GetLocalIP()).c_str());
         outtextxy(200, 300, "waiting for connection...");
-        widget_sunflower.OnDraw(main_camera);
+        widget_peashooter.OnDraw(main_camera);
         FlushBatchDraw();
 
         DWORD frame_end_time = GetTickCount();

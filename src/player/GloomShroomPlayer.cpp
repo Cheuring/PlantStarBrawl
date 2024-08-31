@@ -55,7 +55,7 @@ void GloomShroomPlayer::OnAttack() {
 
     Bullet* bullet = new BubblesBullet();
 
-    bullet->SetPosition(position + size * 0.5f);
+    bullet->SetPosition(position + size / 2);
     bullet->SetCollideTarget(id == PlayerId::P1 ? PlayerId::P2 : PlayerId::P1);
     bullet->SetCallback([&](){
         mp += 25;
@@ -74,7 +74,7 @@ void GloomShroomPlayer::OnAttackEx() {
     is_facing_right ? animation_attack_ex_right.Reset() : animation_attack_ex_left.Reset();
 
     Bullet* bullet = new BubblesBullet(true);
-    bullet->SetPosition(position + size * 0.5f);
+    bullet->SetPosition(position + size / 2);
     bullet->SetCollideTarget(id == PlayerId::P1 ? PlayerId::P2 : PlayerId::P1);
     bullet->SetCallback([&](){
         mp += 15;

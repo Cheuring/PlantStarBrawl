@@ -18,6 +18,7 @@ public:
 
     void OnUpdate(int delta);
     void OnDraw(const Camera& camera) const;
+    void SetAnimation(const PlayerType& player_type);
 
 private:
     Animation animation_current;

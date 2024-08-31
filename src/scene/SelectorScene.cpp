@@ -7,6 +7,7 @@ void SelectorScene::OnEnter() {
         delete game_scene;
         game_scene = nullptr;
     }
+    mciSendString(_T("play bgm_menu repeat from 0"), NULL, 0, NULL);
     
     animation_peashooter.SetAtlas(&atlas_peashooter_idle_right);
     animation_peashooter.SetInterval(100);

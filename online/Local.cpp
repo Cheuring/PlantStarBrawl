@@ -26,7 +26,7 @@ Scene* selector_scene = nullptr;
 
 Camera main_camera;
 SceneManager scene_manager(GameType::LOCAL);
-std::mt19937* engine;
+std::mt19937* engine = nullptr;
 
 std::vector<Bullet *> bullet_list;
 std::vector<BuffBullet *> buff_bullet_list;
