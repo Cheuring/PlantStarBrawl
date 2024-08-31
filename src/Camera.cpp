@@ -21,8 +21,8 @@ void Camera::OnUpdate(int delta){
     timer_shake.OnUpdate(delta);
 
     if(is_shaking){
-        position.x = (-50 + rand() % 100) / 50 * shaking_strength;
-        position.y = (-50 + rand() % 100) / 50 * shaking_strength;
+        position.x = dist(engine_) / 50.0f * shaking_strength;
+        position.y = dist(engine_) / 50.0f * shaking_strength;
     }
 }
 

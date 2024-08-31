@@ -1,6 +1,8 @@
 #ifndef _CAMERA_H_
 #define _CAMERA_H_
 
+#include <random>
+
 #include "Timer.h"
 #include "Vector2.h"
 
@@ -19,6 +21,8 @@ private:
     Timer timer_shake;
     bool is_shaking = false;
     int shaking_strength = 0;
+    std::mt19937 engine_{5099};
+    std::uniform_int_distribution<int> dist{-50, 50};
 };
 
 
