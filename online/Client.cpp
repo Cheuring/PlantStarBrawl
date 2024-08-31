@@ -68,8 +68,8 @@ void HandleInput(std::string &buf, bool is_server) {
         int i = 1;
 
         if(is_server){
+            int delta = 0;
             try{
-                int delta = 0;
                 while(isdigit(buf.at(i))){
                     delta = delta * 10 + (buf[i] - '0');
                     ++i;
@@ -77,7 +77,7 @@ void HandleInput(std::string &buf, bool is_server) {
                 assert(buf[i] == '#');
                 ++i;
 
-                scene_manager.OnUpdate(delta);
+                // scene_manager.OnUpdate(delta);
                 // cleardevice();
                 // scene_manager.OnDraw(main_camera);
                 // FlushBatchDraw();
@@ -157,6 +157,7 @@ void HandleInput(std::string &buf, bool is_server) {
                 buf.clear();
                 return;
             }
+            scene_manager.OnUpdate(delta);
         }
 
         int len = buf.size();

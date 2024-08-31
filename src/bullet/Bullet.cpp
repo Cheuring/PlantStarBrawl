@@ -64,9 +64,9 @@ void Bullet::OnCollide() {
 
 auto Bullet::CheckCollision(const Vector2<int>& position, const Vector2<int>& size) -> bool {
     bool is_collide_x = (std::max(this->position.x + this->size.x - this->collision_offset.x, position.x + size.x)
-        - std::min(this->position.x + this->collision_offset.x, position.x)) <= (this->size.x + size.x - this->collision_offset.x * 2);
+        - std::min(this->position.x + this->collision_offset.x, position.x)) < (this->size.x + size.x - this->collision_offset.x * 2);
     bool is_collide_y = (std::max(this->position.y + this->size.y - this->collision_offset.y, position.y + size.y)
-        - std::min(this->position.y + this->collision_offset.y, position.y)) <= (this->size.y + size.y - this->collision_offset.y * 2);
+        - std::min(this->position.y + this->collision_offset.y, position.y)) < (this->size.y + size.y - this->collision_offset.y * 2);
 
     return is_collide_x && is_collide_y;
 }

@@ -7,7 +7,7 @@
 #include "Camera.h"
 #include "Vector2.h"
 
-constexpr int FPS = 45;
+constexpr int FPS = 90;
 constexpr int LOGICAL_FPS = 20;
 
 inline void FlipImage(IMAGE* src, IMAGE* dest) {

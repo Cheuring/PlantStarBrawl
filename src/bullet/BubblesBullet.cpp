@@ -86,9 +86,9 @@ void BubblesBullet::OnDraw(const Camera& camera) const {
 
 auto BubblesBullet::check_collision_helper(const Vector2<int>& position_bullet, const Vector2<int>& position_target, const Vector2<int>& size) const -> bool {
     bool is_collide_x = (std::max(position_bullet.x + bullet_size.x, position_target.x + size.x)
-        - std::min(position_bullet.x, position_target.x)) <= (bullet_size.x + size.x);
+        - std::min(position_bullet.x, position_target.x)) < (bullet_size.x + size.x);
     bool is_collide_y = (std::max(position_bullet.y + bullet_size.y, position_target.y + size.y)
-        - std::min(position_bullet.y, position_target.y)) <= (bullet_size.y + size.y);
+        - std::min(position_bullet.y, position_target.y)) < (bullet_size.y + size.y);
 
     return is_collide_x && is_collide_y;
 }

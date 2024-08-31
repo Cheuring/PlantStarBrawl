@@ -35,7 +35,7 @@ void GameScene::OnEnter() {
     });
 
     timer_buff_generate.Restart();
-    timer_buff_generate.SetWaitTime(2000);
+    timer_buff_generate.SetWaitTime(3000);
     timer_buff_generate.SetOneShot(false);
     timer_buff_generate.SetCallback([&](){
         int rand_buff_type = buff_type(*engine);
