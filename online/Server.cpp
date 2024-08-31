@@ -6,6 +6,7 @@
 #include <vector>
 #include <iostream>
 #include <mutex>
+#include <random>
 
 #include "AnimationWidget.h"
 #include "BuffBullet.h"
@@ -47,15 +48,16 @@ std::string sendBuf("#");
 std::string recvBuf;
 
 std::mutex mutex;
+std::mt19937* engine = nullptr;
 
 AnimationWidget widget_sunflower(PlayerType::Peashooter, 1080, 520);
 
 void HandleInput(std::string &buf, bool is_server) {
-    if(is_server){
-        std::cout << "send: " << buf << "\n";
-    }else{
-        std::cout << "recv: " << buf << "\n";
-    }
+    // if(is_server){
+    //     std::cout << "send: " << buf << "\n";
+    // }else{
+    //     std::cout << "recv: " << buf << "\n";
+    // }
     ExMessage msg;
     if(buf.size() > 1){
         int i = 1;
@@ -64,10 +66,12 @@ void HandleInput(std::string &buf, bool is_server) {
                 while(buf.at(i) != '#') ++i;
                 ++i;
             }catch (const std::out_of_range& e) {
-                std::cerr << "HandleInput SERVER out of range: " << e.what() << std::endl;
+                std::cout << "send: " << buf << "\n";
+                std::cerr << "HandleInput delta out of range: " << e.what() << std::endl;
             }
             
             if(player_1 != nullptr){
+                ++i;  //  skip *
                 try {
                     while(buf.at(i) != '*') ++i;
                     ++i;
@@ -77,9 +81,14 @@ void HandleInput(std::string &buf, bool is_server) {
                     ++i;
                     while(buf.at(i) != '*') ++i;
                     ++i;
+
                 } catch (const std::out_of_range& e) {
-                    std::cerr << "HandleInput SERVER out of range: " << e.what() << std::endl;
+                    std::cout << "send: " << buf << "\n";
+                    std::cerr << "HandleInput position out of range: " << e.what() << std::endl;
                 }
+            }else if(i < buf.size() && buf[i] == '*') {
+                buf.clear();
+                return;
             }
         }
 
@@ -129,7 +138,7 @@ inline void GameCircle() {
 
         if(player_1 != nullptr){
             const auto& position_player_1 = player_1->GetPosition();
-            sendBuf += std::to_string(position_player_1.x) + "*" + std::to_string(position_player_1.y) + "*";
+            sendBuf += "*" + std::to_string(position_player_1.x) + "*" + std::to_string(position_player_1.y) + "*";
             const auto& position_player_2 = player_2->GetPosition();
             sendBuf += std::to_string(position_player_2.x) + "*" + std::to_string(position_player_2.y) + "*";
         }
@@ -216,6 +225,12 @@ int main(){
     server.Accept();
 
     is_connected = true;
+
+    unsigned int seed = std::random_device{}();
+    engine = new std::mt19937{seed};
+    sendBuf += std::to_string(seed) + "#";
+    server.sendMsg(sendBuf);
+    sendBuf = "#";
 
     menu_scene = new MenuScene();
     selector_scene = new SelectorScene();

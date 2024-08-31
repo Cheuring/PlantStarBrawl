@@ -3,6 +3,11 @@
 #include "SelectorScene.h"
 
 void SelectorScene::OnEnter() {
+    if(game_scene != nullptr){
+        delete game_scene;
+        game_scene = nullptr;
+    }
+    
     animation_peashooter.SetAtlas(&atlas_peashooter_idle_right);
     animation_peashooter.SetInterval(100);
 

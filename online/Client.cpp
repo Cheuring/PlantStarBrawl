@@ -6,6 +6,7 @@
 #include <vector>
 #include <iostream>
 #include <mutex>
+#include <random>
 
 #include "AnimationWidget.h"
 #include "BuffBullet.h"
@@ -49,6 +50,7 @@ std::string recvBuf;
 MySocket client;
 
 std::mutex mutex;
+std::mt19937* engine = nullptr;
 
 EasyTextBox text_ip;
 EasyButton btn_connect;
@@ -56,11 +58,11 @@ EasyButton btn_connect;
 AnimationWidget widget_sunflower(PlayerType::Sunflower, 1080, 520);
 
 void HandleInput(std::string &buf, bool is_server) {
-    if(is_server){
-        std::cout << "recv: " << buf << "\n";
-    }else{
-        std::cout << "send: " << buf << "\n";
-    }
+    // if(is_server){
+    //     std::cout << "recv: " << buf << "\n";
+    // }else{
+    //     std::cout << "send: " << buf << "\n";
+    // }
     ExMessage msg;
     if(buf.size() > 1){
         int i = 1;
@@ -76,14 +78,16 @@ void HandleInput(std::string &buf, bool is_server) {
                 ++i;
 
                 scene_manager.OnUpdate(delta);
-                cleardevice();
-                scene_manager.OnDraw(main_camera);
-                FlushBatchDraw();
+                // cleardevice();
+                // scene_manager.OnDraw(main_camera);
+                // FlushBatchDraw();
             }catch (const std::out_of_range& e) {
-                std::cerr << "HandleInput CLIENT out of range: " << e.what() << std::endl;
+                std::cout << "recv: " << buf << "\n";
+                std::cerr << "HandleInput delta out of range: " << e.what() << std::endl;
             }
 
             if(player_1 != nullptr) {
+                ++i;  //  skip *
                 try{
                     int x = 0, y = 0;
                     bool is_neg = false;
@@ -146,8 +150,12 @@ void HandleInput(std::string &buf, bool is_server) {
                     player_2->SetPosition(x, y);
 
                 } catch (const std::out_of_range& e) {
-                    std::cerr << "HandleInput CLIENT out of range: " << e.what() << std::endl;
+                    std::cout << "recv: " << buf << "\n";
+                    std::cerr << "HandleInput position out of range: " << e.what() << std::endl;
                 }
+            }else if(i < buf.size() && buf[i] == '*') {
+                buf.clear();
+                return;
             }
         }
 
@@ -185,12 +193,12 @@ inline void GameCircle() {
         // scene_manager.OnUpdate(delta);
         // last_tick_time = current_tick_time;
 
-        // cleardevice();
-        // scene_manager.OnDraw(main_camera);
-        // FlushBatchDraw();
-        
         client.recvMsg(recvBuf);
         HandleInput(recvBuf, true);
+        
+        cleardevice();
+        scene_manager.OnDraw(main_camera);
+        FlushBatchDraw();
 
         mutex.lock();
         std::string tmp = std::move(sendBuf);
@@ -269,6 +277,23 @@ void OnClick() {
     }
 }
 
+inline void ParseSeed(std::string& buf){
+    assert(buf.size() > 1);
+    try {
+        unsigned int seed = 0;
+        int i = 1;
+        while(buf.at(i) != '#'){
+            seed = seed * 10 + (buf[i] - '0');
+            ++i;
+        }
+        
+        engine = new std::mt19937{seed};
+        buf.clear();
+    } catch (const std::out_of_range& e) {
+        std::cerr << "ParseSeed: " << e.what() << std::endl;
+    }
+}
+
 int main(){
     LoadGameResources();
 
@@ -301,7 +326,8 @@ int main(){
         }
     }
 
-
+    client.recvMsg(recvBuf);
+    ParseSeed(recvBuf);
 
     menu_scene = new MenuScene();
     selector_scene = new SelectorScene();

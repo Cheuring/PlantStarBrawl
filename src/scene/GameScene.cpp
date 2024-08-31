@@ -1,9 +1,6 @@
 #include "GameScene.h"
-#include <ctime>
-
-GameScene::GameScene() : status_bar_1P(player_1->GetBuffList()), status_bar_2P(player_2->GetBuffList()) {
-    srand((unsigned int)time(nullptr));
-}
+#include <iostream>
+GameScene::GameScene() : status_bar_1P(player_1->GetBuffList()), status_bar_2P(player_2->GetBuffList()) {}
 GameScene::~GameScene() {
     delete player_1;
     delete player_2;
@@ -34,15 +31,15 @@ void GameScene::OnEnter() {
     timer_winner_slide_out.SetWaitTime(1000);
     timer_winner_slide_out.SetOneShot(true);
     timer_winner_slide_out.SetCallback([&](){
-        scene_manager.SwitchTo(SceneManager::SceneType::Menu);
+        scene_manager.SwitchTo(SceneManager::SceneType::Selector);
     });
 
     timer_buff_generate.Restart();
     timer_buff_generate.SetWaitTime(2000);
     timer_buff_generate.SetOneShot(false);
     timer_buff_generate.SetCallback([&](){
-        int rand_buff_num = rand() % 4;
-        BuffBullet* buff_bullet = new BuffBullet(rand_buff_num, rand());
+        int rand_buff_type = buff_type(*engine);
+        BuffBullet* buff_bullet = new BuffBullet(rand_buff_type, buff_position(*engine));
         buff_bullet_list.push_back(buff_bullet);
     });
 
@@ -126,7 +123,7 @@ void GameScene::OnInput(const ExMessage& msg, bool is_1P) {
             switch (msg.vkcode)
             {
             case VK_ESCAPE:
-                scene_manager.SwitchTo(SceneManager::SceneType::Menu);
+                scene_manager.SwitchTo(SceneManager::SceneType::Selector);
                 break;
             case 'q':
             case 'Q':
@@ -161,7 +158,7 @@ void GameScene::OnInput(const ExMessage& msg) {
             switch (msg.vkcode)
             {
             case VK_ESCAPE:
-                scene_manager.SwitchTo(SceneManager::SceneType::Menu);
+                scene_manager.SwitchTo(SceneManager::SceneType::Selector);
                 break;
             case 'q':
             case 'Q':

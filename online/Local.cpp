@@ -1,6 +1,7 @@
 #include <graphics.h>
 #include <windows.h>
 #include <vector>
+#include <random>
 
 #include "Atlas.h"
 #include "BuffBullet.h"
@@ -25,6 +26,7 @@ Scene* selector_scene = nullptr;
 
 Camera main_camera;
 SceneManager scene_manager(GameType::LOCAL);
+std::mt19937* engine;
 
 std::vector<Bullet *> bullet_list;
 std::vector<BuffBullet *> buff_bullet_list;
@@ -42,6 +44,7 @@ int main(){
     LoadGameResources();
 
     initgraph(1280, 720);
+    engine = new std::mt19937{std::random_device{}()};
 
     settextstyle(28, 0, _T("zpix"));
     setbkmode(TRANSPARENT);

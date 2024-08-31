@@ -6,7 +6,7 @@ BuffBullet::BuffBullet(int buffNum, int rand_num){
 
     velocity.y = 0.1f;
     position.y = -size.y / 2;
-    position.x = rand_num % (getwidth() - (int)size.x);
+    position.x = rand_num;
 
     switch(buffNum){
         case 0:

@@ -2,6 +2,8 @@
 #define _GAME_SCENE_H_
 
 #include <graphics.h>
+#include <random>
+#include <chrono>
 
 #include "BuffBullet.h"
 #include "Camera.h"
@@ -23,6 +25,7 @@ extern std::vector<Bullet *> bullet_list;
 extern std::vector<BuffBullet *> buff_bullet_list;
 extern std::vector<Platform> platform_list;
 extern SceneManager scene_manager;
+extern std::mt19937* engine;
 
 extern bool is_debug;
 
@@ -70,6 +73,9 @@ private:
     bool is_slide_out_started = false;
 
     Timer timer_buff_generate;
+    // std::mt19937 engine{static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count())};
+    std::uniform_int_distribution<int> buff_type{0, 3};
+    std::uniform_int_distribution<int> buff_position{0, 1199};
 };
 
 #endif // _GAME_SCENE_H_
