@@ -528,7 +528,7 @@ inline void GameCircle_local() {
 int main(){
     LoadGameResources();
 
-    initgraph(1280, 720, EX_SHOWCONSOLE);
+    initgraph(1280, 720);
 
     settextstyle(28, 0, _T("zpix"));
     setbkmode(TRANSPARENT);
