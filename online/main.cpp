@@ -538,6 +538,8 @@ int main(){
 	settextcolor(BLACK);
     BeginBatchDraw();
 
+    mciSendString(_T("play bgm_menu repeat from 0"), NULL, 0, NULL);
+
     btn_local.Create(540, 200, 740, 250, "Local", nullptr);
     btn_server.Create(540, 300, 740, 350, "Server", nullptr);
     btn_client.Create(540, 400, 740, 450, "Client", nullptr);
