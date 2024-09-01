@@ -13,12 +13,14 @@ extern Atlas atlas_nut_idle_right;
 
 class AnimationWidget {
 public:
+    AnimationWidget() = default;
     AnimationWidget(PlayerType player_type, int x, int y);
     ~AnimationWidget() = default;
 
     void OnUpdate(int delta);
     void OnDraw(const Camera& camera) const;
     void SetAnimation(const PlayerType& player_type);
+    void SetPosition(int x, int y) { this->x = x; this->y = y; }
 
 private:
     Animation animation_current;

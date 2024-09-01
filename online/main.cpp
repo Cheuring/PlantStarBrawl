@@ -27,6 +27,7 @@
 
 bool is_debug = false;
 bool is_connected = false;
+bool is_start = false;
 
 Scene* menu_scene = nullptr;
 Scene* game_scene = nullptr;
@@ -60,7 +61,10 @@ EasyButton btn_server;
 EasyButton btn_client;
 EasyButton btn_local;
 
-AnimationWidget widget_anime(PlayerType::Sunflower, 1080, 520);
+AnimationWidget widget_sunflower(PlayerType::Sunflower, 1080, 520);
+AnimationWidget widget_peashooter(PlayerType::Peashooter, 1080, 100);
+AnimationWidget widget_gloomshroom(PlayerType::Gloomshroom, 100, 520);
+AnimationWidget widget_nut(PlayerType::Nut, 100, 100);
 
 void HandleInput_client(std::string &buf, bool is_server) {
     ExMessage msg;
@@ -263,14 +267,48 @@ void WidgetUpdate_client(){
         DWORD current_tick_time = GetTickCount();
         DWORD delta = current_tick_time - last_tick_time;
 
-        widget_anime.OnUpdate(delta);
+        widget_sunflower.OnUpdate(delta);
+        widget_nut.OnUpdate(delta);
         last_tick_time = current_tick_time;
 
         cleardevice();
         outtextxy(220, 210, "Server IP:");
         text_ip.Show();
         btn_connect.Show();
-        widget_anime.OnDraw(main_camera);
+        widget_sunflower.OnDraw(main_camera);
+        widget_nut.OnDraw(main_camera);
+        FlushBatchDraw();
+
+        DWORD frame_end_time = GetTickCount();
+        DWORD frame_duration = frame_end_time - frame_start_time;
+        if(frame_duration < 1000 / FPS){
+            Sleep(1000 / FPS - frame_duration);
+        }
+    }
+}
+
+void WidgetUpdate(){
+    while(!is_start){
+        DWORD frame_start_time = GetTickCount();
+
+        static DWORD last_tick_time = GetTickCount();
+        DWORD current_tick_time = GetTickCount();
+        DWORD delta = current_tick_time - last_tick_time;
+
+        widget_sunflower.OnUpdate(delta);
+        widget_peashooter.OnUpdate(delta);
+        widget_gloomshroom.OnUpdate(delta);
+        widget_nut.OnUpdate(delta);
+        last_tick_time = current_tick_time;
+
+        cleardevice();
+        btn_local.Show();
+        btn_server.Show();
+        btn_client.Show();
+        widget_sunflower.OnDraw(main_camera);
+        widget_peashooter.OnDraw(main_camera);
+        widget_gloomshroom.OnDraw(main_camera);
+        widget_nut.OnDraw(main_camera);
         FlushBatchDraw();
 
         DWORD frame_end_time = GetTickCount();
@@ -289,13 +327,15 @@ void WidgetUpdate_server(){
         DWORD current_tick_time = GetTickCount();
         DWORD delta = current_tick_time - last_tick_time;
 
-        widget_anime.OnUpdate(delta);
+        widget_peashooter.OnUpdate(delta);
+        widget_gloomshroom.OnUpdate(delta);
         last_tick_time = current_tick_time;
 
         cleardevice();
         outtextxy(200, 200, ("server ip:  " + mysocket.GetLocalIP()).c_str());
         outtextxy(200, 300, "waiting for connection...");
-        widget_anime.OnDraw(main_camera);
+        widget_peashooter.OnDraw(main_camera);
+        widget_gloomshroom.OnDraw(main_camera);
         FlushBatchDraw();
 
         DWORD frame_end_time = GetTickCount();
@@ -388,7 +428,6 @@ inline void GameCircle_server() {
     outtextxy(200, 200, ("server ip:  " + mysocket.GetLocalIP()).c_str());
     outtextxy(200, 300, "waiting for connection...");
 
-    widget_anime.SetAnimation(PlayerType::Peashooter);
     scene_manager.SetGameType(GameType::SERVER);
 
     std::thread thread_widget(WidgetUpdate_server);
@@ -503,9 +542,11 @@ int main(){
     btn_server.Create(540, 300, 740, 350, "Server", nullptr);
     btn_client.Create(540, 400, 740, 450, "Client", nullptr);
 
-    FlushBatchDraw();
+    // FlushBatchDraw();
+    std::thread thread_widget_start(WidgetUpdate);
+    thread_widget_start.detach();
 
-    std::cout<< "start" << std::endl;
+    // std::cout<< "start" << std::endl;
 
 	ExMessage temp_msg;
 	while (true)
@@ -516,16 +557,19 @@ int main(){
 		{
             if(btn_local.Check(temp_msg.x, temp_msg.y)){
                 // btn_local.OnMessage();
+                is_start = true;
                 GameCircle_local();
                 break;
             }
             if(btn_server.Check(temp_msg.x, temp_msg.y)){
                 // btn_server.OnMessage();
+                is_start = true;
                 GameCircle_server();
                 break;
             }
             if(btn_client.Check(temp_msg.x, temp_msg.y)){
                 // btn_client.OnMessage();
+                is_start = true;
                 GameCircle_client();
                 break;
             }
