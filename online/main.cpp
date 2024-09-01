@@ -558,19 +558,19 @@ int main(){
 		if (temp_msg.message == WM_LBUTTONDOWN)
 		{
             if(btn_local.Check(temp_msg.x, temp_msg.y)){
-                // btn_local.OnMessage();
+                mciSendString(_T("play ui_confirm from 0"), NULL, 0, NULL);
                 is_start = true;
                 GameCircle_local();
                 break;
             }
             if(btn_server.Check(temp_msg.x, temp_msg.y)){
-                // btn_server.OnMessage();
+                mciSendString(_T("play ui_confirm from 0"), NULL, 0, NULL);
                 is_start = true;
                 GameCircle_server();
                 break;
             }
             if(btn_client.Check(temp_msg.x, temp_msg.y)){
-                // btn_client.OnMessage();
+                mciSendString(_T("play ui_confirm from 0"), NULL, 0, NULL);
                 is_start = true;
                 GameCircle_client();
                 break;

@@ -4,6 +4,7 @@
 #include <graphics.h>
 #include <vector>
 #include <list>
+#include <unordered_map>
 
 #include "Animation.h"
 #include "BuffId.h"

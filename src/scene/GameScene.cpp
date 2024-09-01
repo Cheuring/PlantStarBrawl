@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include <algorithm>
 #include <iostream>
 GameScene::GameScene() : status_bar_1P(player_1->GetBuffList()), status_bar_2P(player_2->GetBuffList()) {}
 GameScene::~GameScene() {

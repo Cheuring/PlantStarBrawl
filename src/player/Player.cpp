@@ -1,4 +1,5 @@
 #include "Player.h"
+#include <algorithm>
 #include <iostream>
 
 Player::Player(int attack_cd) : attack_cd(attack_cd) {
