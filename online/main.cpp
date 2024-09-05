@@ -487,6 +487,8 @@ inline void GameCircle_server() {
         DWORD frame_duration = frame_end_time - frame_start_time;
         if(frame_duration < 1000 / FPS){
             Sleep(1000 / FPS - frame_duration);
+        }else{
+            last_tick_time = frame_end_time;
         }
     }
 }

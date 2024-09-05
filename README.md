@@ -15,7 +15,6 @@ cd build
 cmake ..
 make .
 ```
-and you will see the server , client and local version of the game
 
 #### operation (online)
 |  Key  | Action|
